@@ -1,7 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 import "./assets/globals.scss";
 import Navbar from "./components/Navbar";
-import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useAnimationControls,
+  useMotionValue,
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import MouseGradient from "./components/MouseGradient";
 
 const drawVariant = {
@@ -174,11 +183,61 @@ function App() {
     });
   };
 
+  const { scrollYProgress } = useScroll();
+  const textY = useTransform(scrollYProgress, [0, 0.5], [0, -400]);
+
+  const backgroundGradient = useMotionValue(
+    "radial-gradient(circle, #111111 0%, #000000 65%)"
+  );
+  const textColor = useMotionValue("#FFFFFF");
+  const svgOpacity = useMotionValue(1);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const progress = Math.max(0, Math.min((latest - 0.2) / 0.2, 2));
+
+    // Interpolate between the initial gradient and white
+    const startColor = [17, 17, 17]; // #111111
+    const endColor = [0, 0, 0]; // #000000
+    const whiteColor = [255, 255, 255];
+
+    const interpolateColor = (start: number[], end: number[]): number[] =>
+      start.map((channel, i) =>
+        Math.round(channel + (whiteColor[i] - channel) * progress)
+      );
+
+    const centerColor = interpolateColor(startColor, whiteColor).join(", ");
+    const outerColor = interpolateColor(endColor, whiteColor).join(", ");
+
+    const newGradient = `radial-gradient(circle, rgb(${centerColor}) 0%, rgb(${outerColor}) 65%)`;
+    backgroundGradient.set(newGradient);
+
+    // Text color transition
+    const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
+      255 - Math.round(255 * progress)
+    }, ${255 - Math.round(255 * progress)})`;
+    textColor.set(txtColor);
+
+    document.documentElement.style.setProperty(
+      "--landing-bg-image",
+      newGradient
+    );
+
+    const opacityProgress = Math.max(0, Math.min((latest - 0.2) / 0.2, 1));
+    const newOpacity = 1 - opacityProgress;
+    svgOpacity.set(newOpacity);
+  });
+
   return (
     <>
-      <div className="w-screen h-screen bg-landing-bg-image backdrop-blur-3xl overflow-x-hidden">
+      <motion.div
+        style={{ background: backgroundGradient }}
+        className="w-screen h-screen backdrop-blur-3xl overflow-x-hidden"
+      >
         <MouseGradient />
-        <div className="absolute top-0 flex w-full h-full flex-col justify-center items-center z-[1]">
+        <motion.div
+          style={{ opacity: svgOpacity }}
+          className="absolute top-0 flex w-full h-full flex-col justify-center items-center z-[1]"
+        >
           {width > 0 && height > 0 && (
             <>
               <motion.svg
@@ -193,13 +252,16 @@ function App() {
               <LoopingAnimation width={width} height={height} />
             </>
           )}
-        </div>
+        </motion.div>
         <div className="flex justify-center items-center relative z-10">
           <Navbar />
           <div className="h-screen flex flex-col justify-center items-center">
-            <h1
+            <motion.h1
               className="text-[80px] text-light khula-extrabold w-[732px] text-center leading-[85px]"
-              style={{ textShadow: "0px 0px 6px rgba(255,255,255,0.25)" }}
+              style={{
+                y: textY,
+                textShadow: "0px 0px 6px rgba(255,255,255,0.25)",
+              }}
             >
               Turning ideas into{" "}
               <span
@@ -214,14 +276,22 @@ function App() {
                 creative
               </span>{" "}
               solutions.
-            </h1>
-            <p className="poppins-regular text-gray-1 w-[420px] text-center text-xl mt-4 shadow-none">
+            </motion.h1>
+            <motion.p
+              style={{ y: textY }}
+              className="poppins-regular text-gray-1 w-[420px] text-center text-xl mt-4 shadow-none"
+            >
               Innovative web developer crafting unique user experiences.
-            </p>
+            </motion.p>
           </div>
         </div>
-      </div>
-      <div className="w-screen h-screen">Test</div>
+      </motion.div>
+      <motion.div
+        style={{ background: backgroundGradient }}
+        className="w-screen h-screen"
+      >
+        Test
+      </motion.div>
     </>
   );
 }
