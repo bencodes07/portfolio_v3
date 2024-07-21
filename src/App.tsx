@@ -176,7 +176,7 @@ function App() {
 
   return (
     <>
-      <div className="w-screen h-screen bg-landing-bg-image backdrop-blur-3xl">
+      <div className="w-screen h-screen bg-landing-bg-image backdrop-blur-3xl overflow-x-hidden">
         <MouseGradient />
         <div className="absolute top-0 flex w-full h-full flex-col justify-center items-center z-[1]">
           {width > 0 && height > 0 && (
