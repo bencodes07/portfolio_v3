@@ -1,118 +1,198 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./assets/globals.scss";
 import Navbar from "./components/Navbar";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
+import MouseGradient from "./components/MouseGradient";
 
-const draw = {
+const drawVariant = {
   hidden: { pathLength: 0, opacity: 0 },
-  visible: (i: any) => {
-    const delay = 1 + i * 0.5;
-    return {
-      pathLength: 1,
-      opacity: 1,
-      transition: {
-        pathLength: { delay, type: "spring", duration: 2.5, bounce: 0 },
-        opacity: { delay, duration: 0.01 },
-      },
-    };
+  visible: {
+    pathLength: 1,
+    opacity: 1,
+    transition: {
+      pathLength: { type: "spring", duration: 5, bounce: 0 },
+      opacity: { duration: 0.8, ease: "easeInOut" },
+    },
   },
 };
 
-function App() {
-  const [width, setWidth] = useState<number>(0);
-  const [height, setHeight] = useState<number>(0);
+const shapeVariants = {
+  hidden: { pathLength: 0, fillOpacity: 0, y: 0 },
+  visible: {
+    pathLength: 1,
+    fillOpacity: 1,
+    transition: {
+      pathLength: { duration: 2, ease: "easeInOut" },
+      fillOpacity: { duration: 0.5, delay: 2 },
+    },
+  },
+  exit: {
+    y: "100%",
+    transition: { duration: 1, ease: "easeInOut" },
+  },
+};
+
+function AnimatedShape({
+  side,
+  onComplete,
+  width,
+  height,
+}: {
+  side: "left" | "right";
+  onComplete: () => void;
+  width: number;
+  height: number;
+}) {
+  const controls = useAnimationControls();
+  const centerX = width / 2;
+  const yStart = (height * 2) / 3;
+  const xOffset = width * 0.12;
+
+  const path = `M ${centerX + (side === "left" ? -xOffset : xOffset)} ${yStart} 
+                L ${centerX} ${yStart + 100} 
+                L ${centerX} ${yStart + 132} 
+                L ${centerX + (side === "left" ? -xOffset : xOffset)} ${
+    yStart + 32
+  } Z`;
+
   useEffect(() => {
+    const animate = async () => {
+      await controls.start("visible");
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await controls.start("exit");
+      onComplete();
+    };
+    animate();
+  }, [controls, onComplete]);
+
+  return (
+    <motion.svg
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      className="absolute top-0 left-0"
+    >
+      <motion.path
+        d={path}
+        stroke="var(--gray-4)"
+        strokeWidth="2"
+        fill="var(--gray-4)"
+        animate={controls}
+        initial="hidden"
+        variants={shapeVariants}
+      />
+    </motion.svg>
+  );
+}
+
+function LoopingAnimation({
+  width,
+  height,
+}: {
+  width: number;
+  height: number;
+}) {
+  const [key, setKey] = useState(0);
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={key}
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 1 }}
+      >
+        <AnimatedShape
+          side="left"
+          onComplete={() => setKey((k) => k + 1)}
+          width={width}
+          height={height}
+        />
+        <AnimatedShape
+          side="right"
+          onComplete={() => {}}
+          width={width}
+          height={height}
+        />
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+function App() {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const dimensionsRef = useRef({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      const newDimensions = {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      };
+      dimensionsRef.current = newDimensions;
+      setDimensions(newDimensions);
+    };
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+
     (async () => {
       const LocomotiveScroll = (await import("locomotive-scroll")).default;
-
       new LocomotiveScroll();
     })();
 
-    setWidth(window.innerWidth);
-    setHeight(window.innerHeight);
-    console.log(width);
-    window.addEventListener("resize", () => {
-      setWidth(window.innerWidth);
-      setHeight(window.innerHeight);
-    });
-
-    return () => {
-      window.removeEventListener("resize", () => {
-        setWidth(window.innerWidth);
-        setHeight(window.innerHeight);
-      });
-    };
+    return () => window.removeEventListener("resize", updateDimensions);
   }, []);
+
+  const { width, height } = dimensions;
+
+  const renderSVGLines = () => {
+    if (width === 0 || height === 0) return null;
+
+    const offsets = [
+      0,
+      -0.12,
+      0.12,
+      -0.12 - 30 / width,
+      0.12 + 30 / width,
+      -0.12 - 30 / width - 0.125,
+      0.12 + 30 / width + 0.125,
+    ];
+
+    return offsets.map((offset, index) => {
+      const x = width / 2 + width * offset;
+      const centerY = height / 2;
+
+      return (
+        <motion.path
+          key={index}
+          d={`M ${x} ${centerY} L ${x} 0 M ${x} ${centerY} L ${x} ${height}`}
+          stroke="var(--gray-4)"
+          strokeWidth="2"
+          fill="none"
+          variants={drawVariant}
+        />
+      );
+    });
+  };
+
   return (
     <>
       <div className="w-screen h-screen bg-landing-bg-image backdrop-blur-3xl">
+        <MouseGradient />
         <div className="absolute top-0 flex w-full h-full flex-col justify-center items-center z-[1]">
-          <motion.svg
-            width={width}
-            height={height}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.line
-              x1={width / 2}
-              y1={height}
-              x2={width / 2}
-              y2={0}
-              stroke={"#222222"}
-              variants={draw}
-            ></motion.line>
-
-            <motion.line
-              x1={width / 2 - width * 0.12}
-              y1={0}
-              x2={width / 2 - width * 0.12}
-              y2={height}
-              stroke={"#222222"}
-              variants={draw}
-            ></motion.line>
-            <motion.line
-              x1={width / 2 + width * 0.12}
-              y1={0}
-              x2={width / 2 + width * 0.12}
-              y2={height}
-              stroke={"#222222"}
-              variants={draw}
-            ></motion.line>
-
-            <motion.line
-              x1={width / 2 - width * 0.12 - 30}
-              y1={0}
-              x2={width / 2 - width * 0.12 - 30}
-              y2={height}
-              stroke={"#222222"}
-              variants={draw}
-            ></motion.line>
-            <motion.line
-              x1={width / 2 + width * 0.12 + 30}
-              y1={0}
-              x2={width / 2 + width * 0.12 + 30}
-              y2={height}
-              stroke={"#222222"}
-              variants={draw}
-            ></motion.line>
-
-            <motion.line
-              x1={width / 2 - width * 0.12 - 30 - width * 0.125}
-              y1={height}
-              x2={width / 2 - width * 0.12 - 30 - width * 0.125}
-              y2={0}
-              stroke={"#222222"}
-              variants={draw}
-            ></motion.line>
-            <motion.line
-              x1={width / 2 + width * 0.12 + 30 + width * 0.125}
-              y1={height}
-              x2={width / 2 + width * 0.12 + 30 + width * 0.125}
-              y2={0}
-              stroke={"#222222"}
-              variants={draw}
-            ></motion.line>
-          </motion.svg>
+          {width > 0 && height > 0 && (
+            <>
+              <motion.svg
+                width={width}
+                height={height}
+                initial="hidden"
+                animate="visible"
+                className="absolute"
+              >
+                {renderSVGLines()}
+              </motion.svg>
+              <LoopingAnimation width={width} height={height} />
+            </>
+          )}
         </div>
         <div className="flex justify-center items-center relative z-10">
           <Navbar />
@@ -141,7 +221,6 @@ function App() {
           </div>
         </div>
       </div>
-
       <div className="w-screen h-screen">Test</div>
     </>
   );
