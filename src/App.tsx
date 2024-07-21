@@ -8,7 +8,6 @@ import {
   useMotionValue,
   useMotionValueEvent,
   useScroll,
-  useSpring,
   useTransform,
 } from "framer-motion";
 import MouseGradient from "./components/MouseGradient";
@@ -200,7 +199,7 @@ function App() {
     const endColor = [0, 0, 0]; // #000000
     const whiteColor = [255, 255, 255];
 
-    const interpolateColor = (start: number[], end: number[]): number[] =>
+    const interpolateColor = (start: number[], _end: number[]): number[] =>
       start.map((channel, i) =>
         Math.round(channel + (whiteColor[i] - channel) * progress)
       );
