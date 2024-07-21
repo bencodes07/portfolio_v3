@@ -25,7 +25,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
       </AnimatePresence>
 
       <motion.div
-        className="absolute top-0 right-0 w-1/2 h-full bg-white z-50 flex flex-col p-6 overflow-y-auto"
+        className="absolute top-0 right-0 w-1/3 max-2xl:w-1/2 max-xl:w-2/3 max-md:w-full h-full bg-white z-50 flex flex-col p-6 overflow-y-auto max-w-screen-md"
         initial="initial"
         animate={"animate"}
         exit="exit"
@@ -44,7 +44,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
 
       {/* Navigation Menu */}
       <motion.div
-        className="fixed top-0 right-0 h-full w-1/2 z-50 flex flex-col p-6"
+        className="fixed top-0 right-0 h-full w-1/3 max-2xl:w-1/2 max-xl:w-2/3 max-md:w-full z-50 flex flex-col p-6 justify-center max-w-screen-md"
         initial="initial"
         animate={"animate"}
         exit="exit"
@@ -53,7 +53,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
           animate: {
             x: isOpen ? "0%" : "40%",
             opacity: isOpen ? 1 : 0,
-            display: isOpen ? "block" : "none",
+            display: isOpen ? "flex" : "none",
             transition: {
               duration: 0.5,
               delay: !isOpen ? 0 : 0.2,
@@ -63,88 +63,80 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
         style={{ originX: 1 }} // This ensures the scale animation starts from the right
       >
         <motion.div
-          className="flex justify-between items-center"
+          className="flex justify-end items-center"
           initial={{ x: 20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.3 }}
         >
-          <span className="text-2xl font-bold">cuberto</span>
           <button onClick={onClose} className="text-2xl">
             &times;
           </button>
         </motion.div>
 
-        <div className="flex justify-between flex-grow mt-12">
-          <motion.div
-            className="space-y-4"
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.3 }}
-          >
-            <h3 className="text-lg font-semibold">Social</h3>
-            <ul className="space-y-2">
-              {[
-                "LinkedIn",
-                "Behance",
-                "Dribbble",
-                "Instagram",
-                "YouTube",
-                "Twitter",
-                "GitHub",
-              ].map((item, index) => (
-                <motion.li
-                  key={item}
-                  initial={{ x: 20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
-                >
-                  <a href="#" className="hover:underline">
-                    {item}
-                  </a>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
+        <div className="flex justify-between flex-grow mt-12 mx-[15%] items-center">
+          <div className="flex flex-grow items-start justify-between w-full">
+            <motion.div
+              className="space-y-4"
+              initial={{ x: 20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.3 }}
+            >
+              <h3 className="text-lg khula-light">Social</h3>
+              <ul className="space-y-2">
+                {["LinkedIn", "Instagram", "GitHub"].map((item, index) => (
+                  <motion.li
+                    key={item}
+                    initial={{ x: 20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
+                  >
+                    <a href="#" className="hover:underline text-xl">
+                      {item}
+                    </a>
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
 
-          <motion.div
-            className="space-y-4"
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.3 }}
-          >
-            <h3 className="text-lg font-semibold">Menu</h3>
-            <ul className="space-y-2">
-              {[
-                "What we do",
-                "Projects",
-                "Company",
-                "Tutorials",
-                "Contacts",
-              ].map((item, index) => (
-                <motion.li
-                  key={item}
-                  initial={{ x: 20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
-                >
-                  <a href="#" className="hover:underline">
-                    {item}
-                  </a>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
+            <motion.div
+              className="space-y-4"
+              initial={{ x: 20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.3 }}
+            >
+              <h3 className="text-lg khula-light">Menu</h3>
+              <ul className="space-y-2">
+                {["About Me", "Projects", "Experience", "Contact"].map(
+                  (item, index) => (
+                    <motion.li
+                      key={item}
+                      initial={{ x: 20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
+                    >
+                      <a href="#" className="text-[2.5rem]">
+                        {item}
+                      </a>
+                    </motion.li>
+                  )
+                )}
+              </ul>
+            </motion.div>
+          </div>
         </div>
 
         <motion.div
-          className="mt-auto"
+          className="mx-12 mb-12"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.3 }}
         >
           <p className="text-sm text-gray-600">Get in touch</p>
-          <a href="mailto:info@cuberto.com" className="text-lg hover:underline">
-            info@cuberto.com
+          <a
+            href="mailto:boeckmannben@gmail.com"
+            className="text-lg hover:underline"
+          >
+            boeckmannben@gmail.com
           </a>
         </motion.div>
       </motion.div>
