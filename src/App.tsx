@@ -168,12 +168,12 @@ function App() {
     []
   );
 
-  useEffect(() => {
-    (async () => {
-      const LocomotiveScroll = (await import("locomotive-scroll")).default;
-      new LocomotiveScroll();
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const LocomotiveScroll = (await import("locomotive-scroll")).default;
+  //     new LocomotiveScroll();
+  //   })();
+  // }, []);
 
   useEffect(() => {
     updateDimensions();
