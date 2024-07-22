@@ -13,7 +13,7 @@ import {
 import MouseGradient from "./components/MouseGradient";
 import { ArrowUpRight } from "lucide-react";
 import Magnetic from "./components/Magnetic";
-import { debounce, throttle } from "lodash";
+import { debounce } from "lodash";
 import LoopingAnimation from "./components/LoopingAnimation";
 
 const drawVariant = {
