@@ -8,7 +8,7 @@ const MouseGradient: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [textColor, setTextColor] = useState<"white" | "transparent">("white");
 
-  const { scrollY, scrollYProgress } = useScroll();
+  const { scrollYProgress } = useScroll();
 
   const [springProps, setSpringProps] = useSpring(() => ({
     xy: [0, 0],
