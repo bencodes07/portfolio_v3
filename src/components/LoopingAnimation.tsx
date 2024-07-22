@@ -38,11 +38,11 @@ function AnimatedShape({
   useEffect(() => {
     const runAnimation = async () => {
       // Draw the outline
-      await animate(scope.current, { pathLength: 1 }, { duration: 2 });
+      await animate(scope.current, { pathLength: 1 }, { duration: 1.5 });
       // Fill the shape
       await animate(scope.current, { fillOpacity: 1 }, { duration: 0.5 });
       // Move the shape down
-      await animate(scope.current, { y: "100%" }, { duration: 1 });
+      await animate(scope.current, { y: "50%" }, { duration: 1 });
       onComplete();
     };
 
