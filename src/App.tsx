@@ -4,11 +4,11 @@ import {
   useRef,
   useCallback,
   useLayoutEffect,
+  useMemo,
 } from "react";
 import "./assets/globals.scss";
 import Navbar from "./components/Navbar";
 import {
-  AnimatePresence,
   motion,
   useAnimationControls,
   useInView,
@@ -20,7 +20,7 @@ import {
 import MouseGradient from "./components/MouseGradient";
 import { ArrowUpRight } from "lucide-react";
 import Magnetic from "./components/Magnetic";
-import { debounce } from "lodash";
+import { debounce, throttle } from "lodash";
 
 const drawVariant = {
   hidden: { pathLength: 0, opacity: 0 },
@@ -121,29 +121,26 @@ function LoopingAnimation({
   width: number;
   height: number;
 }) {
-  const [key, setKey] = useState(0);
+  const [leftKey, setLeftKey] = useState(0);
+  const [rightKey, setRightKey] = useState(1);
+
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={key}
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 1 }}
-      >
-        <AnimatedShape
-          side="left"
-          onComplete={() => setKey((k) => k + 1)}
-          width={width}
-          height={height}
-        />
-        <AnimatedShape
-          side="right"
-          onComplete={() => {}}
-          width={width}
-          height={height}
-        />
-      </motion.div>
-    </AnimatePresence>
+    <>
+      <AnimatedShape
+        key={leftKey}
+        side="left"
+        onComplete={() => setLeftKey((k) => k + 2)}
+        width={width}
+        height={height}
+      />
+      <AnimatedShape
+        key={rightKey}
+        side="right"
+        onComplete={() => setRightKey((k) => k + 2)}
+        width={width}
+        height={height}
+      />
+    </>
   );
 }
 
@@ -168,12 +165,12 @@ function App() {
     []
   );
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const LocomotiveScroll = (await import("locomotive-scroll")).default;
-  //     new LocomotiveScroll();
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const LocomotiveScroll = (await import("locomotive-scroll")).default;
+      new LocomotiveScroll();
+    })();
+  }, []);
 
   useEffect(() => {
     updateDimensions();
@@ -184,7 +181,7 @@ function App() {
 
   const { width, height } = dimensions;
 
-  const renderSVGLines = useCallback(() => {
+  const renderSVGLines = useMemo(() => {
     if (width === 0 || height === 0) return null;
 
     const offsets = [
@@ -221,32 +218,37 @@ function App() {
   const textColor = useMotionValue("#FFFFFF");
   const svgOpacity = useMotionValue(1);
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const progress = Math.max(0, Math.min((latest - 0.1) / 0.2, 1));
+  const handleScroll = useCallback(
+    throttle((latest: number) => {
+      const progress = Math.max(0, Math.min((latest - 0.1) / 0.2, 1));
 
-    const startColor = [17, 17, 17]; // #111111
-    const endColor = [255, 255, 255]; // #FFFFFF
+      const startColor = [17, 17, 17]; // #111111
+      const endColor = [255, 255, 255]; // #FFFFFF
 
-    const interpolateColor = (start: number[], end: number[]): string =>
-      start
-        .map((channel, i) =>
-          Math.round(channel + (end[i] - channel) * progress)
-        )
-        .join(", ");
+      const interpolateColor = (start: number[], end: number[]): string =>
+        start
+          .map((channel, i) =>
+            Math.round(channel + (end[i] - channel) * progress)
+          )
+          .join(", ");
 
-    const newGradient = `radial-gradient(circle, rgb(${interpolateColor(
-      startColor,
-      endColor
-    )}) 0%, rgb(${interpolateColor(startColor, endColor)}) 65%)`;
-    backgroundGradient.set(newGradient);
+      const newGradient = `radial-gradient(circle, rgb(${interpolateColor(
+        startColor,
+        endColor
+      )}) 0%, rgb(${interpolateColor(startColor, endColor)}) 65%)`;
+      backgroundGradient.set(newGradient);
 
-    const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
-      255 - Math.round(255 * progress)
-    }, ${255 - Math.round(255 * progress)})`;
-    textColor.set(txtColor);
-    const newOpacity = 1 - progress;
-    svgOpacity.set(newOpacity);
-  });
+      const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
+        255 - Math.round(255 * progress)
+      }, ${255 - Math.round(255 * progress)})`;
+      textColor.set(txtColor);
+      const newOpacity = 1 - progress;
+      svgOpacity.set(newOpacity);
+    }, 16), // ~60fps
+    []
+  );
+
+  useMotionValueEvent(scrollYProgress, "change", handleScroll);
 
   useEffect(() => {
     if (isAboutInView && !hasAnimated) {
@@ -302,7 +304,7 @@ function App() {
                 animate="visible"
                 className="absolute"
               >
-                {renderSVGLines()}
+                {renderSVGLines}
               </motion.svg>
               <LoopingAnimation width={width} height={height} />
             </>
@@ -313,7 +315,11 @@ function App() {
           <motion.h1
             className="text-[80px] text-light khula-extrabold w-[732px] text-center leading-[85px]"
             style={{
-              y: useTransform(scrollYProgress, [0, 0.5], [0, -200]),
+              transform: useTransform(
+                scrollYProgress,
+                [0, 0.5],
+                ["translateY(0px)", "translateY(-200px)"]
+              ),
               textShadow: "0px 0px 6px rgba(255,255,255,0.25)",
               opacity: svgOpacity,
             }}
