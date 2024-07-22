@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSpring, animated, config } from "react-spring";
 import NavMenu from "./NavMenu";
 import { Equal } from "lucide-react";
 import { useScroll } from "framer-motion";
+import gsap from "gsap";
 
 const MouseGradient: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [textColor, setTextColor] = useState<"white" | "transparent">("white");
+  const gradientRef = useRef<HTMLDivElement>(null);
+  const animation = useRef<gsap.core.Tween | null>(null);
 
   const { scrollYProgress } = useScroll();
-
-  const [springProps, setSpringProps] = useSpring(() => ({
-    xy: [0, 0],
-    config: config.gentle,
-  }));
 
   const [buttonProps, setButtonProps] = useSpring(() => ({
     color: "rgb(255, 255, 255)",
@@ -22,10 +20,59 @@ const MouseGradient: React.FC = () => {
   }));
 
   useEffect(() => {
-    const updateMousePosition = (ev: MouseEvent) => {
-      setSpringProps({ xy: [ev.clientX, ev.clientY] });
+    const element = gradientRef.current;
+    if (!element) return;
+
+    const maxDistance = 80; // Maximum pixel distance to move
+
+    const animate = (x: number, y: number) => {
+      if (animation.current) {
+        animation.current.kill();
+      }
+      animation.current = gsap.to(element, {
+        x,
+        y,
+        duration: 0.3,
+        ease: "power2.out",
+      });
     };
 
+    const calculateMovement = (clientX: number, clientY: number) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      let x = (clientX - centerX) / 10;
+      let y = (clientY - centerY) / 10;
+
+      // Limit the movement range
+      const distance = Math.sqrt(x * x + y * y);
+      if (distance > maxDistance) {
+        const factor = maxDistance / distance;
+        x *= factor;
+        y *= factor;
+      }
+
+      return { x, y };
+    };
+
+    const mouseMove = (e: MouseEvent) => {
+      const { x, y } = calculateMovement(e.clientX, e.clientY);
+      requestAnimationFrame(() => animate(x, y));
+    };
+
+    const mouseLeave = () => {
+      requestAnimationFrame(() => animate(0, 0));
+    };
+
+    window.addEventListener("mousemove", mouseMove);
+    window.addEventListener("mouseleave", mouseLeave);
+
+    return () => {
+      window.removeEventListener("mousemove", mouseMove);
+      window.removeEventListener("mouseleave", mouseLeave);
+    };
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
       if (scrollYProgress.get() > 0.2 && scrollYProgress.get() < 0.4) {
         const t = (scrollYProgress.get() - 0.2) / 0.2; // normalize to 0-1
@@ -51,32 +98,27 @@ const MouseGradient: React.FC = () => {
       }
     };
 
-    window.addEventListener("mousemove", updateMousePosition);
     window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener("mousemove", updateMousePosition);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [setSpringProps, setButtonProps]);
+  }, [setButtonProps]);
 
   return (
     <>
-      <animated.div
+      <div
+        ref={gradientRef}
         style={{
           position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
+          top: "50%",
+          left: "50%",
+          width: `${Math.min(window.innerWidth, window.innerHeight)}px`,
+          height: `${Math.min(window.innerWidth, window.innerHeight)}px`,
+          transform: "translate(-50%, -50%)",
           pointerEvents: "none",
-          zIndex: 1,
-          background: springProps.xy.to(
-            (x, y) =>
-              `radial-gradient(${
-                window.innerWidth / 3
-              }px at ${x}px ${y}px, rgba(190, 190, 255, 0.09), transparent 50%)`
-          ),
+          zIndex: 0,
+          background: `radial-gradient(circle, rgba(190, 190, 255, 0.06) 0%, transparent 50%)`,
         }}
       />
 

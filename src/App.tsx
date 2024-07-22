@@ -134,6 +134,8 @@ function App() {
   const dimensionsRef = useRef({ width: 0, height: 0 });
 
   const aboutRef = useRef<HTMLDivElement>(null);
+  const aboutControls = useAnimationControls();
+  const isAboutInView = useInView(aboutRef, { amount: 0.3 });
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -187,10 +189,7 @@ function App() {
     });
   };
 
-  const { scrollYProgress, scrollY } = useScroll();
-  const textY = useTransform(scrollYProgress, [0, 0.5], [0, -400]);
-  const aboutY = useTransform(scrollYProgress, [0, 1], [0, -400]);
-
+  const { scrollYProgress } = useScroll();
   const backgroundGradient = useMotionValue(
     "radial-gradient(circle, #111111 0%, #000000 65%)"
   );
@@ -198,46 +197,70 @@ function App() {
   const svgOpacity = useMotionValue(1);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const progress = Math.max(0, Math.min((latest - 0.2) / 0.2, 2));
+    const progress = Math.max(0, Math.min((latest - 0.1) / 0.2, 1));
 
-    // Interpolate between the initial gradient and white
     const startColor = [17, 17, 17]; // #111111
-    const endColor = [0, 0, 0]; // #000000
-    const whiteColor = [255, 255, 255];
+    const endColor = [255, 255, 255]; // #FFFFFF
 
-    const interpolateColor = (start: number[], _end: number[]): number[] =>
-      start.map((channel, i) =>
-        Math.round(channel + (whiteColor[i] - channel) * progress)
-      );
+    const interpolateColor = (start: number[], end: number[]): string =>
+      start
+        .map((channel, i) =>
+          Math.round(channel + (end[i] - channel) * progress)
+        )
+        .join(", ");
 
-    const centerColor = interpolateColor(startColor, whiteColor).join(", ");
-    const outerColor = interpolateColor(endColor, whiteColor).join(", ");
-
-    const newGradient = `radial-gradient(circle, rgb(${centerColor}) 0%, rgb(${outerColor}) 65%)`;
+    const newGradient = `radial-gradient(circle, rgb(${interpolateColor(
+      startColor,
+      endColor
+    )}) 0%, rgb(${interpolateColor(startColor, endColor)}) 65%)`;
     backgroundGradient.set(newGradient);
 
-    // Text color transition
     const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
       255 - Math.round(255 * progress)
     }, ${255 - Math.round(255 * progress)})`;
     textColor.set(txtColor);
-
-    document.documentElement.style.setProperty(
-      "--landing-bg-image",
-      newGradient
-    );
-
-    const opacityProgress = Math.max(0, Math.min((latest - 0.2) / 0.2, 1));
-    const newOpacity = 1 - opacityProgress;
+    const newOpacity = 1 - progress;
     svgOpacity.set(newOpacity);
   });
 
+  useEffect(() => {
+    if (isAboutInView) {
+      aboutControls.start("visible");
+    } else {
+      aboutControls.start("hidden");
+    }
+  }, [isAboutInView, aboutControls]);
+
+  const fadeInUpVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: (custom: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        delay: custom * 0.2,
+      },
+    }),
+  };
+
+  const lineVariants = {
+    hidden: { width: 0 },
+    visible: {
+      width: "100%",
+      transition: {
+        duration: 1.5,
+        ease: "easeInOut",
+      },
+    },
+  };
+
   return (
-    <>
+    <div className="overflow-x-hidden">
       <MouseGradient />
       <motion.div
         style={{ background: backgroundGradient }}
-        className="w-screen h-screen backdrop-blur-3xl overflow-x-hidden"
+        className="w-screen min-h-screen flex flex-col justify-center items-center"
       >
         <motion.div
           style={{ opacity: svgOpacity }}
@@ -258,94 +281,78 @@ function App() {
             </>
           )}
         </motion.div>
-        <div className="flex justify-center items-center relative z-10">
-          <Navbar />
-          <div className="h-screen flex flex-col justify-center items-center">
-            <motion.h1
-              className="text-[80px] text-light khula-extrabold w-[732px] text-center leading-[85px]"
+        <Navbar />
+        <div className="flex-grow flex justify-center items-center relative z-10">
+          <motion.h1
+            className="text-[80px] text-light khula-extrabold w-[732px] text-center leading-[85px]"
+            style={{
+              y: useTransform(scrollYProgress, [0, 0.5], [0, -200]),
+              textShadow: "0px 0px 6px rgba(255,255,255,0.25)",
+              opacity: svgOpacity,
+            }}
+          >
+            Turning ideas into{" "}
+            <span
               style={{
-                y: textY,
-                textShadow: "0px 0px 6px rgba(255,255,255,0.25)",
+                backgroundImage:
+                  "linear-gradient(90deg, #FE7171 0%, #EC5500 100%)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
               }}
             >
-              Turning ideas into{" "}
-              <span
-                style={{
-                  backgroundImage:
-                    "linear-gradient(90deg, #FE7171 0%, #EC5500 100%)",
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  color: "transparent",
-                }}
-              >
-                creative
-              </span>{" "}
-              solutions.
-            </motion.h1>
-            <motion.p
-              style={{ y: textY }}
-              className="poppins-regular text-gray-1 w-[420px] text-center text-xl mt-4 shadow-none"
-            >
-              Innovative web developer crafting unique user experiences.
-            </motion.p>
-          </div>
+              creative
+            </span>{" "}
+            solutions.
+          </motion.h1>
         </div>
       </motion.div>
       <motion.div
         ref={aboutRef}
         style={{ background: backgroundGradient }}
-        className="w-screen flex justify-center items-center"
+        className="w-screen min-h-screen flex justify-center items-center"
       >
         <motion.div
-          style={{
-            y: aboutY,
-            opacity: useTransform(scrollY, [100, 700, 800], [0, 0, 1]),
-          }}
-          className="max-w-[1000px] h-screen"
+          initial="hidden"
+          animate={aboutControls}
+          className="max-w-[1000px] px-4"
         >
-          <h1 className="khula-semibold text-6xl bg-light">
+          <motion.h1
+            variants={fadeInUpVariants}
+            custom={0}
+            className="khula-semibold text-6xl"
+          >
             I believe in a user centered design approach, ensuring that every
             project I work on is tailored to meet the specific needs of its
-            users.{" "}
-          </h1>
+            users.
+          </motion.h1>
 
-          <div className="mt-[10vh]">
+          <motion.div
+            variants={fadeInUpVariants}
+            custom={1}
+            className="mt-[10vh]"
+          >
             <p className="text-gray-3 poppins-light-italic ml-2 mb-1 select-none">
               This is me.
             </p>
             <motion.hr
-              initial={{ width: "0%" }}
-              animate={
-                useInView(aboutRef, { amount: 0.55 })
-                  ? { width: "100%" }
-                  : { width: "0%" }
-              }
-              transition={{ duration: 1.5, ease: "easeInOut" }}
-              className="bg-gray-2 origin-left w-full"
+              variants={lineVariants}
+              className="bg-gray-3 origin-left w-full"
             ></motion.hr>
-          </div>
-          <div className="flex justify-between mx-4 mt-16">
+          </motion.div>
+          <div className="flex justify-between mt-16">
             <div className="flex flex-col w-1/2">
               <motion.h2
+                variants={fadeInUpVariants}
+                custom={2}
                 className="khula-light text-5xl"
-                initial={{ opacity: 0, y: 50 }}
-                animate={
-                  useInView(aboutRef, { amount: 0.56 })
-                    ? { opacity: 1, y: 0 }
-                    : { opacity: 0, y: 50 }
-                }
               >
                 Hi, I'm Ben.
               </motion.h2>
               <Magnetic>
                 <motion.button
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={
-                    useInView(aboutRef, { amount: 0.57 })
-                      ? { opacity: 1, y: 0 }
-                      : { opacity: 0, y: 50 }
-                  }
-                  transition={{ delay: 0.2 }}
+                  variants={fadeInUpVariants}
+                  custom={3}
                   className="flex bg-dark rounded-full text-light pl-4 pr-6 gap-x-1 py-3 w-max poppins-regular mt-24 select-none"
                 >
                   <ArrowUpRight />
@@ -354,27 +361,12 @@ function App() {
               </Magnetic>
             </div>
             <div className="flex flex-col gap-y-4 w-1/2 khula-light text-2xl">
-              <motion.p
-                initial={{ opacity: 0, y: 50 }}
-                animate={
-                  useInView(aboutRef, { amount: 0.57 })
-                    ? { opacity: 1, y: 0 }
-                    : { opacity: 0, y: 50 }
-                }
-              >
+              <motion.p variants={fadeInUpVariants} custom={4}>
                 I'm a passionate web developer dedicated to turning ideas into
                 creative solutions. I specialize in creating seamless and
                 intuitive user experiences.
               </motion.p>
-              <motion.p
-                initial={{ opacity: 0, y: 50 }}
-                animate={
-                  useInView(aboutRef, { amount: 0.57 })
-                    ? { opacity: 1, y: 0 }
-                    : { opacity: 0, y: 50 }
-                }
-                transition={{ delay: 0.1 }}
-              >
+              <motion.p variants={fadeInUpVariants} custom={5}>
                 I'm involved in every step of the process: from discovery and
                 design to development, testing, and deployment. I focus on
                 delivering high-quality, scalable results that drive positive
@@ -384,7 +376,7 @@ function App() {
           </div>
         </motion.div>
       </motion.div>
-    </>
+    </div>
   );
 }
 
