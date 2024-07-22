@@ -1,5 +1,6 @@
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
+import { X } from "lucide-react";
 
 interface NavMenuProps {
   isOpen: boolean;
@@ -7,6 +8,7 @@ interface NavMenuProps {
 }
 
 const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
+  const { scrollY } = useScroll();
   return (
     <>
       {/* Backdrop */}
@@ -25,7 +27,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
       </AnimatePresence>
 
       <motion.div
-        className="absolute top-0 right-0 w-1/3 max-2xl:w-1/2 max-xl:w-2/3 max-md:w-full h-full bg-white z-50 flex flex-col p-6 overflow-y-auto max-w-screen-md"
+        className="absolute top-0 right-0 w-1/3 max-2xl:w-1/2 max-xl:w-2/3 max-md:w-full h-full bg-white z-[100] flex flex-col p-6 overflow-y-auto max-w-screen-md"
         initial="initial"
         animate={"animate"}
         exit="exit"
@@ -39,28 +41,35 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
             },
           },
         }}
-        style={{ originX: 1 }} // This ensures the scale animation starts from the right
+        style={{ originX: 1, top: scrollY }} // This ensures the scale animation starts from the right
       ></motion.div>
 
       {/* Navigation Menu */}
       <motion.div
-        className="fixed top-0 right-0 h-full w-1/3 max-2xl:w-1/2 max-xl:w-2/3 max-md:w-full z-50 flex flex-col p-6 justify-center max-w-screen-md"
+        className="fixed right-0 h-screen w-1/3 max-2xl:w-1/2 max-xl:w-2/3 max-md:w-full z-[100] flex flex-col p-6 justify-center max-w-screen-md bg-white overflow-y-auto"
         initial="initial"
-        animate={"animate"}
+        animate="animate"
         exit="exit"
         variants={{
-          initial: { x: "40%", opacity: 0, display: "none" },
+          initial: { x: "100%", opacity: 0 },
           animate: {
-            x: isOpen ? "0%" : "40%",
+            x: isOpen ? "0%" : "100%",
             opacity: isOpen ? 1 : 0,
-            display: isOpen ? "flex" : "none",
             transition: {
               duration: 0.5,
-              delay: !isOpen ? 0 : 0.2,
+              ease: [0.79, 0.35, 0.26, 1],
+            },
+          },
+          exit: {
+            x: "100%",
+            opacity: 0,
+            transition: {
+              duration: 0.5,
+              ease: [0.79, 0.35, 0.26, 1],
             },
           },
         }}
-        style={{ originX: 1 }} // This ensures the scale animation starts from the right
+        style={{ top: scrollY + "px" }} // Set the top position based on scrollY
       >
         <motion.div
           className="flex justify-end items-center"
@@ -68,8 +77,11 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.3 }}
         >
-          <button onClick={onClose} className="text-2xl">
-            &times;
+          <button
+            className="fixed top-6 right-6 z-40 px-4 py-2 text-dark text-xl poppins-regular flex flex-row gap-x-2 items-center pl-20"
+            onClick={onClose}
+          >
+            <X size={32} />
           </button>
         </motion.div>
 

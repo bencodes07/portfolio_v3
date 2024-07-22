@@ -5,12 +5,15 @@ import {
   AnimatePresence,
   motion,
   useAnimationControls,
+  useInView,
   useMotionValue,
   useMotionValueEvent,
   useScroll,
   useTransform,
 } from "framer-motion";
 import MouseGradient from "./components/MouseGradient";
+import { ArrowUpRight } from "lucide-react";
+import Magnetic from "./components/Magnetic";
 
 const drawVariant = {
   hidden: { pathLength: 0, opacity: 0 },
@@ -130,6 +133,8 @@ function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const dimensionsRef = useRef({ width: 0, height: 0 });
 
+  const aboutRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const updateDimensions = () => {
       const newDimensions = {
@@ -182,8 +187,9 @@ function App() {
     });
   };
 
-  const { scrollYProgress } = useScroll();
+  const { scrollYProgress, scrollY } = useScroll();
   const textY = useTransform(scrollYProgress, [0, 0.5], [0, -400]);
+  const aboutY = useTransform(scrollYProgress, [0, 1], [0, -400]);
 
   const backgroundGradient = useMotionValue(
     "radial-gradient(circle, #111111 0%, #000000 65%)"
@@ -228,11 +234,11 @@ function App() {
 
   return (
     <>
+      <MouseGradient />
       <motion.div
         style={{ background: backgroundGradient }}
         className="w-screen h-screen backdrop-blur-3xl overflow-x-hidden"
       >
-        <MouseGradient />
         <motion.div
           style={{ opacity: svgOpacity }}
           className="absolute top-0 flex w-full h-full flex-col justify-center items-center z-[1]"
@@ -286,10 +292,97 @@ function App() {
         </div>
       </motion.div>
       <motion.div
+        ref={aboutRef}
         style={{ background: backgroundGradient }}
-        className="w-screen h-screen"
+        className="w-screen flex justify-center items-center"
       >
-        Test
+        <motion.div
+          style={{
+            y: aboutY,
+            opacity: useTransform(scrollY, [100, 700, 800], [0, 0, 1]),
+          }}
+          className="max-w-[1000px] h-screen"
+        >
+          <h1 className="khula-semibold text-6xl bg-light">
+            I believe in a user centered design approach, ensuring that every
+            project I work on is tailored to meet the specific needs of its
+            users.{" "}
+          </h1>
+
+          <div className="mt-[10vh]">
+            <p className="text-gray-3 poppins-light-italic ml-2 mb-1 select-none">
+              This is me.
+            </p>
+            <motion.hr
+              initial={{ width: "0%" }}
+              animate={
+                useInView(aboutRef, { amount: 0.55 })
+                  ? { width: "100%" }
+                  : { width: "0%" }
+              }
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              className="bg-gray-2 origin-left w-full"
+            ></motion.hr>
+          </div>
+          <div className="flex justify-between mx-4 mt-16">
+            <div className="flex flex-col w-1/2">
+              <motion.h2
+                className="khula-light text-5xl"
+                initial={{ opacity: 0, y: 50 }}
+                animate={
+                  useInView(aboutRef, { amount: 0.56 })
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: 50 }
+                }
+              >
+                Hi, I'm Ben.
+              </motion.h2>
+              <Magnetic>
+                <motion.button
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={
+                    useInView(aboutRef, { amount: 0.57 })
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 50 }
+                  }
+                  transition={{ delay: 0.2 }}
+                  className="flex bg-dark rounded-full text-light pl-4 pr-6 gap-x-1 py-3 w-max poppins-regular mt-24 select-none"
+                >
+                  <ArrowUpRight />
+                  Get in Touch
+                </motion.button>
+              </Magnetic>
+            </div>
+            <div className="flex flex-col gap-y-4 w-1/2 khula-light text-2xl">
+              <motion.p
+                initial={{ opacity: 0, y: 50 }}
+                animate={
+                  useInView(aboutRef, { amount: 0.57 })
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: 50 }
+                }
+              >
+                I'm a passionate web developer dedicated to turning ideas into
+                creative solutions. I specialize in creating seamless and
+                intuitive user experiences.
+              </motion.p>
+              <motion.p
+                initial={{ opacity: 0, y: 50 }}
+                animate={
+                  useInView(aboutRef, { amount: 0.57 })
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: 50 }
+                }
+                transition={{ delay: 0.1 }}
+              >
+                I'm involved in every step of the process: from discovery and
+                design to development, testing, and deployment. I focus on
+                delivering high-quality, scalable results that drive positive
+                user experiences.
+              </motion.p>
+            </div>
+          </div>
+        </motion.div>
       </motion.div>
     </>
   );

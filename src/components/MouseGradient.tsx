@@ -1,27 +1,64 @@
 import React, { useState, useEffect } from "react";
-import { useSpring, animated } from "react-spring";
+import { useSpring, animated, config } from "react-spring";
 import NavMenu from "./NavMenu";
+import { Equal } from "lucide-react";
+import { useScroll } from "framer-motion";
 
 const MouseGradient: React.FC = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [textColor, setTextColor] = useState<"white" | "transparent">("white");
+
+  const { scrollY, scrollYProgress } = useScroll();
+
+  const [springProps, setSpringProps] = useSpring(() => ({
+    xy: [0, 0],
+    config: config.gentle,
+  }));
+
+  const [buttonProps, setButtonProps] = useSpring(() => ({
+    color: "rgb(255, 255, 255)",
+    backgroundColor: "rgba(0, 0, 0, 0)",
+    config: config.gentle,
+  }));
 
   useEffect(() => {
     const updateMousePosition = (ev: MouseEvent) => {
-      setMousePosition({ x: ev.clientX, y: ev.clientY });
+      setSpringProps({ xy: [ev.clientX, ev.clientY] });
+    };
+
+    const handleScroll = () => {
+      if (scrollYProgress.get() > 0.2 && scrollYProgress.get() < 0.4) {
+        const t = (scrollYProgress.get() - 0.2) / 0.2; // normalize to 0-1
+        setButtonProps({
+          color: `rgb(${Math.round(255 * (1 - t))}, ${Math.round(
+            255 * (1 - t)
+          )}, ${Math.round(255 * (1 - t))})`,
+          backgroundColor: `rgba(255, 255, 255, ${t})`,
+        });
+        setTextColor("transparent");
+      } else if (scrollYProgress.get() <= 0.2) {
+        setTextColor("white");
+        setButtonProps({
+          color: "rgb(255, 255, 255)",
+          backgroundColor: "rgba(0, 0, 0, 0)",
+        });
+      } else if (scrollYProgress.get() >= 0.4) {
+        setButtonProps({
+          color: "rgb(0, 0, 0)",
+          backgroundColor: "rgb(255, 255, 255)",
+        });
+        setTextColor("transparent");
+      }
     };
 
     window.addEventListener("mousemove", updateMousePosition);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("mousemove", updateMousePosition);
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
-
-  const springProps = useSpring({
-    xy: [mousePosition.x, mousePosition.y],
-    config: { mass: 10, tension: 550, friction: 140 },
-  });
+  }, [setSpringProps, setButtonProps]);
 
   return (
     <>
@@ -35,34 +72,37 @@ const MouseGradient: React.FC = () => {
           pointerEvents: "none",
           zIndex: 1,
           background: springProps.xy.to(
-            (x: number, y: number) =>
+            (x, y) =>
               `radial-gradient(${
                 window.innerWidth / 3
               }px at ${x}px ${y}px, rgba(190, 190, 255, 0.09), transparent 50%)`
           ),
         }}
       />
-      <button
-        className="fixed top-6 right-6 z-40 px-4 py-2 text-light text-xl poppins-regular flex flex-row gap-x-2 items-center"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-      >
-        menu{" "}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          className="lucide lucide-equal"
+
+      <div>
+        <button
+          className="fixed top-6 right-16 z-40 px-4 py-2 text-xl poppins-regular flex flex-row gap-x-2 items-center"
+          style={{ color: textColor }}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          <line x1="5" x2="19" y1="9" y2="9" />
-          <line x1="5" x2="19" y1="15" y2="15" />
-        </svg>
-      </button>
+          menu
+        </button>
+
+        <animated.button
+          style={{
+            position: "fixed",
+            right: "1.5rem",
+            zIndex: 40,
+            padding: "0.5rem 1rem",
+            color: buttonProps.color,
+          }}
+          className="fixed top-6 right-16 z-40 px-4 py-2 text-light text-xl poppins-regular flex flex-row gap-x-2 items-center"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <Equal size={32} />
+        </animated.button>
+      </div>
       <NavMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </>
   );
