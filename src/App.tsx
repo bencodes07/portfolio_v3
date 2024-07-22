@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import "./assets/globals.scss";
 import Navbar from "./components/Navbar";
 import {
@@ -14,6 +14,7 @@ import {
 import MouseGradient from "./components/MouseGradient";
 import { ArrowUpRight } from "lucide-react";
 import Magnetic from "./components/Magnetic";
+import { debounce } from "lodash";
 
 const drawVariant = {
   hidden: { pathLength: 0, opacity: 0 },
@@ -136,30 +137,37 @@ function App() {
   const aboutRef = useRef<HTMLDivElement>(null);
   const aboutControls = useAnimationControls();
   const isAboutInView = useInView(aboutRef, { amount: 0.3 });
+  const [hasAnimated, setHasAnimated] = useState(false);
 
-  useEffect(() => {
-    const updateDimensions = () => {
+  const updateDimensions = useCallback(
+    debounce(() => {
       const newDimensions = {
         width: window.innerWidth,
         height: window.innerHeight,
       };
       dimensionsRef.current = newDimensions;
       setDimensions(newDimensions);
-    };
-    updateDimensions();
-    window.addEventListener("resize", updateDimensions);
+    }, 200),
+    []
+  );
 
+  useEffect(() => {
     (async () => {
       const LocomotiveScroll = (await import("locomotive-scroll")).default;
       new LocomotiveScroll();
     })();
+  }, []);
+
+  useEffect(() => {
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
 
     return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
+  }, [updateDimensions]);
 
   const { width, height } = dimensions;
 
-  const renderSVGLines = () => {
+  const renderSVGLines = useCallback(() => {
     if (width === 0 || height === 0) return null;
 
     const offsets = [
@@ -187,7 +195,7 @@ function App() {
         />
       );
     });
-  };
+  }, [width, height]);
 
   const { scrollYProgress } = useScroll();
   const backgroundGradient = useMotionValue(
@@ -224,12 +232,14 @@ function App() {
   });
 
   useEffect(() => {
-    if (isAboutInView) {
+    if (isAboutInView && !hasAnimated) {
       aboutControls.start("visible");
-    } else {
+      setHasAnimated(true);
+    } else if (!isAboutInView && hasAnimated) {
       aboutControls.start("hidden");
+      setHasAnimated(false);
     }
-  }, [isAboutInView, aboutControls]);
+  }, [isAboutInView, aboutControls, hasAnimated]);
 
   const fadeInUpVariants = {
     hidden: { opacity: 0, y: 50 },
