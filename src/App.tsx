@@ -1,11 +1,4 @@
-import {
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-  useLayoutEffect,
-  useMemo,
-} from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import "./assets/globals.scss";
 import Navbar from "./components/Navbar";
 import {
@@ -21,6 +14,7 @@ import MouseGradient from "./components/MouseGradient";
 import { ArrowUpRight } from "lucide-react";
 import Magnetic from "./components/Magnetic";
 import { debounce, throttle } from "lodash";
+import LoopingAnimation from "./components/LoopingAnimation";
 
 const drawVariant = {
   hidden: { pathLength: 0, opacity: 0 },
@@ -33,116 +27,6 @@ const drawVariant = {
     },
   },
 };
-
-const shapeVariants = {
-  hidden: { pathLength: 0, fillOpacity: 0, y: 0 },
-  visible: {
-    pathLength: 1,
-    fillOpacity: 1,
-    transition: {
-      pathLength: { duration: 2, ease: "easeInOut" },
-      fillOpacity: { duration: 0.5, delay: 2 },
-    },
-  },
-  exit: {
-    y: "100%",
-    transition: { duration: 1, ease: "easeInOut" },
-  },
-};
-
-function AnimatedShape({
-  side,
-  onComplete,
-  width,
-  height,
-}: {
-  side: "left" | "right";
-  onComplete: () => void;
-  width: number;
-  height: number;
-}) {
-  const controls = useAnimationControls();
-  const [isMounted, setIsMounted] = useState(false);
-  const centerX = width / 2;
-  const yStart = (height * 2) / 3;
-  const xOffset = width * 0.12;
-
-  const path = `M ${centerX + (side === "left" ? -xOffset : xOffset)} ${yStart} 
-                L ${centerX} ${yStart + 100} 
-                L ${centerX} ${yStart + 132} 
-                L ${centerX + (side === "left" ? -xOffset : xOffset)} ${
-    yStart + 32
-  } Z`;
-
-  const animate = useCallback(async () => {
-    if (isMounted) {
-      await controls.start("visible");
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await controls.start("exit");
-      onComplete();
-    }
-  }, [controls, onComplete, isMounted]);
-
-  useLayoutEffect(() => {
-    setIsMounted(true);
-    return () => setIsMounted(false);
-  }, []);
-
-  useLayoutEffect(() => {
-    if (isMounted) {
-      animate();
-    }
-  }, [isMounted, animate]);
-
-  return (
-    <motion.svg
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
-      className="absolute top-0 left-0"
-    >
-      <motion.path
-        d={path}
-        stroke="var(--gray-4)"
-        strokeWidth="2"
-        fill="var(--gray-4)"
-        animate={controls}
-        initial="hidden"
-        variants={shapeVariants}
-      />
-    </motion.svg>
-  );
-}
-
-function LoopingAnimation({
-  width,
-  height,
-}: {
-  width: number;
-  height: number;
-}) {
-  const [leftKey, setLeftKey] = useState(0);
-  const [rightKey, setRightKey] = useState(1);
-
-  return (
-    <>
-      <AnimatedShape
-        key={leftKey}
-        side="left"
-        onComplete={() => setLeftKey((k) => k + 2)}
-        width={width}
-        height={height}
-      />
-      <AnimatedShape
-        key={rightKey}
-        side="right"
-        onComplete={() => setRightKey((k) => k + 2)}
-        width={width}
-        height={height}
-      />
-    </>
-  );
-}
 
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -218,8 +102,8 @@ function App() {
   const textColor = useMotionValue("#FFFFFF");
   const svgOpacity = useMotionValue(1);
 
-  const handleScroll = useCallback(
-    throttle((latest: number) => {
+  const handleScroll = useCallback((latest: number) => {
+    requestAnimationFrame(() => {
       const progress = Math.max(0, Math.min((latest - 0.1) / 0.2, 1));
 
       const startColor = [17, 17, 17]; // #111111
@@ -244,9 +128,8 @@ function App() {
       textColor.set(txtColor);
       const newOpacity = 1 - progress;
       svgOpacity.set(newOpacity);
-    }, 16), // ~60fps
-    []
-  );
+    });
+  }, []);
 
   useMotionValueEvent(scrollYProgress, "change", handleScroll);
 
