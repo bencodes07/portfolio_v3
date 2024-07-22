@@ -1,4 +1,10 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import "./assets/globals.scss";
 import Navbar from "./components/Navbar";
 import {
@@ -56,6 +62,7 @@ function AnimatedShape({
   height: number;
 }) {
   const controls = useAnimationControls();
+  const [isMounted, setIsMounted] = useState(false);
   const centerX = width / 2;
   const yStart = (height * 2) / 3;
   const xOffset = width * 0.12;
@@ -67,15 +74,25 @@ function AnimatedShape({
     yStart + 32
   } Z`;
 
-  useEffect(() => {
-    const animate = async () => {
+  const animate = useCallback(async () => {
+    if (isMounted) {
       await controls.start("visible");
       await new Promise((resolve) => setTimeout(resolve, 500));
       await controls.start("exit");
       onComplete();
-    };
-    animate();
-  }, [controls, onComplete]);
+    }
+  }, [controls, onComplete, isMounted]);
+
+  useLayoutEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (isMounted) {
+      animate();
+    }
+  }, [isMounted, animate]);
 
   return (
     <motion.svg
