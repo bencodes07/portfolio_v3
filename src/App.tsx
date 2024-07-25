@@ -281,7 +281,7 @@ function App() {
       <motion.div
         ref={aboutRef}
         style={{ background: backgroundGradient }}
-        className="w-screen min-h-screen overflow-hidden flex justify-center items-center"
+        className="w-screen min-h-screen overflow-hidden flex justify-center items-center relative z-10"
       >
         <motion.div
           initial="hidden"
