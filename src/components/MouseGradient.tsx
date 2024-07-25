@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSpring, animated, config } from "react-spring";
 import NavMenu from "./NavMenu";
 import { Equal } from "lucide-react";
 import { useScroll } from "framer-motion";
 import gsap from "gsap";
 
-const MouseGradient: React.FC = () => {
+const MouseGradient = ({ isMobile }: { isMobile: boolean }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [textColor, setTextColor] = useState<"white" | "transparent">("white");
   const gradientRef = useRef<HTMLDivElement>(null);
@@ -110,11 +110,15 @@ const MouseGradient: React.FC = () => {
       <div
         ref={gradientRef}
         style={{
-          position: "fixed",
+          position: window.innerWidth > 768 ? "fixed" : "absolute",
           top: "50%",
           left: "50%",
-          width: `${Math.min(window.innerWidth, window.innerHeight)}px`,
-          height: `${Math.min(window.innerWidth, window.innerHeight)}px`,
+          width: `${
+            !isMobile ? Math.min(window.innerWidth, window.innerHeight) : 0
+          }px`,
+          height: `${
+            !isMobile ? Math.min(window.innerWidth, window.innerHeight) : 0
+          }px`,
           transform: "translate(-50%, -50%)",
           pointerEvents: "none",
           zIndex: 0,
@@ -123,17 +127,19 @@ const MouseGradient: React.FC = () => {
       />
 
       <div>
-        <button
-          className="fixed top-6 right-16 z-40 px-4 py-2 text-xl poppins-regular flex flex-row gap-x-2 items-center"
-          style={{ color: textColor }}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          menu
-        </button>
+        {window.innerWidth > 768 && (
+          <button
+            className="fixed top-6 right-16 z-40 px-4 py-2 text-xl poppins-regular flex flex-row gap-x-2 items-center"
+            style={{ color: textColor }}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            menu
+          </button>
+        )}
 
         <animated.button
           style={{
-            position: "fixed",
+            position: window.innerWidth > 768 ? "fixed" : "absolute",
             right: "1.5rem",
             zIndex: 40,
             padding: "0.5rem 1rem",

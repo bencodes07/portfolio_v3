@@ -37,6 +37,8 @@ function App() {
   const isAboutInView = useInView(aboutRef, { amount: 0.3 });
   const [hasAnimated, setHasAnimated] = useState(false);
 
+  const isMobile = useMemo(() => window.innerWidth <= 768, []);
+
   const updateDimensions = useCallback(
     debounce(() => {
       const newDimensions = {
@@ -50,10 +52,12 @@ function App() {
   );
 
   useEffect(() => {
-    (async () => {
-      const LocomotiveScroll = (await import("locomotive-scroll")).default;
-      new LocomotiveScroll();
-    })();
+    if (window.innerWidth > 768) {
+      (async () => {
+        const LocomotiveScroll = (await import("locomotive-scroll")).default;
+        new LocomotiveScroll();
+      })();
+    }
   }, []);
 
   useEffect(() => {
@@ -68,32 +72,76 @@ function App() {
   const renderSVGLines = useMemo(() => {
     if (width === 0 || height === 0) return null;
 
-    const offsets = [
-      0,
-      -0.12,
-      0.12,
-      -0.12 - 30 / width,
-      0.12 + 30 / width,
-      -0.12 - 30 / width - 0.125,
-      0.12 + 30 / width + 0.125,
-    ];
-
-    return offsets.map((offset, index) => {
-      const x = width / 2 + width * offset;
-      const centerY = height / 2;
+    if (isMobile) {
+      // Render three lines for mobile: left, center, and right
+      const centerX = width / 2;
+      const xOffset = width * 0.3; // This should match the xOffset in AnimatedShape
+      const leftX = centerX - xOffset;
+      const rightX = centerX + xOffset;
 
       return (
-        <motion.path
-          key={index}
-          d={`M ${x} ${centerY} L ${x} 0 M ${x} ${centerY} L ${x} ${height}`}
-          stroke="var(--gray-4)"
-          strokeWidth="2"
-          fill="none"
-          variants={drawVariant}
-        />
+        <>
+          <motion.path
+            key="mobile-left-line"
+            d={`M ${leftX} ${height / 2} L ${leftX} 0 M ${leftX} ${
+              height / 2
+            } L ${leftX} ${height}`}
+            stroke="var(--gray-4)"
+            strokeWidth="2"
+            fill="none"
+            variants={drawVariant}
+          />
+          <motion.path
+            key="mobile-center-line"
+            d={`M ${centerX} ${height / 2} L ${centerX} 0 M ${centerX} ${
+              height / 2
+            } L ${centerX} ${height}`}
+            stroke="var(--gray-4)"
+            strokeWidth="2"
+            fill="none"
+            variants={drawVariant}
+          />
+          <motion.path
+            key="mobile-right-line"
+            d={`M ${rightX} ${height / 2} L ${rightX} 0 M ${rightX} ${
+              height / 2
+            } L ${rightX} ${height}`}
+            stroke="var(--gray-4)"
+            strokeWidth="2"
+            fill="none"
+            variants={drawVariant}
+          />
+        </>
       );
-    });
-  }, [width, height]);
+    } else {
+      // Existing code for desktop lines
+      const offsets = [
+        -0.12 - 30 / width - 0.125,
+        -0.12 - 30 / width,
+        -0.12,
+        0,
+        0.12,
+        0.12 + 30 / width,
+        0.12 + 30 / width + 0.125,
+      ];
+
+      return offsets.map((offset, index) => {
+        const x = width / 2 + width * offset;
+        const centerY = height / 2;
+
+        return (
+          <motion.path
+            key={index}
+            d={`M ${x} ${centerY} L ${x} 0 M ${x} ${centerY} L ${x} ${height}`}
+            stroke="var(--gray-4)"
+            strokeWidth="2"
+            fill="none"
+            variants={drawVariant}
+          />
+        );
+      });
+    }
+  }, [width, height, isMobile]);
 
   const { scrollYProgress } = useScroll();
   const backgroundGradient = useMotionValue(
@@ -106,7 +154,7 @@ function App() {
     requestAnimationFrame(() => {
       const progress = Math.max(0, Math.min((latest - 0.1) / 0.2, 1));
 
-      const startColor = [17, 17, 17]; // #111111
+      const startColor = [0, 0, 0];
       const endColor = [255, 255, 255]; // #FFFFFF
 
       const interpolateColor = (start: number[], end: number[]): string =>
@@ -117,7 +165,7 @@ function App() {
           .join(", ");
 
       const newGradient = `radial-gradient(circle, rgb(${interpolateColor(
-        startColor,
+        [17, 17, 17],
         endColor
       )}) 0%, rgb(${interpolateColor(startColor, endColor)}) 65%)`;
       backgroundGradient.set(newGradient);
@@ -168,15 +216,15 @@ function App() {
   };
 
   return (
-    <div className="overflow-x-hidden">
-      <MouseGradient />
+    <>
+      <MouseGradient isMobile={isMobile} />
       <motion.div
         style={{ background: backgroundGradient }}
-        className="w-screen min-h-screen flex flex-col justify-center items-center"
+        className="w-screen overflow-hidden h-screen flex flex-col justify-center items-center "
       >
         <motion.div
           style={{ opacity: svgOpacity }}
-          className="absolute top-0 flex w-full h-full flex-col justify-center items-center z-[1]"
+          className="fixed top-0 flex w-full overflow-hidden h-full flex-col justify-center items-center z-[1]"
         >
           {width > 0 && height > 0 && (
             <>
@@ -185,26 +233,33 @@ function App() {
                 height={height}
                 initial="hidden"
                 animate="visible"
-                className="absolute"
+                className="fixed top-0 left-0"
               >
                 {renderSVGLines}
               </motion.svg>
-              <LoopingAnimation width={width} height={height} />
+
+              <LoopingAnimation
+                width={width}
+                height={height}
+                isMobile={isMobile}
+              />
             </>
           )}
         </motion.div>
         <Navbar />
-        <div className="flex-grow flex justify-center items-center relative z-10">
+        <div className="flex justify-center items-center relative z-10">
           <motion.h1
-            className="text-[80px] text-light khula-extrabold w-[732px] text-center leading-[85px]"
+            className="text-[80px] max-sm:text-[10vw] max-sm:max-w-sm max-sm:leading-tight text-light khula-extrabold w-[732px] text-center leading-[85px]"
             style={{
-              transform: useTransform(
-                scrollYProgress,
-                [0, 0.5],
-                ["translateY(0px)", "translateY(-200px)"]
-              ),
+              transform: isMobile
+                ? "none"
+                : useTransform(
+                    scrollYProgress,
+                    [0, 0.5],
+                    ["translateY(0px)", "translateY(-200px)"]
+                  ),
+              opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0]),
               textShadow: "0px 0px 6px rgba(255,255,255,0.25)",
-              opacity: svgOpacity,
             }}
           >
             Turning ideas into{" "}
@@ -226,7 +281,7 @@ function App() {
       <motion.div
         ref={aboutRef}
         style={{ background: backgroundGradient }}
-        className="w-screen min-h-screen flex justify-center items-center"
+        className="w-screen min-h-screen overflow-hidden flex justify-center items-center"
       >
         <motion.div
           initial="hidden"
@@ -236,7 +291,7 @@ function App() {
           <motion.h1
             variants={fadeInUpVariants}
             custom={0}
-            className="khula-semibold text-6xl"
+            className="khula-semibold text-6xl max-sm:text-4xl"
           >
             I believe in a user centered design approach, ensuring that every
             project I work on is tailored to meet the specific needs of its
@@ -246,7 +301,7 @@ function App() {
           <motion.div
             variants={fadeInUpVariants}
             custom={1}
-            className="mt-[10vh]"
+            className="mt-[10vh] max-sm:mt-8"
           >
             <p className="text-gray-3 poppins-light-italic ml-2 mb-1 select-none">
               This is me.
@@ -256,27 +311,29 @@ function App() {
               className="bg-gray-3 origin-left w-full"
             ></motion.hr>
           </motion.div>
-          <div className="flex justify-between mt-16">
+          <div className="flex justify-between max-sm:flex-col flex-row mt-16 max-sm:mt-8">
             <div className="flex flex-col w-1/2">
               <motion.h2
                 variants={fadeInUpVariants}
                 custom={2}
-                className="khula-light text-5xl"
+                className="khula-light text-5xl text-nowrap"
               >
                 Hi, I'm Ben.
               </motion.h2>
-              <Magnetic>
-                <motion.button
-                  variants={fadeInUpVariants}
-                  custom={3}
-                  className="flex bg-dark rounded-full text-light pl-4 pr-6 gap-x-1 py-3 w-max poppins-regular mt-24 select-none"
-                >
-                  <ArrowUpRight />
-                  Get in Touch
-                </motion.button>
-              </Magnetic>
+              {!isMobile && (
+                <Magnetic>
+                  <motion.button
+                    variants={fadeInUpVariants}
+                    custom={3}
+                    className="flex bg-dark rounded-full text-light pl-4 pr-6 gap-x-1 py-3 w-max poppins-regular mt-24 select-none"
+                  >
+                    <ArrowUpRight />
+                    Get in Touch
+                  </motion.button>
+                </Magnetic>
+              )}
             </div>
-            <div className="flex flex-col gap-y-4 w-1/2 khula-light text-2xl">
+            <div className="flex flex-col gap-y-4 w-1/2 khula-light text-2xl max-sm:text-lg max-sm:w-full max-sm:mt-8">
               <motion.p variants={fadeInUpVariants} custom={4}>
                 I'm a passionate web developer dedicated to turning ideas into
                 creative solutions. I specialize in creating seamless and
@@ -289,10 +346,22 @@ function App() {
                 user experiences.
               </motion.p>
             </div>
+            {isMobile && (
+              <motion.button
+                variants={fadeInUpVariants}
+                custom={3}
+                className="flex bg-dark rounded-full text-light pl-4 pr-6 gap-x-1 py-3 w-max poppins-regular select-none mt-8"
+              >
+                <ArrowUpRight />
+                Get in Touch
+              </motion.button>
+            )}
           </div>
         </motion.div>
       </motion.div>
-    </div>
+      {/* Add some blank space */}
+      <div style={{ height: "100vh", background: "#ffffff" }} />
+    </>
   );
 }
 

@@ -24,6 +24,7 @@ interface AnimatedShapeProps {
   onComplete: () => void;
   width: number;
   height: number;
+  isMobile: boolean;
 }
 
 function AnimatedShape({
@@ -31,6 +32,7 @@ function AnimatedShape({
   onComplete,
   width,
   height,
+  isMobile,
 }: AnimatedShapeProps) {
   const [scope, animate] = useAnimate();
   const animationRef = useRef<number | null>(null);
@@ -57,7 +59,7 @@ function AnimatedShape({
 
   const centerX = width / 2;
   const yStart = (height * 2) / 3;
-  const xOffset = width * 0.12;
+  const xOffset = isMobile ? width * 0.3 : width * 0.12;
 
   const path = `M ${centerX + (side === "left" ? -xOffset : xOffset)} ${yStart} 
                 L ${centerX} ${yStart + 100} 
@@ -71,7 +73,7 @@ function AnimatedShape({
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      className="absolute top-0 left-0"
+      className="fixed top-0 left-0 "
     >
       <motion.path
         ref={scope}
@@ -88,9 +90,10 @@ function AnimatedShape({
 interface LoopingAnimationProps {
   width: number;
   height: number;
+  isMobile: boolean;
 }
 
-function LoopingAnimation({ width, height }: LoopingAnimationProps) {
+function LoopingAnimation({ width, height, isMobile }: LoopingAnimationProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
@@ -101,6 +104,7 @@ function LoopingAnimation({ width, height }: LoopingAnimationProps) {
         onComplete={() => dispatch({ type: "INCREMENT_LEFT" })}
         width={width}
         height={height}
+        isMobile={isMobile}
       />
       <AnimatedShape
         key={`right-${state.rightKey}`}
@@ -108,6 +112,7 @@ function LoopingAnimation({ width, height }: LoopingAnimationProps) {
         onComplete={() => dispatch({ type: "INCREMENT_RIGHT" })}
         width={width}
         height={height}
+        isMobile={isMobile}
       />
     </>
   );
