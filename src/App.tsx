@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import "./assets/globals.scss";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/hero/Navbar";
 import {
   motion,
-  useAnimationControls,
   useInView,
   useMotionValue,
   useMotionValueEvent,
@@ -11,34 +10,19 @@ import {
   useTransform,
 } from "framer-motion";
 import MouseGradient from "./components/MouseGradient";
-import { ArrowUpRight } from "lucide-react";
-import Magnetic from "./components/Magnetic";
 import { debounce } from "lodash";
-import LoopingAnimation from "./components/LoopingAnimation";
-
-const drawVariant = {
-  hidden: { pathLength: 0, opacity: 0 },
-  visible: {
-    pathLength: 1,
-    opacity: 1,
-    transition: {
-      pathLength: { type: "spring", duration: 5, bounce: 0 },
-      opacity: { duration: 0.8, ease: "easeInOut" },
-    },
-  },
-};
+import BackgroundSVG from "./components/hero/BackgroundSVG";
+import About from "./components/about";
+import { useColorAnimation } from "./hooks/useColorAnimation";
 
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const dimensionsRef = useRef({ width: 0, height: 0 });
-
   const aboutRef = useRef<HTMLDivElement>(null);
-  const aboutControls = useAnimationControls();
-  const isAboutInView = useInView(aboutRef, { amount: 0.3 });
   const [hasAnimated, setHasAnimated] = useState(false);
-
   const isMobile = useMemo(() => window.innerWidth <= 768, []);
 
+  // ----- Dimesion update ----- //
   const updateDimensions = useCallback(
     debounce(() => {
       const newDimensions = {
@@ -52,97 +36,13 @@ function App() {
   );
 
   useEffect(() => {
-    if (window.innerWidth > 768) {
-      (async () => {
-        const LocomotiveScroll = (await import("locomotive-scroll")).default;
-        new LocomotiveScroll();
-      })();
-    }
-  }, []);
-
-  useEffect(() => {
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
 
     return () => window.removeEventListener("resize", updateDimensions);
   }, [updateDimensions]);
 
-  const { width, height } = dimensions;
-
-  const renderSVGLines = useMemo(() => {
-    if (width === 0 || height === 0) return null;
-
-    if (isMobile) {
-      // Render three lines for mobile: left, center, and right
-      const centerX = width / 2;
-      const xOffset = width * 0.3; // This should match the xOffset in AnimatedShape
-      const leftX = centerX - xOffset;
-      const rightX = centerX + xOffset;
-
-      return (
-        <>
-          <motion.path
-            key="mobile-left-line"
-            d={`M ${leftX} ${height / 2} L ${leftX} 0 M ${leftX} ${
-              height / 2
-            } L ${leftX} ${height}`}
-            stroke="var(--gray-4)"
-            strokeWidth="2"
-            fill="none"
-            variants={drawVariant}
-          />
-          <motion.path
-            key="mobile-center-line"
-            d={`M ${centerX} ${height / 2} L ${centerX} 0 M ${centerX} ${
-              height / 2
-            } L ${centerX} ${height}`}
-            stroke="var(--gray-4)"
-            strokeWidth="2"
-            fill="none"
-            variants={drawVariant}
-          />
-          <motion.path
-            key="mobile-right-line"
-            d={`M ${rightX} ${height / 2} L ${rightX} 0 M ${rightX} ${
-              height / 2
-            } L ${rightX} ${height}`}
-            stroke="var(--gray-4)"
-            strokeWidth="2"
-            fill="none"
-            variants={drawVariant}
-          />
-        </>
-      );
-    } else {
-      // Existing code for desktop lines
-      const offsets = [
-        -0.12 - 30 / width - 0.125,
-        -0.12 - 30 / width,
-        -0.12,
-        0,
-        0.12,
-        0.12 + 30 / width,
-        0.12 + 30 / width + 0.125,
-      ];
-
-      return offsets.map((offset, index) => {
-        const x = width / 2 + width * offset;
-        const centerY = height / 2;
-
-        return (
-          <motion.path
-            key={index}
-            d={`M ${x} ${centerY} L ${x} 0 M ${x} ${centerY} L ${x} ${height}`}
-            stroke="var(--gray-4)"
-            strokeWidth="2"
-            fill="none"
-            variants={drawVariant}
-          />
-        );
-      });
-    }
-  }, [width, height, isMobile]);
-
+  // ----- Scroll animations ----- //
   const { scrollYProgress } = useScroll();
   const backgroundGradient = useMotionValue(
     "radial-gradient(circle, #111111 0%, #000000 65%)"
@@ -182,59 +82,16 @@ function App() {
   useMotionValueEvent(scrollYProgress, "change", handleScroll);
 
   useEffect(() => {
-    if (isAboutInView && !hasAnimated) {
-      aboutControls.start("visible");
-      setHasAnimated(true);
-    } else if (!isAboutInView && hasAnimated) {
-      aboutControls.start("hidden");
-      setHasAnimated(false);
+    if (window.innerWidth > 768) {
+      (async () => {
+        const LocomotiveScroll = (await import("locomotive-scroll")).default;
+        new LocomotiveScroll();
+      })();
     }
-  }, [isAboutInView, aboutControls, hasAnimated]);
-
-  const fadeInUpVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: (custom: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-        delay: custom * 0.2,
-      },
-    }),
-  };
-
-  const lineVariants = {
-    hidden: { width: 0 },
-    visible: {
-      width: "100%",
-      transition: {
-        duration: 1.5,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  const baseHue = useMotionValue(0);
-
-  const mapHue = useCallback((h: number) => {
-    // Map 0-360 to 0-270 (excluding yellow and green)
-    h = h % 360;
-    if (h < 60) return h; // Red to purple
-    if (h < 180) return 60 + (h - 60) * (60 / 120); // Purple to blue
-    return 120 + (h - 180) * (150 / 180); // Blue to red
   }, []);
 
-  const hue1 = useTransform(baseHue, mapHue);
-  const hue2 = useTransform(baseHue, (h) => mapHue((h + 60) % 360));
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      baseHue.set(baseHue.get() - 1);
-    }, 50);
-
-    return () => clearInterval(interval);
-  }, [baseHue]);
+  // ----- Color Animation ----- //
+  const { hue1, hue2 } = useColorAnimation();
 
   return (
     <>
@@ -243,30 +100,12 @@ function App() {
         style={{ background: backgroundGradient }}
         className="w-screen overflow-hidden h-screen flex flex-col justify-center items-center "
       >
-        <motion.div
-          style={{ opacity: svgOpacity }}
-          className="fixed top-0 flex w-full overflow-hidden h-full flex-col justify-center items-center z-[1]"
-        >
-          {width > 0 && height > 0 && (
-            <>
-              <motion.svg
-                width={width}
-                height={height}
-                initial="hidden"
-                animate="visible"
-                className="fixed top-0 left-0"
-              >
-                {renderSVGLines}
-              </motion.svg>
-
-              <LoopingAnimation
-                width={width}
-                height={height}
-                isMobile={isMobile}
-              />
-            </>
-          )}
-        </motion.div>
+        <BackgroundSVG
+          width={dimensions.width}
+          height={dimensions.height}
+          isMobile={isMobile}
+          svgOpacity={svgOpacity}
+        />
         <Navbar />
         <div className="flex justify-center items-center relative z-10">
           <motion.h1
@@ -302,87 +141,16 @@ function App() {
           </motion.h1>
         </div>
       </motion.div>
-      <motion.div
-        ref={aboutRef}
-        style={{ background: backgroundGradient }}
-        className="w-screen min-h-screen overflow-hidden flex justify-center items-center relative z-10"
-      >
-        <motion.div
-          initial="hidden"
-          animate={aboutControls}
-          className="max-w-[1000px] px-4"
-        >
-          <motion.h1
-            variants={fadeInUpVariants}
-            custom={0}
-            className="khula-semibold text-6xl max-sm:text-4xl"
-          >
-            I believe in a user centered design approach, ensuring that every
-            project I work on is tailored to meet the specific needs of its
-            users.
-          </motion.h1>
+      <div ref={aboutRef}>
+        <About
+          isAboutInView={useInView(aboutRef, { amount: 0.3 })}
+          hasAnimated={hasAnimated}
+          setHasAnimated={setHasAnimated}
+          isMobile={isMobile}
+          backgroundGradient={backgroundGradient}
+        />
+      </div>
 
-          <motion.div
-            variants={fadeInUpVariants}
-            custom={1}
-            className="mt-[10vh] max-sm:mt-8"
-          >
-            <p className="text-gray-3 poppins-light-italic ml-2 mb-1 select-none">
-              This is me.
-            </p>
-            <motion.hr
-              variants={lineVariants}
-              className="bg-gray-3 origin-left w-full"
-            ></motion.hr>
-          </motion.div>
-          <div className="flex justify-between max-sm:flex-col flex-row mt-16 max-sm:mt-8">
-            <div className="flex flex-col w-1/2">
-              <motion.h2
-                variants={fadeInUpVariants}
-                custom={2}
-                className="khula-light text-5xl text-nowrap"
-              >
-                Hi, I'm Ben.
-              </motion.h2>
-              {!isMobile && (
-                <Magnetic>
-                  <motion.button
-                    variants={fadeInUpVariants}
-                    custom={3}
-                    className="flex bg-dark rounded-full text-light pl-4 pr-6 gap-x-1 py-3 w-max poppins-regular mt-24 select-none"
-                  >
-                    <ArrowUpRight />
-                    Get in Touch
-                  </motion.button>
-                </Magnetic>
-              )}
-            </div>
-            <div className="flex flex-col gap-y-4 w-1/2 khula-light text-2xl max-sm:text-lg max-sm:w-full max-sm:mt-8">
-              <motion.p variants={fadeInUpVariants} custom={4}>
-                I'm a passionate web developer dedicated to turning ideas into
-                creative solutions. I specialize in creating seamless and
-                intuitive user experiences.
-              </motion.p>
-              <motion.p variants={fadeInUpVariants} custom={5}>
-                I'm involved in every step of the process: from discovery and
-                design to development, testing, and deployment. I focus on
-                delivering high-quality, scalable results that drive positive
-                user experiences.
-              </motion.p>
-            </div>
-            {isMobile && (
-              <motion.button
-                variants={fadeInUpVariants}
-                custom={3}
-                className="flex bg-dark rounded-full text-light pl-4 pr-6 gap-x-1 py-3 w-max poppins-regular select-none mt-8"
-              >
-                <ArrowUpRight />
-                Get in Touch
-              </motion.button>
-            )}
-          </div>
-        </motion.div>
-      </motion.div>
       {/* Add some blank space */}
       <div style={{ height: "100vh", background: "#ffffff" }} />
     </>
