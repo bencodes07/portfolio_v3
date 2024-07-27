@@ -1,12 +1,10 @@
 import { MotionValue, useAnimationControls, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Magnetic from "../Magnetic";
 
 type AboutSectionProps = {
   isAboutInView: boolean;
-  hasAnimated: boolean;
-  setHasAnimated: (value: boolean) => void;
   isMobile: boolean;
   backgroundGradient: MotionValue<string>;
 };
@@ -37,12 +35,12 @@ const lineVariants = {
 
 const About: React.FC<AboutSectionProps> = ({
   isAboutInView,
-  hasAnimated,
-  setHasAnimated,
   isMobile,
   backgroundGradient,
 }) => {
   const aboutControls = useAnimationControls();
+
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
     if (isAboutInView && !hasAnimated) {

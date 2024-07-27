@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/gsap": "^3.0.0",
     "framer-motion": "^11.3.8",
     "gsap": "^3.12.5",
     "locomotive-scroll": "^5.0.0-beta.13",

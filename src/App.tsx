@@ -16,6 +16,9 @@ import About from "./components/about";
 import { useColorAnimation } from "./hooks/useColorAnimation";
 import { ScrollProvider } from "./contexts/ScrollContext";
 import LocomotiveScroll from "locomotive-scroll";
+import Contact from "./components/contact";
+import Projects from "./components/projects";
+import SectionSpacer from "./components/SectionSpacer";
 
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -23,7 +26,8 @@ function App() {
   const [locomotiveScroll, setLocomotiveScroll] =
     useState<LocomotiveScroll | null>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const projectsRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
   const isMobile = useMemo(() => window.innerWidth <= 768, []);
 
   // ----- Dimesion update ----- //
@@ -56,7 +60,7 @@ function App() {
 
   const handleScroll = useCallback((latest: number) => {
     requestAnimationFrame(() => {
-      const progress = Math.max(0, Math.min((latest - 0.1) / 0.2, 1));
+      const progress = Math.max(0, Math.min((latest - 0.1) / 0.1, 1));
 
       const startColor = [0, 0, 0];
       const endColor = [255, 255, 255]; // #FFFFFF
@@ -78,7 +82,7 @@ function App() {
         255 - Math.round(255 * progress)
       }, ${255 - Math.round(255 * progress)})`;
       textColor.set(txtColor);
-      const newOpacity = 1 - progress;
+      const newOpacity = 1 - progress * 3;
       svgOpacity.set(newOpacity);
     });
   }, []);
@@ -146,18 +150,31 @@ function App() {
           </motion.h1>
         </div>
       </motion.div>
-      <div ref={aboutRef} id="about" data-scroll-section>
+      <div ref={aboutRef} id="about">
         <About
           isAboutInView={useInView(aboutRef, { amount: 0.3 })}
-          hasAnimated={hasAnimated}
-          setHasAnimated={setHasAnimated}
           isMobile={isMobile}
           backgroundGradient={backgroundGradient}
         />
       </div>
 
-      {/* Add some blank space */}
-      <div style={{ height: "100vh", background: "#ffffff" }} />
+      <SectionSpacer height={300} backgroundGradient={backgroundGradient} />
+
+      <div ref={projectsRef} id="projects">
+        <Projects
+          isProjectsInView={useInView(projectsRef, { amount: 0.3 })}
+          isMobile={isMobile}
+          backgroundGradient={backgroundGradient}
+        />
+      </div>
+
+      <div ref={contactRef} id="contact">
+        <Contact
+          isContactInView={useInView(contactRef, { amount: 0.3 })}
+          isMobile={isMobile}
+          backgroundGradient={backgroundGradient}
+        />
+      </div>
     </ScrollProvider>
   );
 }

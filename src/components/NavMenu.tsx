@@ -141,7 +141,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
                 {[
                   { name: "About Me", id: "about" },
                   { name: "Projects", id: "projects" },
-                  { name: "Experience", id: "about" },
+                  /* { name: "Experience", id: "about" }, */
                   { name: "Contact", id: "contact" },
                 ].map((item, index) => (
                   <motion.li
