@@ -6,11 +6,7 @@ type ContactSectionProps = {
   backgroundGradient: MotionValue<string>;
 };
 
-const Contact: React.FC<ContactSectionProps> = ({
-  isContactInView,
-  isMobile,
-  backgroundGradient,
-}) => {
+const Contact: React.FC<ContactSectionProps> = ({ backgroundGradient }) => {
   return (
     <motion.div
       style={{ background: backgroundGradient }}

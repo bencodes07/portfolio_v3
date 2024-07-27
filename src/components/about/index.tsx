@@ -123,7 +123,7 @@ const About: React.FC<AboutSectionProps> = ({
             <motion.button
               variants={fadeInUpVariants}
               custom={3}
-              className="flex bg-dark rounded-full text-light pl-4 pr-6 gap-x-1 py-3 w-max poppins-regular select-none mt-8"
+              className="flex bg-dark rounded-full text-light pl-4 pr-6 gap-x-1 py-3 w-max h-fit poppins-regular select-none mt-8"
             >
               <ArrowUpRight />
               Get in Touch

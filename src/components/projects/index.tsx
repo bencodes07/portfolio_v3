@@ -6,6 +6,7 @@ import {
   useSpring,
   useAnimationControls,
 } from "framer-motion";
+import { useIsTouchDevice } from "../../hooks/useIsTouchDevice";
 
 type ProjectsSectionProps = {
   isProjectsInView: boolean;
@@ -36,6 +37,8 @@ const Projects: React.FC<ProjectsSectionProps> = ({
   const itemsRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isScrolling, setIsScrolling] = useState(false);
+
+  const isTouchDevice = useIsTouchDevice();
 
   const projectsControls = useAnimationControls();
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -111,24 +114,28 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       number: "01",
       title: "MeetMate",
       category: "Web Development / Design",
+      year: "2021",
       image: "https://picsum.photos/400/300?random=1",
     },
     {
       number: "02",
       title: "fishtrack.",
       category: "iOS Development / Product Design",
+      year: "2020",
       image: "https://picsum.photos/400/300?random=2",
     },
     {
       number: "03",
       title: "EssentialsB",
       category: "Web Development",
+      year: "2021",
       image: "https://picsum.photos/400/300?random=3",
     },
     {
       number: "04",
       title: "Portfolio",
       category: "Java Development",
+      year: "2021",
       image: "https://picsum.photos/400/300?random=4",
     },
   ];
@@ -136,88 +143,128 @@ const Projects: React.FC<ProjectsSectionProps> = ({
   return (
     <motion.div
       style={{ background: backgroundGradient }}
+      initial="hidden"
+      animate={projectsControls}
       className="w-screen min-h-screen overflow-hidden flex justify-center flex-col items-center relative z-10"
     >
-      <motion.div
-        initial="hidden"
-        animate={projectsControls}
-        className="max-w-[1000px] w-full flex justify-center flex-col items-center"
-      >
-        <motion.h2
-          custom={0}
-          variants={fadeInUpVariants}
-          className="poppins-light text-3xl tracking-[calc(3rem * 0.02)] mb-10"
-        >
-          Selected Projects
-        </motion.h2>
+      {isTouchDevice || (!isTouchDevice && isMobile) ? (
+        <motion.div>
+          <motion.h2
+            custom={0}
+            variants={fadeInUpVariants}
+            className="poppins-light text-3xl tracking-[calc(3rem * 0.02)] text-center mb-10"
+          >
+            Selected Projects
+          </motion.h2>
 
-        <AnimatePresence>
-          {activeIndex !== -1 && (
-            <motion.div
-              ref={galleryRef}
-              className="fixed w-[385px] h-[200px] overflow-hidden pointer-events-none z-50 rounded-xl"
-              initial={{ opacity: 0, scale: 0.2 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.2 }}
-              transition={{
-                duration: 0.3,
-                ease: "easeOut",
-              }}
-              style={{
-                left: cursorX,
-                top: cursorY,
-                x: "-50%",
-                y: "-50%",
-              }}
-            >
+          {/* Mobile Version: Card like design */}
+          <div className="grid grid-cols-2 grid-flow-row max-sm:grid-cols-1 gap-6 gap-y-32">
+            {projects.map((project, index) => (
               <motion.div
-                ref={imagesRef}
-                className="w-full h-[800px] flex flex-col"
-                animate={{ y: `-${200 * activeIndex}px` }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
+                key={project.number}
+                className="w-80 max-sm:w-[90vw] flex flex-col gap-y-4"
+                variants={fadeInUpVariants}
+                custom={index + 1}
               >
-                {projects.map((project) => (
-                  <div
-                    key={project.number}
-                    className="w-full h-[200px] bg-cover bg-center"
-                    style={{ backgroundImage: `url('${project.image}')` }}
-                  ></div>
-                ))}
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <div
-          ref={itemsRef}
-          className="flex justify-center items-center flex-col w-full"
-        >
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.number}
-              className="flex flex-col w-full group project-item cursor-pointer"
-              onMouseEnter={() => setActiveIndex(index)}
-              variants={fadeInUpVariants}
-              custom={index + 1}
-            >
-              <div className="w-full flex justify-between items-center h-[200px]">
-                <div className="flex justify-start items-start h-fit gap-x-4">
-                  <p className="poppins-extralight text-2xl leading-none group-hover:text-gray-2 text-gray-3 transition-colors">
-                    {project.number}
+                <div
+                  key={project.number}
+                  className="size-80 max-sm:size-[90vw] bg-cover bg-center rounded-xl"
+                  style={{ backgroundImage: `url('${project.image}')` }}
+                ></div>
+                <h1 className="khula-regular text-4xl mt-8">{project.title}</h1>
+                <hr />
+                <div className="flex flex-row justify-between items-center w-full">
+                  <p className="poppins-extralight text-lg">
+                    {project.category}
                   </p>
-                  <h1 className="khula-regular text-6xl tracking-[calc(3.75rem * 0.03)] group-hover:text-gray-2 transition-all group-hover:ml-2">
-                    {project.title}
-                  </h1>
+                  <p className="poppins-extralight text-lg">{project.year}</p>
                 </div>
-                <p className="poppins-extralight text-lg pr-2 group-hover:text-gray-2 group-hover:pr-4 transition-all">
-                  {project.category}
-                </p>
-              </div>
-              <hr className="w-full border-gray-1 group-hover:border-gray-4 transition-colors"></hr>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial="hidden"
+          animate={projectsControls}
+          className="max-w-[1000px] w-full flex justify-center flex-col items-center px-4"
+        >
+          <motion.h2
+            custom={0}
+            variants={fadeInUpVariants}
+            className="poppins-light text-3xl tracking-[calc(3rem * 0.02)] mb-10"
+          >
+            Selected Projects
+          </motion.h2>
+
+          <AnimatePresence>
+            {activeIndex !== -1 && (
+              <motion.div
+                ref={galleryRef}
+                className="fixed w-[385px] h-[200px] overflow-hidden pointer-events-none z-50 rounded-xl"
+                initial={{ opacity: 0, scale: 0.2 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.2 }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeOut",
+                }}
+                style={{
+                  left: cursorX,
+                  top: cursorY,
+                  x: "-50%",
+                  y: "-50%",
+                }}
+              >
+                <motion.div
+                  ref={imagesRef}
+                  className="w-full h-[800px] flex flex-col"
+                  animate={{ y: `-${200 * activeIndex}px` }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                >
+                  {projects.map((project) => (
+                    <div
+                      key={project.number}
+                      className="w-full h-[200px] bg-cover bg-center"
+                      style={{ backgroundImage: `url('${project.image}')` }}
+                    ></div>
+                  ))}
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div
+            ref={itemsRef}
+            className="flex justify-center items-center flex-col w-full"
+          >
+            {projects.map((project, index) => (
+              <motion.div
+                key={project.number}
+                className="flex flex-col w-full group project-item cursor-pointer"
+                onMouseEnter={() => setActiveIndex(index)}
+                variants={fadeInUpVariants}
+                custom={index + 1}
+              >
+                <div className="w-full flex justify-between items-center h-[200px]">
+                  <div className="flex justify-start items-start h-fit gap-x-4">
+                    <p className="poppins-extralight text-2xl leading-none group-hover:text-gray-2 text-gray-3 transition-colors">
+                      {project.number}
+                    </p>
+                    <h1 className="khula-regular text-6xl tracking-[calc(3.75rem * 0.03)] group-hover:text-gray-2 transition-all group-hover:ml-2">
+                      {project.title}
+                    </h1>
+                  </div>
+                  <p className="poppins-extralight text-lg pr-2 group-hover:text-gray-2 group-hover:pr-4 transition-all">
+                    {project.category}
+                  </p>
+                </div>
+                <hr className="w-full border-gray-1 group-hover:border-gray-4 transition-colors"></hr>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   );
 };

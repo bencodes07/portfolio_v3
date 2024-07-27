@@ -19,6 +19,7 @@ import LocomotiveScroll from "locomotive-scroll";
 import Contact from "./components/contact";
 import Projects from "./components/projects";
 import SectionSpacer from "./components/SectionSpacer";
+import { useIsTouchDevice } from "./hooks/useIsTouchDevice";
 
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -29,6 +30,8 @@ function App() {
   const projectsRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
   const isMobile = useMemo(() => window.innerWidth <= 768, []);
+
+  const isTouchDevice = useIsTouchDevice();
 
   // ----- Dimesion update ----- //
   const updateDimensions = useCallback(
@@ -60,7 +63,9 @@ function App() {
 
   const handleScroll = useCallback((latest: number) => {
     requestAnimationFrame(() => {
-      const progress = Math.max(0, Math.min((latest - 0.1) / 0.1, 1));
+      const progress = !isMobile
+        ? Math.max(0, Math.min((latest - 0.1) / 0.1, 1))
+        : Math.max(0, Math.min((latest - 0.03) / 0.1, 1));
 
       const startColor = [0, 0, 0];
       const endColor = [255, 255, 255]; // #FFFFFF
@@ -158,11 +163,17 @@ function App() {
         />
       </div>
 
+      {/* {!isMobile && ( */}
       <SectionSpacer height={300} backgroundGradient={backgroundGradient} />
+      {/* )} */}
 
       <div ref={projectsRef} id="projects">
         <Projects
-          isProjectsInView={useInView(projectsRef, { amount: 0.3 })}
+          isProjectsInView={
+            isTouchDevice
+              ? useInView(projectsRef, { amount: 0.1 })
+              : useInView(projectsRef, { amount: 0.3 })
+          }
           isMobile={isMobile}
           backgroundGradient={backgroundGradient}
         />
