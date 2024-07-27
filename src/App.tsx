@@ -14,10 +14,14 @@ import { debounce } from "lodash";
 import BackgroundSVG from "./components/hero/BackgroundSVG";
 import About from "./components/about";
 import { useColorAnimation } from "./hooks/useColorAnimation";
+import { ScrollProvider } from "./contexts/ScrollContext";
+import LocomotiveScroll from "locomotive-scroll";
 
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const dimensionsRef = useRef({ width: 0, height: 0 });
+  const [locomotiveScroll, setLocomotiveScroll] =
+    useState<LocomotiveScroll | null>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
   const isMobile = useMemo(() => window.innerWidth <= 768, []);
@@ -85,7 +89,8 @@ function App() {
     if (window.innerWidth > 768) {
       (async () => {
         const LocomotiveScroll = (await import("locomotive-scroll")).default;
-        new LocomotiveScroll();
+        const scroll = new LocomotiveScroll();
+        setLocomotiveScroll(scroll);
       })();
     }
   }, []);
@@ -94,7 +99,7 @@ function App() {
   const { hue1, hue2 } = useColorAnimation();
 
   return (
-    <>
+    <ScrollProvider value={locomotiveScroll}>
       <MouseGradient isMobile={isMobile} />
       <motion.div
         style={{ background: backgroundGradient }}
@@ -141,7 +146,7 @@ function App() {
           </motion.h1>
         </div>
       </motion.div>
-      <div ref={aboutRef}>
+      <div ref={aboutRef} id="about" data-scroll-section>
         <About
           isAboutInView={useInView(aboutRef, { amount: 0.3 })}
           hasAnimated={hasAnimated}
@@ -153,7 +158,7 @@ function App() {
 
       {/* Add some blank space */}
       <div style={{ height: "100vh", background: "#ffffff" }} />
-    </>
+    </ScrollProvider>
   );
 }
 

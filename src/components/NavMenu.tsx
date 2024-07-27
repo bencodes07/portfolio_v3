@@ -1,6 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { X } from "lucide-react";
+import { useScroll as useContextScroll } from "../contexts/ScrollContext";
 
 interface NavMenuProps {
   isOpen: boolean;
@@ -9,6 +10,22 @@ interface NavMenuProps {
 
 const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
   const { scrollY } = useScroll();
+
+  const locomotiveScroll = useContextScroll();
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    targetId: string
+  ) => {
+    e.preventDefault();
+    if (locomotiveScroll) {
+      const target = document.getElementById(targetId);
+      if (target) {
+        locomotiveScroll.scrollTo(target);
+      }
+    }
+    onClose();
+  };
   return (
     <>
       {/* Backdrop */}
@@ -121,25 +138,29 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
             >
               <h3 className="text-lg khula-light">Menu</h3>
               <ul className="space-y-2">
-                {["About Me", "Projects", "Experience", "Contact"].map(
-                  (item, index) => (
-                    <motion.li
-                      key={item}
-                      initial={{ x: 20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
+                {[
+                  { name: "About Me", id: "about" },
+                  { name: "Projects", id: "projects" },
+                  { name: "Experience", id: "about" },
+                  { name: "Contact", id: "contact" },
+                ].map((item, index) => (
+                  <motion.li
+                    key={item.name}
+                    initial={{ x: 20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
+                  >
+                    <a
+                      href={`#${item.id}`}
+                      onClick={(e) => handleNavClick(e, item.id)}
+                      className={`text-[2.5rem] ${
+                        !(window.innerWidth <= 768) && "hover:left-2"
+                      } left-0 relative transition-[left] duration-300 ease-in-out`}
                     >
-                      <a
-                        href="#"
-                        className={`text-[2.5rem] ${
-                          !(window.innerWidth <= 768) && "hover:left-2"
-                        } left-0 relative transition-[left] duration-300 ease-in-out`}
-                      >
-                        {item}
-                      </a>
-                    </motion.li>
-                  )
-                )}
+                      {item.name}
+                    </a>
+                  </motion.li>
+                ))}
               </ul>
             </motion.div>
           </div>
