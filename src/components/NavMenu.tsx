@@ -112,18 +112,28 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
             >
               <h3 className="text-lg khula-light max-sm:mt-10">Social</h3>
               <ul className="space-y-2">
-                {["LinkedIn", "Instagram", "GitHub"].map((item, index) => (
+                {[
+                  {
+                    name: "LinkedIn",
+                    link: "https://linkedin.com/in/ben-böckmann-296293265",
+                  },
+                  {
+                    name: "Instagram",
+                    link: "https://instagram.com/ben.bck_prvt",
+                  },
+                  { name: "Github", link: "https://github.com/bencodes07" },
+                ].map((item, index) => (
                   <motion.li
-                    key={item}
+                    key={item.name}
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
                   >
                     <a
-                      href="#"
+                      href={item.link}
                       className="hover:underline text-xl poppins-light"
                     >
-                      {item}
+                      {item.name}
                     </a>
                   </motion.li>
                 ))}
