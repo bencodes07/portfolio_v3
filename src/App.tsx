@@ -175,7 +175,7 @@ function App() {
         <Projects
           isProjectsInView={
             isTouchDevice
-              ? useInView(projectsRef, { amount: 0.1 })
+              ? useInView(projectsRef, { amount: 0 })
               : useInView(projectsRef, { amount: 0.3 })
           }
           isMobile={isMobile}
