@@ -33,7 +33,7 @@ function App() {
 
   const isTouchDevice = useIsTouchDevice();
 
-  // ----- Dimesion update ----- //
+  // ----- Dimension update ----- //
   const updateDimensions = useCallback(
     debounce(() => {
       const newDimensions = {
@@ -102,6 +102,12 @@ function App() {
         setLocomotiveScroll(scroll);
       })();
     }
+
+    return () => {
+      if (locomotiveScroll) {
+        locomotiveScroll.destroy();
+      }
+    };
   }, []);
 
   // ----- Color Animation ----- //
@@ -163,9 +169,7 @@ function App() {
         />
       </div>
 
-      {/* {!isMobile && ( */}
       <SectionSpacer height={300} backgroundGradient={backgroundGradient} />
-      {/* )} */}
 
       <div ref={projectsRef} id="projects">
         <Projects
@@ -179,7 +183,7 @@ function App() {
         />
       </div>
 
-      <div ref={contactRef} id="contact">
+      <div ref={contactRef} id="contact" className="relative">
         <Contact
           isContactInView={useInView(contactRef, { amount: 0.3 })}
           isMobile={isMobile}

@@ -131,6 +131,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
                   >
                     <a
                       href={item.link}
+                      target="_blank"
                       className="hover:underline text-xl poppins-light"
                     >
                       {item.name}

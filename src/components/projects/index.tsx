@@ -7,11 +7,22 @@ import {
   useAnimationControls,
 } from "framer-motion";
 import { useIsTouchDevice } from "../../hooks/useIsTouchDevice";
+import Curve from "./Curve";
 
 type ProjectsSectionProps = {
   isProjectsInView: boolean;
   isMobile: boolean;
   backgroundGradient: MotionValue<string>;
+};
+
+export type Project = {
+  number: string;
+  title: string;
+  category: string;
+  year: string;
+  image: string;
+  description: string;
+  technologies: string[];
 };
 
 const fadeInUpVariants = {
@@ -22,9 +33,17 @@ const fadeInUpVariants = {
     transition: {
       duration: 0.6,
       ease: "easeOut",
-      delay: custom * 0.2,
+      delay: custom * 0.2 + 1,
     },
   }),
+  exit: {
+    opacity: 0,
+    y: 50,
+    transition: {
+      duration: 0.4,
+      ease: "easeIn",
+    },
+  },
 };
 
 const Projects: React.FC<ProjectsSectionProps> = ({
@@ -46,15 +65,57 @@ const Projects: React.FC<ProjectsSectionProps> = ({
   const cursorX = useSpring(0, { stiffness: 200, damping: 50 });
   const cursorY = useSpring(0, { stiffness: 200, damping: 50 });
 
+  const projects: Project[] = [
+    {
+      number: "01",
+      title: "MeetMate",
+      category: "Web Development / Design",
+      year: "2021",
+      image: "./image-placeholder-image.jpg",
+      description: "A social media platform for meeting new people.",
+      technologies: ["React", "Node.js", "MongoDB"],
+    },
+    {
+      number: "02",
+      title: "fishtrack.",
+      category: "iOS Development / Product Design",
+      year: "2020",
+      image: "https://picsum.photos/400/300?random=2",
+      description: "A fishing app that helps you track your catches.",
+      technologies: ["Swift", "Figma"],
+    },
+    {
+      number: "03",
+      title: "EssentialsB",
+      category: "Java Development",
+      year: "2021",
+      image: "https://picsum.photos/400/300?random=3",
+      description: "A grocery delivery app for busy people.",
+      technologies: ["Java", "Android Studio"],
+    },
+    {
+      number: "04",
+      title: "Portfolio",
+      category: "Web Development",
+      year: "2021",
+      image: "https://picsum.photos/400/300?random=4",
+      description: "My personal portfolio website.",
+      technologies: ["React", "Framer Motion"],
+    },
+  ];
+
   useEffect(() => {
     if (isProjectsInView && !hasAnimated) {
-      projectsControls.start("visible");
-      setHasAnimated(true);
+      projectsControls.start("visible").then(() => {
+        setHasAnimated(true);
+      });
     } else if (!isProjectsInView && hasAnimated) {
       projectsControls.start("hidden");
       setHasAnimated(false);
     }
   }, [isProjectsInView, projectsControls, hasAnimated, setHasAnimated]);
+
+  // ----- Hover effect ----- //
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
@@ -109,40 +170,39 @@ const Projects: React.FC<ProjectsSectionProps> = ({
     };
   }, [isMobile, handleMouseMove, handleScroll, cursorX, cursorY, isScrolling]);
 
-  const projects = [
-    {
-      number: "01",
-      title: "MeetMate",
-      category: "Web Development / Design",
-      year: "2021",
-      image: "https://picsum.photos/400/300?random=1",
-    },
-    {
-      number: "02",
-      title: "fishtrack.",
-      category: "iOS Development / Product Design",
-      year: "2020",
-      image: "https://picsum.photos/400/300?random=2",
-    },
-    {
-      number: "03",
-      title: "EssentialsB",
-      category: "Web Development",
-      year: "2021",
-      image: "https://picsum.photos/400/300?random=3",
-    },
-    {
-      number: "04",
-      title: "Portfolio",
-      category: "Java Development",
-      year: "2021",
-      image: "https://picsum.photos/400/300?random=4",
-    },
-  ];
+  // ----- Overlay ----- //
+
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isContentVisible, setIsContentVisible] = useState(false);
+
+  const handleProjectClick = (project: Project) => {
+    setSelectedProject(project);
+    setIsOverlayVisible(true);
+  };
+
+  const closeOverlay = () => {
+    setIsContentVisible(false);
+    setTimeout(() => {
+      setIsOverlayVisible(false);
+    }, 800);
+  };
+
+  useEffect(() => {
+    if (isOverlayVisible) {
+      const timer = setTimeout(() => {
+        setIsContentVisible(true);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [isOverlayVisible]);
 
   return (
     <motion.div
-      style={{ background: backgroundGradient }}
+      style={{
+        background: backgroundGradient,
+        zIndex: isOverlayVisible ? 20 : 10,
+      }}
       initial="hidden"
       animate={projectsControls}
       className="w-screen min-h-screen overflow-hidden flex justify-center flex-col items-center relative z-10"
@@ -164,6 +224,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
                 key={project.number}
                 className="w-80 max-sm:w-[90vw] flex flex-col gap-y-4"
                 variants={fadeInUpVariants}
+                onClick={() => handleProjectClick(project)}
                 custom={index + 1}
               >
                 <div
@@ -197,42 +258,44 @@ const Projects: React.FC<ProjectsSectionProps> = ({
             Selected Projects
           </motion.h2>
 
-          <AnimatePresence>
-            {activeIndex !== -1 && (
-              <motion.div
-                ref={galleryRef}
-                className="fixed w-[385px] h-[200px] overflow-hidden pointer-events-none z-50 rounded-xl"
-                initial={{ opacity: 0, scale: 0.2 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.2 }}
-                transition={{
-                  duration: 0.3,
-                  ease: "easeOut",
-                }}
-                style={{
-                  left: cursorX,
-                  top: cursorY,
-                  x: "-50%",
-                  y: "-50%",
-                }}
-              >
+          {hasAnimated && (
+            <AnimatePresence>
+              {activeIndex !== -1 && (
                 <motion.div
-                  ref={imagesRef}
-                  className="w-full h-[800px] flex flex-col"
-                  animate={{ y: `-${200 * activeIndex}px` }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  ref={galleryRef}
+                  className="fixed w-[385px] h-[200px] overflow-hidden pointer-events-none z-50 rounded-xl"
+                  initial={{ opacity: 0, scale: 0.2 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.2 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeOut",
+                  }}
+                  style={{
+                    left: cursorX,
+                    top: cursorY,
+                    x: "-50%",
+                    y: "-50%",
+                  }}
                 >
-                  {projects.map((project) => (
-                    <div
-                      key={project.number}
-                      className="w-full h-[200px] bg-cover bg-center"
-                      style={{ backgroundImage: `url('${project.image}')` }}
-                    ></div>
-                  ))}
+                  <motion.div
+                    ref={imagesRef}
+                    className="w-full h-[800px] flex flex-col"
+                    animate={{ y: `-${200 * activeIndex}px` }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  >
+                    {projects.map((project) => (
+                      <div
+                        key={project.number}
+                        className="w-full h-[200px] bg-cover bg-center"
+                        style={{ backgroundImage: `url('${project.image}')` }}
+                      ></div>
+                    ))}
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              )}
+            </AnimatePresence>
+          )}
 
           <div
             ref={itemsRef}
@@ -242,7 +305,9 @@ const Projects: React.FC<ProjectsSectionProps> = ({
               <motion.div
                 key={project.number}
                 className="flex flex-col w-full group project-item cursor-pointer"
+                style={{ willChange: "transform, opacity" }}
                 onMouseEnter={() => setActiveIndex(index)}
+                onClick={() => handleProjectClick(project)}
                 variants={fadeInUpVariants}
                 custom={index + 1}
               >
@@ -265,6 +330,44 @@ const Projects: React.FC<ProjectsSectionProps> = ({
           </div>
         </motion.div>
       )}
+
+      <div className="z-50 relative">
+        <AnimatePresence>
+          {(isOverlayVisible || selectedProject) && (
+            <>
+              <Curve isVisible={isOverlayVisible} />
+              <motion.div
+                className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none"
+                initial="hidden"
+                animate={isOverlayVisible ? "visible" : "exit"}
+                exit="exit"
+              >
+                <AnimatePresence mode="wait">
+                  {isContentVisible && selectedProject && (
+                    <motion.div
+                      key={selectedProject.number}
+                      className="text-white max-w-2xl mx-auto px-4 pointer-events-auto"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      <h2 className="text-4xl mb-4">{selectedProject.title}</h2>
+                      <p>{selectedProject.description}</p>
+                      <button
+                        className="mt-4 px-4 py-2 bg-white text-black"
+                        onClick={closeOverlay}
+                      >
+                        Close
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </div>
     </motion.div>
   );
 };
