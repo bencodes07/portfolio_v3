@@ -2,6 +2,7 @@ import { MotionValue, useAnimationControls, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import Magnetic from "../Magnetic";
+import { useScroll } from "../../contexts/ScrollContext";
 
 type AboutSectionProps = {
   isAboutInView: boolean;
@@ -52,6 +53,8 @@ const About: React.FC<AboutSectionProps> = ({
     }
   }, [isAboutInView, aboutControls, hasAnimated, setHasAnimated]);
 
+  const locomotiveScroll = useScroll();
+
   return (
     <motion.div
       style={{ background: backgroundGradient }}
@@ -98,6 +101,7 @@ const About: React.FC<AboutSectionProps> = ({
                 <motion.button
                   variants={fadeInUpVariants}
                   custom={3}
+                  onClick={() => locomotiveScroll?.scrollTo("#contact")}
                   className="flex bg-dark rounded-full text-light pl-4 pr-6 gap-x-1 py-3 w-max poppins-regular mt-24 select-none"
                 >
                   <ArrowUpRight />
@@ -123,6 +127,9 @@ const About: React.FC<AboutSectionProps> = ({
             <motion.button
               variants={fadeInUpVariants}
               custom={3}
+              onClick={() =>
+                document.getElementById("contact")?.scrollIntoView()
+              }
               className="flex bg-dark rounded-full text-light pl-4 pr-6 gap-x-1 py-3 w-max h-fit poppins-regular select-none mt-8"
             >
               <ArrowUpRight />

@@ -160,6 +160,10 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
+                    onClick={() =>
+                      window.innerWidth <= 768 &&
+                      document.getElementById(item.id)?.scrollIntoView()
+                    }
                   >
                     <a
                       href={`#${item.id}`}

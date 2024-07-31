@@ -222,14 +222,14 @@ const Projects: React.FC<ProjectsSectionProps> = ({
             {projects.map((project, index) => (
               <motion.div
                 key={project.number}
-                className="w-80 max-sm:w-[90vw] flex flex-col gap-y-4"
+                className="w-80 max-sm:w-[80vw] flex flex-col gap-y-4 items-center"
                 variants={fadeInUpVariants}
                 onClick={() => handleProjectClick(project)}
                 custom={index + 1}
               >
                 <div
                   key={project.number}
-                  className="size-80 max-sm:size-[90vw] bg-cover bg-center rounded-xl"
+                  className="size-80 max-sm:size-[80vw] bg-cover bg-center rounded-xl"
                   style={{ backgroundImage: `url('${project.image}')` }}
                 ></div>
                 <h1 className="khula-regular text-4xl mt-8">{project.title}</h1>
