@@ -32,6 +32,7 @@
     "@typescript-eslint/parser": "^7.15.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.19",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
@@ -40,5 +41,10 @@
     "tailwindcss": "^3.4.6",
     "typescript": "^5.2.2",
     "vite": "^5.3.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
