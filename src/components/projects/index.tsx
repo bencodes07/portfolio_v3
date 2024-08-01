@@ -264,7 +264,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
               {activeIndex !== -1 && (
                 <motion.div
                   ref={galleryRef}
-                  className="fixed w-[385px] h-[200px] overflow-hidden pointer-events-none z-50 rounded-xl"
+                  className="absolute w-[385px] h-[200px] overflow-hidden pointer-events-none z-50 rounded-xl"
                   initial={{ opacity: 0, scale: 0.2 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.2 }}
@@ -332,16 +332,18 @@ const Projects: React.FC<ProjectsSectionProps> = ({
         </motion.div>
       )}
 
-      <div className="z-50 relative">
+      <div className=" z-auto relative ">
         <AnimatePresence>
           {(isOverlayVisible || selectedProject) && (
             <>
               <Curve isVisible={isOverlayVisible} />
               <motion.div
-                className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none"
+                className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
                 initial="hidden"
                 animate={isOverlayVisible ? "visible" : "exit"}
                 exit="exit"
+                onTouchStart={(e) => e.stopPropagation()}
+                onTouchMove={(e) => e.stopPropagation()}
               >
                 <AnimatePresence mode="wait">
                   {isContentVisible && selectedProject && (
