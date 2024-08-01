@@ -106,9 +106,10 @@ const Projects: React.FC<ProjectsSectionProps> = ({
 
   useEffect(() => {
     if (isProjectsInView && !hasAnimated) {
-      projectsControls.start("visible").then(() => {
+      projectsControls.start("visible");
+      setTimeout(() => {
         setHasAnimated(true);
-      });
+      }, 500);
     } else if (!isProjectsInView && hasAnimated) {
       projectsControls.start("hidden");
       setHasAnimated(false);
