@@ -8,6 +8,8 @@ import {
 } from "framer-motion";
 import { useIsTouchDevice } from "../../hooks/useIsTouchDevice";
 import Curve from "./Curve";
+import Overlay from "./Overlay";
+import { X } from "lucide-react";
 
 type ProjectsSectionProps = {
   isProjectsInView: boolean;
@@ -23,6 +25,7 @@ export type Project = {
   image: string;
   description: string;
   technologies: string[];
+  color: string;
 };
 
 const fadeInUpVariants = {
@@ -71,9 +74,10 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       title: "MeetMate",
       category: "Web Development / Design",
       year: "2021",
-      image: "./image-placeholder-image.jpg",
+      image: "./MeetMate_Landing.png",
       description: "A social media platform for meeting new people.",
       technologies: ["React", "Node.js", "MongoDB"],
+      color: "77, 128, 237",
     },
     {
       number: "02",
@@ -83,6 +87,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       image: "https://picsum.photos/400/300?random=2",
       description: "A fishing app that helps you track your catches.",
       technologies: ["Swift", "Figma"],
+      color: "#ffffff",
     },
     {
       number: "03",
@@ -92,6 +97,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       image: "https://picsum.photos/400/300?random=3",
       description: "A grocery delivery app for busy people.",
       technologies: ["Java", "Android Studio"],
+      color: "#ffffff",
     },
     {
       number: "04",
@@ -101,6 +107,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       image: "https://picsum.photos/400/300?random=4",
       description: "My personal portfolio website.",
       technologies: ["React", "Framer Motion"],
+      color: "#ffffff",
     },
   ];
 
@@ -264,7 +271,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
               {activeIndex !== -1 && (
                 <motion.div
                   ref={galleryRef}
-                  className="absolute w-[385px] h-[200px] overflow-hidden pointer-events-none z-50 rounded-xl"
+                  className="fixed w-[385px] h-[200px] overflow-hidden pointer-events-none z-50 rounded-xl"
                   initial={{ opacity: 0, scale: 0.2 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.2 }}
@@ -332,45 +339,52 @@ const Projects: React.FC<ProjectsSectionProps> = ({
         </motion.div>
       )}
 
-      <div className=" z-auto relative ">
-        <AnimatePresence>
-          {(isOverlayVisible || selectedProject) && (
-            <>
-              <Curve isVisible={isOverlayVisible} />
-              <motion.div
-                className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
-                initial="hidden"
-                animate={isOverlayVisible ? "visible" : "exit"}
-                exit="exit"
-                onTouchStart={(e) => e.stopPropagation()}
-                onTouchMove={(e) => e.stopPropagation()}
+      <AnimatePresence>
+        {(isOverlayVisible || selectedProject) && (
+          <>
+            <Curve isVisible={isOverlayVisible} />
+            <motion.div
+              className="fixed inset-0 w-full z-[999] flex items-center justify-center pointer-events-none"
+              initial="hidden"
+              animate={isOverlayVisible ? "visible" : "exit"}
+              exit="exit"
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+            >
+              <AnimatePresence mode="wait">
+                {isContentVisible && selectedProject && (
+                  <Overlay project={selectedProject} />
+                  // <motion.div
+                  //   key={selectedProject.number}
+                  //   className="text-white max-w-2xl mx-auto px-4 pointer-events-auto"
+                  //   initial={{ opacity: 0, y: 20 }}
+                  //   animate={{ opacity: 1, y: 0 }}
+                  //   exit={{ opacity: 0, y: 20 }}
+                  //   transition={{ duration: 0.4 }}
+                  // >
+                  //   <h2 className="text-4xl mb-4">{selectedProject.title}</h2>
+                  //   <p>{selectedProject.description}</p>
+                  //   <button
+                  //     className="mt-4 px-4 py-2 bg-white text-black"
+                  //     onClick={closeOverlay}
+                  //   >
+                  //     Close
+                  //   </button>
+                  // </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+            {isContentVisible && (
+              <button
+                onClick={closeOverlay}
+                className="fixed z-[9999] top-6 right-6 px-4 py-2 text-light text-xl poppins-regular flex flex-row gap-x-2 items-center"
               >
-                <AnimatePresence mode="wait">
-                  {isContentVisible && selectedProject && (
-                    <motion.div
-                      key={selectedProject.number}
-                      className="text-white max-w-2xl mx-auto px-4 pointer-events-auto"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      <h2 className="text-4xl mb-4">{selectedProject.title}</h2>
-                      <p>{selectedProject.description}</p>
-                      <button
-                        className="mt-4 px-4 py-2 bg-white text-black"
-                        onClick={closeOverlay}
-                      >
-                        Close
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </div>
+                <X size={32} />
+              </button>
+            )}
+          </>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
