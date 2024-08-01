@@ -33,7 +33,7 @@ const fadeInUpVariants = {
     transition: {
       duration: 0.6,
       ease: "easeOut",
-      delay: custom * 0.2 + 1,
+      delay: custom * 0.2,
     },
   }),
   exit: {
@@ -122,7 +122,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
     },
-    [cursorX, cursorY]
+    [cursorX, cursorY],
   );
 
   const handleScroll = useCallback(() => {
@@ -143,12 +143,12 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       if (isScrolling) {
         const hoverItem = document.elementFromPoint(
           cursorX.get(),
-          cursorY.get()
+          cursorY.get(),
         );
         const projectItem = hoverItem?.closest(".project-item");
         if (projectItem) {
           const index = Array.from(items.children).indexOf(
-            projectItem as Element
+            projectItem as Element,
           );
           setActiveIndex(index);
         } else {

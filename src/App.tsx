@@ -43,7 +43,7 @@ function App() {
       dimensionsRef.current = newDimensions;
       setDimensions(newDimensions);
     }, 200),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -56,7 +56,7 @@ function App() {
   // ----- Scroll animations ----- //
   const { scrollYProgress } = useScroll();
   const backgroundGradient = useMotionValue(
-    "radial-gradient(circle, #111111 0%, #000000 65%)"
+    "radial-gradient(circle, #111111 0%, #000000 65%)",
   );
   const textColor = useMotionValue("#FFFFFF");
   const svgOpacity = useMotionValue(1);
@@ -73,13 +73,13 @@ function App() {
       const interpolateColor = (start: number[], end: number[]): string =>
         start
           .map((channel, i) =>
-            Math.round(channel + (end[i] - channel) * progress)
+            Math.round(channel + (end[i] - channel) * progress),
           )
           .join(", ");
 
       const newGradient = `radial-gradient(circle, rgb(${interpolateColor(
         [17, 17, 17],
-        endColor
+        endColor,
       )}) 0%, rgb(${interpolateColor(startColor, endColor)}) 65%)`;
       backgroundGradient.set(newGradient);
 
@@ -136,7 +136,7 @@ function App() {
                 : useTransform(
                     scrollYProgress,
                     [0, 0.5],
-                    ["translateY(0px)", "translateY(-200px)"]
+                    ["translateY(0px)", "translateY(-200px)"],
                   ),
               opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0]),
               textShadow: "0px 0px 6px rgba(255,255,255,0.25)",
@@ -148,7 +148,7 @@ function App() {
                 backgroundImage: useTransform(
                   [hue1, hue2],
                   ([h1, h2]) =>
-                    `linear-gradient(90deg, hsl(${h1}, 100%, 50%), hsl(${h2}, 100%, 50%))`
+                    `linear-gradient(90deg, hsl(${h1}, 100%, 50%), hsl(${h2}, 100%, 50%))`,
                 ),
                 backgroundClip: "text",
                 WebkitBackgroundClip: "text",
@@ -173,11 +173,9 @@ function App() {
 
       <div ref={projectsRef} id="projects">
         <Projects
-          isProjectsInView={
-            isTouchDevice
-              ? useInView(projectsRef, { amount: 0 })
-              : useInView(projectsRef, { amount: 0.3 })
-          }
+          isProjectsInView={useInView(projectsRef, {
+            amount: isTouchDevice ? 0.1 : 0.3,
+          })}
           isMobile={isMobile}
           backgroundGradient={backgroundGradient}
         />
