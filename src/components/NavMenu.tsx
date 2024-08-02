@@ -15,7 +15,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
 
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    targetId: string
+    targetId: string,
   ) => {
     e.preventDefault();
     if (locomotiveScroll) {
@@ -33,7 +33,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
         {isOpen && (
           <motion.div
             key="backdrop"
-            className="fixed inset-0 bg-black z-40"
+            className="fixed inset-0 bg-black z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}

@@ -271,7 +271,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
               {activeIndex !== -1 && (
                 <motion.div
                   ref={galleryRef}
-                  className="fixed w-[385px] h-[200px] overflow-hidden pointer-events-none z-50 rounded-xl"
+                  className="fixed w-[385px] h-[200px] overflow-hidden pointer-events-none z-40 rounded-xl"
                   initial={{ opacity: 0, scale: 0.2 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.2 }}

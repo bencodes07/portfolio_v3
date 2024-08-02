@@ -171,7 +171,7 @@ function App() {
 
       <SectionSpacer height={300} backgroundGradient={backgroundGradient} />
 
-      <div ref={projectsRef} id="projects" className="relative z-50">
+      <div ref={projectsRef} id="projects" className="relative">
         <Projects
           isProjectsInView={useInView(projectsRef, {
             amount: isTouchDevice ? 0.1 : 0.3,
