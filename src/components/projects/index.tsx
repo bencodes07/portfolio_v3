@@ -205,6 +205,15 @@ const Projects: React.FC<ProjectsSectionProps> = ({
     }
   }, [isOverlayVisible]);
 
+  // ----- Image Preloading ----- //
+
+  useEffect(() => {
+    projects.map((project: Project) => {
+      const img = new Image();
+      img.src = project.image;
+    });
+  }, []);
+
   return (
     <motion.div
       style={{
@@ -293,11 +302,11 @@ const Projects: React.FC<ProjectsSectionProps> = ({
                     transition={{ duration: 0.2, ease: "easeOut" }}
                   >
                     {projects.map((project) => (
-                      <div
+                      <img
                         key={project.number}
-                        className="w-full h-[200px] bg-cover bg-center"
-                        style={{ backgroundImage: `url('${project.image}')` }}
-                      ></div>
+                        className="w-full h-[200px] object-cover object-center"
+                        src={project.image}
+                      />
                     ))}
                   </motion.div>
                 </motion.div>
