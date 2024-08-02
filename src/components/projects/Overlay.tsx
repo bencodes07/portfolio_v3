@@ -1,7 +1,13 @@
 import { Project } from ".";
 import { motion } from "framer-motion";
 
-export default function Overlay({ project }: { project: Project }) {
+export default function Overlay({
+  project,
+  isMobile,
+}: {
+  project: Project;
+  isMobile: boolean;
+}) {
   return (
     <motion.div
       className="text-white px-4 pointer-events-auto h-screen max-h-screen flex max-w-[1000px] w-full flex-col justify-between items-start"
@@ -14,15 +20,40 @@ export default function Overlay({ project }: { project: Project }) {
         {project.title}
       </h1>
 
-      <p className="khula-light text-sm tracking-[calc(0.875rem * 0.05)] uppercase text-gray-1">
-        Description
-      </p>
-      <hr className="w-[350px] border-gray-2 mt-2" />
-      <p className="poppins-regular text-base text-gray-1 mt-8 mb-16 max-w-[800px] w-screen">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate
-        libero et velit interdum, ac aliquet odio mattis. Class aptent taciti
-        sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-      </p>
+      <div
+        className="flex gap-x-12"
+        style={{ flexDirection: isMobile ? "column" : "row" }}
+      >
+        <div>
+          <p className="khula-light text-sm tracking-[calc(0.875rem * 0.05)] uppercase text-gray-1">
+            Description
+          </p>
+          <hr className="w-[350px] border-gray-2 mt-2" />
+          <p className="poppins-regular text-base text-gray-1 mt-8 mb-16 max-w-[500px] w-full">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+            vulputate libero et velit interdum, ac aliquet odio mattis. Class
+            aptent taciti sociosqu ad litora torquent per conubia nostra, per
+            inceptos himenaeos.
+          </p>
+        </div>
+        <div>
+          <p className="khula-light text-sm tracking-[calc(0.875rem * 0.05)] uppercase text-gray-1">
+            Technologies
+          </p>
+          <hr className="w-[350px] border-gray-2 mt-2" />
+          <p className="poppins-regular text-base text-gray-1 mt-8 mb-16 max-w-[500px] w-full flex-col flex">
+            <p className="flex gap-x-1 poppins-regular text-base text-gray-1">
+              <span className="khula-light mt-[3px]">Frontend: </span>
+              {project.technologies.frontend}
+            </p>
+            <p className="flex gap-x-1 poppins-regular text-base text-gray-1">
+              <span className="khula-light mt-[3px]">Backend: </span>
+              {project.technologies.backend}
+            </p>
+          </p>
+        </div>
+      </div>
+
       <img
         className="w-full object-cover object-top h-[45vh] rounded-2xl rounded-b-none select-none"
         style={{

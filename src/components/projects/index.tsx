@@ -24,7 +24,7 @@ export type Project = {
   year: string;
   image: string;
   description: string;
-  technologies: string[];
+  technologies: { frontend: string; backend: string };
   color: string;
 };
 
@@ -76,8 +76,11 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       year: "2021",
       image: "./MeetMate_Landing.png",
       description: "A social media platform for meeting new people.",
-      technologies: ["React", "Node.js", "MongoDB"],
       color: "77, 128, 237",
+      technologies: {
+        frontend: "NextJS, TailwindCSS, ThreeJS",
+        backend: "Spring Boot, GraphQL, PostgreSQL, MongoDB",
+      },
     },
     {
       number: "02",
@@ -86,7 +89,10 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       year: "2020",
       image: "https://picsum.photos/400/300?random=2",
       description: "A fishing app that helps you track your catches.",
-      technologies: ["Swift", "Figma"],
+      technologies: {
+        frontend: "NextJS, TailwindCSS, ThreeJS",
+        backend: "Spring Boot, GraphQL, PostgreSQL, MongoDB",
+      },
       color: "#ffffff",
     },
     {
@@ -96,7 +102,10 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       year: "2021",
       image: "https://picsum.photos/400/300?random=3",
       description: "A grocery delivery app for busy people.",
-      technologies: ["Java", "Android Studio"],
+      technologies: {
+        frontend: "NextJS, TailwindCSS, ThreeJS",
+        backend: "Spring Boot, GraphQL, PostgreSQL, MongoDB",
+      },
       color: "#ffffff",
     },
     {
@@ -106,7 +115,10 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       year: "2021",
       image: "https://picsum.photos/400/300?random=4",
       description: "My personal portfolio website.",
-      technologies: ["React", "Framer Motion"],
+      technologies: {
+        frontend: "NextJS, TailwindCSS, ThreeJS",
+        backend: "Spring Boot, GraphQL, PostgreSQL, MongoDB",
+      },
       color: "#ffffff",
     },
   ];
@@ -362,7 +374,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
             >
               <AnimatePresence mode="wait">
                 {isContentVisible && selectedProject && (
-                  <Overlay project={selectedProject} />
+                  <Overlay project={selectedProject} isMobile={isMobile} />
                   // <motion.div
                   //   key={selectedProject.number}
                   //   className="text-white max-w-2xl mx-auto px-4 pointer-events-auto"

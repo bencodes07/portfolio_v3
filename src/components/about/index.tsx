@@ -112,9 +112,9 @@ const About: React.FC<AboutSectionProps> = ({
           </div>
           <div className="flex flex-col gap-y-4 w-1/2 khula-light text-2xl max-sm:text-lg max-sm:w-full max-sm:mt-8">
             <motion.p variants={fadeInUpVariants} custom={4}>
-              I'm a passionate web developer dedicated to turning ideas into
-              creative solutions. I specialize in creating seamless and
-              intuitive user experiences.
+              I'm a passionate fullstack web developer dedicated to turning
+              ideas into creative solutions. I specialize in creating seamless
+              and intuitive user experiences.
             </motion.p>
             <motion.p variants={fadeInUpVariants} custom={5}>
               I'm involved in every step of the process: from discovery and

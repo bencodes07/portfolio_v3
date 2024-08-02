@@ -90,7 +90,7 @@ const BackgroundSVG: React.FC<BackgroundSVGProps> = ({
           <motion.path
             key={index}
             d={`M ${x} ${centerY} L ${x} 0 M ${x} ${centerY} L ${x} ${height}`}
-            stroke="var(--gray-4)"
+            stroke="#2c2c2c"
             strokeWidth="2"
             fill="none"
             variants={drawVariant}

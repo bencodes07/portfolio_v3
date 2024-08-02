@@ -65,8 +65,8 @@ function AnimatedShape({
                 L ${centerX} ${yStart + 100} 
                 L ${centerX} ${yStart + 132} 
                 L ${centerX + (side === "left" ? -xOffset : xOffset)} ${
-    yStart + 32
-  } Z`;
+                  yStart + 32
+                } Z`;
 
   return (
     <svg
@@ -78,9 +78,9 @@ function AnimatedShape({
       <motion.path
         ref={scope}
         d={path}
-        stroke="var(--gray-4)"
+        stroke="var(--svg-line)"
         strokeWidth="2"
-        fill="var(--gray-4)"
+        fill="var(--svg-line)"
         initial={{ pathLength: 0, fillOpacity: 0, y: 0 }}
       />
     </svg>
