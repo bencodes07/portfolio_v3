@@ -230,6 +230,9 @@ const Projects: React.FC<ProjectsSectionProps> = ({
     projects.map((project: Project) => {
       const img = new Image();
       img.src = project.image;
+
+      const img2 = new Image();
+      img2.src = project.imageDetail;
     });
   }, []);
 
