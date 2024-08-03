@@ -32,11 +32,8 @@ export default function Overlay({
             Description
           </p>
           <hr className="w-[350px] border-gray-2 mt-2" />
-          <p className="poppins-regular text-base text-gray-1 mt-8 mb-[4vh] max-w-[500px] w-full">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-            vulputate libero et velit interdum, ac aliquet odio mattis. Class
-            aptent taciti sociosqu ad litora torquent per conubia nostra, per
-            inceptos himenaeos.
+          <p className="poppins-regular text-base text-gray-1 overflow-scroll mt-8 mb-[4vh] max-w-[500px] w-full">
+            {project.description}
           </p>
         </div>
         <div>
@@ -64,7 +61,7 @@ export default function Overlay({
           borderBottom: "none",
           boxShadow: "0px 0px 16px 8px rgba(" + project.color + ", 0.25)",
         }}
-        src={project.image}
+        src={project.imageDetail}
       />
     </motion.div>
   );

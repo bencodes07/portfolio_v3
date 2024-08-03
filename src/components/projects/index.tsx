@@ -23,6 +23,7 @@ export type Project = {
   category: string;
   year: string;
   image: string;
+  imageDetail: string;
   description: string;
   technologies: { frontend: string; backend: string };
   color: string;
@@ -74,8 +75,10 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       title: "MeetMate",
       category: "Web Development / Design",
       year: "2021",
-      image: "./MeetMate_Landing.png",
-      description: "A social media platform for meeting new people.",
+      image: "./img/meetmate/landing.png",
+      imageDetail: "./img/meetmate/dashboard.png",
+      description:
+        "MeetMate is a web application streamlining appointment management for businesses and clients. It simplifies scheduling, allowing clients to book with various companies while businesses manage availability efficiently. This approach reduces time spent on booking and organizing appointments for all parties.",
       color: "77, 128, 237",
       technologies: {
         frontend: "NextJS, TailwindCSS, ThreeJS",
@@ -87,13 +90,15 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       title: "fishtrack.",
       category: "iOS Development / Product Design",
       year: "2020",
-      image: "https://picsum.photos/400/300?random=2",
-      description: "A fishing app that helps you track your catches.",
+      image: "./img/fishtrack/preview.png",
+      imageDetail: "./img/fishtrack/mockup.png",
+      description:
+        "fishtrack is an iOS app for fishing enthusiasts to log and analyze their catches. It extracts date and location from photos, allows users to add fish details, and provides filtering options. Anglers can easily track their catches and view statistics, gaining insights into their fishing patterns over time.",
       technologies: {
-        frontend: "NextJS, TailwindCSS, ThreeJS",
-        backend: "Spring Boot, GraphQL, PostgreSQL, MongoDB",
+        frontend: "Swift, SwiftUI, UIKit",
+        backend: "Supabase",
       },
-      color: "#ffffff",
+      color: "0 122 255",
     },
     {
       number: "03",
@@ -101,6 +106,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       category: "Java Development",
       year: "2021",
       image: "https://picsum.photos/400/300?random=3",
+      imageDetail: "./MeetMate_Landing.png",
       description: "A grocery delivery app for busy people.",
       technologies: {
         frontend: "NextJS, TailwindCSS, ThreeJS",
@@ -114,6 +120,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       category: "Web Development",
       year: "2021",
       image: "https://picsum.photos/400/300?random=4",
+      imageDetail: "./MeetMate_Landing.png",
       description: "My personal portfolio website.",
       technologies: {
         frontend: "NextJS, TailwindCSS, ThreeJS",
