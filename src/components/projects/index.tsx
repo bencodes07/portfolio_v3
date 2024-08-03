@@ -74,7 +74,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       number: "01",
       title: "MeetMate",
       category: "Web Development / Design",
-      year: "2021",
+      year: "2024/25",
       image: "./img/meetmate/landing.png",
       imageDetail: "./img/meetmate/dashboard.png",
       description:
@@ -89,7 +89,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       number: "02",
       title: "fishtrack.",
       category: "iOS Development / Product Design",
-      year: "2020",
+      year: "2023/24",
       image: "./img/fishtrack/preview.png",
       imageDetail: "./img/fishtrack/mockup.png",
       description:
@@ -104,7 +104,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       number: "03",
       title: "EssentialsB",
       category: "Java Development",
-      year: "2021",
+      year: "2022",
       image: "https://picsum.photos/400/300?random=3",
       imageDetail: "./MeetMate_Landing.png",
       description: "A grocery delivery app for busy people.",
@@ -118,15 +118,15 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       number: "04",
       title: "Portfolio",
       category: "Web Development",
-      year: "2021",
+      year: "2024",
       image: "https://picsum.photos/400/300?random=4",
       imageDetail: "./MeetMate_Landing.png",
       description: "My personal portfolio website.",
       technologies: {
-        frontend: "NextJS, TailwindCSS, ThreeJS",
-        backend: "Spring Boot, GraphQL, PostgreSQL, MongoDB",
+        frontend: "React, TailwindCSS, Framer Motion",
+        backend: "N/A",
       },
-      color: "#ffffff",
+      color: "255 255 255",
     },
   ];
 
@@ -268,7 +268,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
               >
                 <div
                   key={project.number}
-                  className="size-80 max-sm:size-[80vw] bg-cover bg-center rounded-xl"
+                  className="w-80 aspect-[77/44] max-sm:w-[80vw] bg-cover bg-center rounded-xl"
                   style={{ backgroundImage: `url('${project.image}')` }}
                 ></div>
                 <h1 className="khula-regular text-4xl mt-8">{project.title}</h1>
