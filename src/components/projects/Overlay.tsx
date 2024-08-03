@@ -16,7 +16,10 @@ export default function Overlay({
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.4 }}
     >
-      <h1 className="khula-regular max-sm:text-[12vw] text-8xl tracking-[calc(6rem * 0.03)] mb-[4vh] mt-[20vh]">
+      <h1
+        className="khula-regular max-sm:text-[12vw] text-8xl tracking-[calc(6rem * 0.03)] mb-[4vh]"
+        style={{ marginTop: !isMobile ? "20vh" : "2rem" }}
+      >
         {project.title}
       </h1>
 
@@ -29,7 +32,7 @@ export default function Overlay({
             Description
           </p>
           <hr className="w-[350px] border-gray-2 mt-2" />
-          <p className="poppins-regular text-base text-gray-1 mt-8 mb-16 max-w-[500px] w-full">
+          <p className="poppins-regular text-base text-gray-1 mt-8 mb-[4vh] max-w-[500px] w-full">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
             vulputate libero et velit interdum, ac aliquet odio mattis. Class
             aptent taciti sociosqu ad litora torquent per conubia nostra, per
@@ -41,7 +44,7 @@ export default function Overlay({
             Technologies
           </p>
           <hr className="w-[350px] border-gray-2 mt-2" />
-          <p className="poppins-regular text-base text-gray-1 mt-8 mb-16 max-w-[500px] w-full flex-col flex">
+          <p className="poppins-regular text-base text-gray-1 mt-8 mb-[4vh] max-w-[500px] w-full flex-col flex">
             <p className="flex gap-x-1 poppins-regular text-base text-gray-1">
               <span className="khula-light mt-[3px]">Frontend: </span>
               {project.technologies.frontend}
