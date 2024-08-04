@@ -1,5 +1,5 @@
 import { MotionValue, motion, useAnimationControls } from "framer-motion";
-import { Github, Mail, Phone } from "lucide-react";
+import { Linkedin, Mail, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import Magnetic from "../Magnetic";
 
@@ -62,11 +62,11 @@ const Contact: React.FC<ContactSectionProps> = ({
       <motion.div
         custom={2}
         variants={fadeInUpVariants}
-        className="flex flex-row gap-x-4 items-center mt-[10vh]"
+        className="flex flex-row gap-x-4 items-center mt-[14vh]"
       >
         <Magnetic>
           <a
-            href="mailto:boeckmannben@gmail.com"
+            href="mailto:info@bencodes.de"
             className="flex gap-x-2 rounded-full border-dark border-2 px-2 py-1"
           >
             <Mail />
@@ -84,12 +84,12 @@ const Contact: React.FC<ContactSectionProps> = ({
         </Magnetic>
         <Magnetic>
           <a
-            href="https://github.com/bencodes07/bencodes07/issues"
+            href="https://linkedin.com/in/ben-böckmann-296293265"
             target="_blank"
             className="flex gap-x-2 rounded-full border-dark border-2 px-2 py-1"
           >
-            <Github />
-            Github
+            <Linkedin />
+            LinkedIn
           </a>
         </Magnetic>
       </motion.div>

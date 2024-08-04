@@ -159,9 +159,21 @@ function App() {
             </motion.span>{" "}
             solutions.
           </motion.h1>
-          <p className="poppins-regular text-lg mt-4 max-w-[390px] text-gray-2 max-sm:text-[4vw] px-4 text-center leading-[123%]">
+          <motion.p
+            className="poppins-regular text-lg mt-4 max-w-[390px] text-gray-2 max-sm:text-[4vw] px-4 text-center leading-[123%]"
+            style={{
+              transform: isMobile
+                ? "none"
+                : useTransform(
+                    scrollYProgress,
+                    [0, 0.5],
+                    ["translateY(0px)", "translateY(-200px)"],
+                  ),
+              opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0]),
+            }}
+          >
             Innovative web developer crafting unique user experiences.
-          </p>
+          </motion.p>
         </div>
       </motion.div>
       <div ref={aboutRef} id="about">

@@ -119,9 +119,10 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       title: "Portfolio",
       category: "Web Development",
       year: "2024",
-      image: "https://picsum.photos/400/300?random=4",
-      imageDetail: "./MeetMate_Landing.png",
-      description: "My personal portfolio website.",
+      image: "./img/portfolio/landing.png",
+      imageDetail: "./img/portfolio/about.png",
+      description:
+        "This portfolio showcases a range of web development projects, demonstrating proficiency in creating practical, user-focused applications. From appointment management systems to specialized mobile apps, each project highlights problem-solving skills and technical expertise.",
       technologies: {
         frontend: "React, TailwindCSS, Framer Motion",
         backend: "N/A",

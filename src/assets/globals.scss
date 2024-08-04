@@ -37,13 +37,13 @@ body {
     position: absolute;
     left: -50%;
     bottom: -50%;
-    width: 100%;
+    width: 80%;
     height: 100%;
     background-color: var(--light);
     background: radial-gradient(
       circle,
-      rgba(185, 185, 185, 1) 0%,
-      rgba(255, 255, 255, 1) 40%
+      rgb(177, 175, 255) 0%,
+      rgba(255, 255, 255, 1) 60%
     );
     filter: blur(10px);
     backdrop-filter: blur(10px);
@@ -55,13 +55,13 @@ body {
     position: absolute;
     left: 50%;
     bottom: -50%;
-    width: 100%;
+    width: 80%;
     height: 100%;
     background-color: var(--light);
     background: radial-gradient(
       circle,
-      rgba(185, 185, 185, 1) 0%,
-      rgba(255, 255, 255, 1) 40%
+      rgb(187, 233, 255) 0%,
+      rgba(255, 255, 255, 1) 60%
     );
     filter: blur(10px);
     backdrop-filter: blur(10px);

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { useIsTouchDevice } from "../hooks/useIsTouchDevice";
 
 // Utility function for throttling
 function throttle(func: Function, limit: number) {
@@ -16,8 +17,10 @@ function throttle(func: Function, limit: number) {
 export default function Index({ children }: { children: JSX.Element }) {
   const magnetic = useRef<HTMLDivElement>(null);
   const animation = useRef<gsap.core.Tween | null>(null);
+  const isTouchDevice = useIsTouchDevice();
 
   useEffect(() => {
+    if (isTouchDevice) return;
     const element = magnetic.current;
     if (!element) return;
 
@@ -67,7 +70,7 @@ export default function Index({ children }: { children: JSX.Element }) {
       element.removeEventListener("mousemove", mouseMove);
       element.removeEventListener("mouseleave", mouseLeave);
     };
-  }, []);
+  }, [isTouchDevice]);
 
   return React.cloneElement(children, { ref: magnetic });
 }
