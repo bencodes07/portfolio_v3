@@ -186,7 +186,7 @@ function App() {
 
       <div ref={contactRef} id="contact" className="relative">
         <Contact
-          isContactInView={useInView(contactRef, { amount: 0.3 })}
+          isContactInView={useInView(contactRef, { amount: 0.5 })}
           isMobile={isMobile}
           backgroundGradient={backgroundGradient}
         />

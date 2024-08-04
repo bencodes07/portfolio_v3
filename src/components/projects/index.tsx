@@ -385,23 +385,6 @@ const Projects: React.FC<ProjectsSectionProps> = ({
               <AnimatePresence mode="wait">
                 {isContentVisible && selectedProject && (
                   <Overlay project={selectedProject} isMobile={isMobile} />
-                  // <motion.div
-                  //   key={selectedProject.number}
-                  //   className="text-white max-w-2xl mx-auto px-4 pointer-events-auto"
-                  //   initial={{ opacity: 0, y: 20 }}
-                  //   animate={{ opacity: 1, y: 0 }}
-                  //   exit={{ opacity: 0, y: 20 }}
-                  //   transition={{ duration: 0.4 }}
-                  // >
-                  //   <h2 className="text-4xl mb-4">{selectedProject.title}</h2>
-                  //   <p>{selectedProject.description}</p>
-                  //   <button
-                  //     className="mt-4 px-4 py-2 bg-white text-black"
-                  //     onClick={closeOverlay}
-                  //   >
-                  //     Close
-                  //   </button>
-                  // </motion.div>
                 )}
               </AnimatePresence>
             </motion.div>

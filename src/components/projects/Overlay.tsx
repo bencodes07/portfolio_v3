@@ -18,7 +18,7 @@ export default function Overlay({
     >
       <h1
         className="khula-regular max-sm:text-[12vw] text-8xl tracking-[calc(6rem * 0.03)] mb-[4vh]"
-        style={{ marginTop: !isMobile ? "20vh" : "2rem" }}
+        style={{ marginTop: !isMobile ? "20vh" : "2.5rem" }}
       >
         {project.title}
       </h1>
