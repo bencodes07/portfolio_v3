@@ -27,6 +27,7 @@ export type Project = {
   description: string;
   technologies: { frontend: string; backend: string };
   color: string;
+  link: string;
 };
 
 const fadeInUpVariants = {
@@ -84,6 +85,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
         frontend: "NextJS, TailwindCSS, ThreeJS",
         backend: "Spring Boot, GraphQL, PostgreSQL, MongoDB",
       },
+      link: "https://meetmate.dev",
     },
     {
       number: "02",
@@ -99,20 +101,22 @@ const Projects: React.FC<ProjectsSectionProps> = ({
         backend: "Supabase",
       },
       color: "0 122 255",
+      link: "https://github.com/bencodes07/fishtrackMobile",
     },
     {
       number: "03",
-      title: "EssentialsB",
-      category: "Java Development",
-      year: "2022",
-      image: "https://picsum.photos/400/300?random=3",
-      imageDetail: "./MeetMate_Landing.png",
-      description: "A grocery delivery app for busy people.",
+      title: "TCG-Home",
+      category: "Frontend Development",
+      year: "2021-Now",
+      image: "./img/tcg/landing.jpeg",
+      imageDetail: "./img/tcg/collection.png",
+      description: `TCG Home is an innovative online platform transforming the global niche market of collectible card games like "Magic: The Gathering". This project moves such games into the digital era by creating a comprehensive seamless portal where collecting, playing, and trading can take place. Disclaimer: This project was developed during my employment at TCG-Vault, where I contributed as part of the development team.`,
       technologies: {
-        frontend: "NextJS, TailwindCSS, ThreeJS",
-        backend: "Spring Boot, GraphQL, PostgreSQL, MongoDB",
+        frontend: "VueJS, Typescript, GraphQL",
+        backend: "Not Involved",
       },
-      color: "#ffffff",
+      color: "121 35 208",
+      link: "https://tcg-home.com",
     },
     {
       number: "04",
@@ -122,12 +126,13 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       image: "./img/portfolio/landing.png",
       imageDetail: "./img/portfolio/about.png",
       description:
-        "This portfolio showcases a range of web development projects, demonstrating proficiency in creating practical, user-focused applications. From appointment management systems to specialized mobile apps, each project highlights problem-solving skills and technical expertise.",
+        "This portfolio showcases a range of web development projects, demonstrating proficiency in creating practical, user-focused applications. From appointment management systems to specialized mobile apps, each project highlights problem-solving skills and technical expertise. Click the arrow to view the Figma Design",
       technologies: {
         frontend: "React, TailwindCSS, Framer Motion",
         backend: "N/A",
       },
       color: "255 255 255",
+      link: "https://www.figma.com/design/fSOLXbVsHPG3k61ffrfFLQ/Portfolio?m=auto&t=KL4Fad6LDLPN60Us-1",
     },
   ];
 
@@ -258,7 +263,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
           </motion.h2>
 
           {/* Mobile Version: Card like design */}
-          <div className="grid grid-cols-2 grid-flow-row max-sm:grid-cols-1 gap-6 gap-y-32">
+          <div className="grid grid-cols-2 grid-flow-row max-sm:grid-cols-1 gap-6 gap-y-32 px-4">
             {projects.map((project, index) => (
               <motion.div
                 key={project.number}

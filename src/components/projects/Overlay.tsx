@@ -1,3 +1,4 @@
+import { ArrowUpRight } from "lucide-react";
 import { Project } from ".";
 import { motion } from "framer-motion";
 
@@ -16,12 +17,21 @@ export default function Overlay({
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.4 }}
     >
-      <h1
-        className="khula-regular max-sm:text-[12vw] text-8xl tracking-[calc(6rem * 0.03)] mb-[4vh]"
+      <div
+        className={`flex flex-row items-center ${!isMobile ? "justify-between" : "justify-start gap-x-2"} w-full mb-[4vh] pr-12`}
         style={{ marginTop: !isMobile ? "20vh" : "2.5rem" }}
       >
-        {project.title}
-      </h1>
+        <h1 className="khula-regular max-sm:text-[12vw] text-8xl tracking-[calc(6rem * 0.03)]">
+          {project.title}
+        </h1>
+        <a
+          href={project.link}
+          target="_blank"
+          title={project.title.includes("Portfolio") ? "Figma Design" : ""}
+        >
+          <ArrowUpRight size={48} className="mb-2" />
+        </a>
+      </div>
 
       <div
         className="flex gap-x-12"
@@ -48,7 +58,11 @@ export default function Overlay({
             </p>
             <p className="flex gap-x-1 poppins-regular text-base text-gray-1">
               <span className="khula-light mt-[3px]">Backend: </span>
-              {project.technologies.backend}
+              {project.technologies.backend.includes("Not Involved") ? (
+                <i>Not Involved</i>
+              ) : (
+                project.technologies.backend
+              )}
             </p>
           </p>
         </div>

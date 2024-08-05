@@ -20,6 +20,7 @@ import Contact from "./components/contact";
 import Projects from "./components/projects";
 import SectionSpacer from "./components/SectionSpacer";
 import { useIsTouchDevice } from "./hooks/useIsTouchDevice";
+import Loader from "./components/Loader";
 
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -113,95 +114,123 @@ function App() {
   // ----- Color Animation ----- //
   const { hue1, hue2 } = useColorAnimation();
 
+  // ----- Loading Animation ----- //
+  const [isLoading, setIsLoading] = useState(true);
+
+  const landingSectionVariants = {
+    hidden: { scale: 0.8, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+        when: "beforeChildren",
+        staggerChildren: 0.1,
+        delay: 0.5,
+      },
+    },
+  };
+
   return (
     <ScrollProvider value={locomotiveScroll}>
-      <MouseGradient isMobile={isMobile} />
-      <motion.div
-        style={{ background: backgroundGradient }}
-        className="w-screen overflow-hidden h-screen flex flex-col justify-center items-center "
-      >
-        <BackgroundSVG
-          width={dimensions.width}
-          height={dimensions.height}
-          isMobile={isMobile}
-          svgOpacity={svgOpacity}
-        />
-        <Navbar />
-        <div className="flex justify-center items-center relative z-10 flex-col mt-8">
-          <motion.h1
-            className="text-[80px] max-sm:text-[10vw] max-sm:max-w-sm max-sm:leading-tight text-light khula-extrabold w-[732px] text-center leading-[85px]"
-            style={{
-              transform: isMobile
-                ? "none"
-                : useTransform(
-                    scrollYProgress,
-                    [0, 0.5],
-                    ["translateY(0px)", "translateY(-200px)"],
-                  ),
-              opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0]),
-              textShadow: "0px 0px 6px rgba(255,255,255,0.25)",
-            }}
+      <Loader onLoadingComplete={() => setIsLoading(false)} />
+
+      <div style={{ visibility: isLoading ? "hidden" : "visible" }}>
+        <MouseGradient isMobile={isMobile} />
+        <motion.div
+          style={{ background: backgroundGradient }}
+          className="w-screen overflow-hidden h-screen flex flex-col justify-center items-center "
+        >
+          <BackgroundSVG
+            width={dimensions.width}
+            height={dimensions.height}
+            isMobile={isMobile}
+            svgOpacity={svgOpacity}
+            isLoading={isLoading}
+          />
+          <Navbar />
+          <motion.div
+            initial="hidden"
+            animate={isLoading ? "hidden" : "visible"}
+            variants={landingSectionVariants}
+            className="flex justify-center items-center relative z-10 flex-col mt-8"
           >
-            Turning ideas into{" "}
-            <motion.span
+            <motion.h1
+              className="text-[80px] max-sm:text-[10vw] max-sm:max-w-sm max-sm:leading-tight text-light khula-extrabold w-[732px] text-center leading-[85px]"
               style={{
-                backgroundImage: useTransform(
-                  [hue1, hue2],
-                  ([h1, h2]) =>
-                    `linear-gradient(90deg, hsl(${h1}, 100%, 50%), hsl(${h2}, 100%, 50%))`,
-                ),
-                backgroundClip: "text",
-                WebkitBackgroundClip: "text",
-                color: "transparent",
+                transform: isMobile
+                  ? "none"
+                  : useTransform(
+                      scrollYProgress,
+                      [0, 0.5],
+                      ["translateY(0px)", "translateY(-200px)"],
+                    ),
+                opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0]),
+                textShadow: "0px 0px 6px rgba(255,255,255,0.25)",
               }}
             >
-              creative
-            </motion.span>{" "}
-            solutions.
-          </motion.h1>
-          <motion.p
-            className="poppins-regular text-lg mt-4 max-w-[390px] text-gray-2 max-sm:text-[4vw] px-4 text-center leading-[123%]"
-            style={{
-              transform: isMobile
-                ? "none"
-                : useTransform(
-                    scrollYProgress,
-                    [0, 0.5],
-                    ["translateY(0px)", "translateY(-200px)"],
+              Turning ideas into{" "}
+              <motion.span
+                style={{
+                  backgroundImage: useTransform(
+                    [hue1, hue2],
+                    ([h1, h2]) =>
+                      `linear-gradient(90deg, hsl(${h1}, 100%, 50%), hsl(${h2}, 100%, 50%))`,
                   ),
-              opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0]),
-            }}
-          >
-            Innovative web developer crafting unique user experiences.
-          </motion.p>
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                creative
+              </motion.span>{" "}
+              solutions.
+            </motion.h1>
+            <motion.p
+              className="poppins-regular text-lg mt-4 max-w-[390px] text-gray-2 max-sm:text-[4vw] px-4 text-center leading-[123%]"
+              style={{
+                transform: isMobile
+                  ? "none"
+                  : useTransform(
+                      scrollYProgress,
+                      [0, 0.5],
+                      ["translateY(0px)", "translateY(-200px)"],
+                    ),
+                opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0]),
+              }}
+            >
+              Innovative web developer crafting unique user experiences.
+            </motion.p>
+          </motion.div>
+        </motion.div>
+        <div ref={aboutRef} id="about">
+          <About
+            isAboutInView={useInView(aboutRef, { amount: 0.3 })}
+            isMobile={isMobile}
+            backgroundGradient={backgroundGradient}
+          />
         </div>
-      </motion.div>
-      <div ref={aboutRef} id="about">
-        <About
-          isAboutInView={useInView(aboutRef, { amount: 0.3 })}
-          isMobile={isMobile}
-          backgroundGradient={backgroundGradient}
-        />
-      </div>
 
-      <SectionSpacer height={300} backgroundGradient={backgroundGradient} />
+        <SectionSpacer height={300} backgroundGradient={backgroundGradient} />
 
-      <div ref={projectsRef} id="projects" className="relative">
-        <Projects
-          isProjectsInView={useInView(projectsRef, {
-            amount: isTouchDevice ? 0.1 : 0.3,
-          })}
-          isMobile={isMobile}
-          backgroundGradient={backgroundGradient}
-        />
-      </div>
+        <div ref={projectsRef} id="projects" className="relative">
+          <Projects
+            isProjectsInView={useInView(projectsRef, {
+              amount: isTouchDevice ? 0.1 : 0.3,
+            })}
+            isMobile={isMobile}
+            backgroundGradient={backgroundGradient}
+          />
+        </div>
 
-      <div ref={contactRef} id="contact" className="relative">
-        <Contact
-          isContactInView={useInView(contactRef, { amount: 0.5 })}
-          isMobile={isMobile}
-          backgroundGradient={backgroundGradient}
-        />
+        <div ref={contactRef} id="contact" className="relative">
+          <Contact
+            isContactInView={useInView(contactRef, { amount: 0.5 })}
+            isMobile={isMobile}
+            backgroundGradient={backgroundGradient}
+          />
+        </div>
       </div>
     </ScrollProvider>
   );

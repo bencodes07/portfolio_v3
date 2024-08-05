@@ -7,6 +7,7 @@ type BackgroundSVGProps = {
   height: number;
   isMobile: boolean;
   svgOpacity: MotionValue<number>;
+  isLoading: boolean;
 };
 
 const drawVariant = {
@@ -15,8 +16,8 @@ const drawVariant = {
     pathLength: 1,
     opacity: 1,
     transition: {
-      pathLength: { type: "spring", duration: 5, bounce: 0 },
-      opacity: { duration: 0.8, ease: "easeInOut" },
+      pathLength: { type: "spring", duration: 5, bounce: 0, delay: 0.5 },
+      opacity: { duration: 0.8, ease: "easeInOut", delay: 0.5 },
     },
   },
 };
@@ -26,9 +27,10 @@ const BackgroundSVG: React.FC<BackgroundSVGProps> = ({
   height,
   isMobile,
   svgOpacity,
+  isLoading,
 }) => {
   const renderSVGLines = useMemo(() => {
-    if (width === 0 || height === 0) return null;
+    if (width === 0 || height === 0 || isLoading) return null;
 
     if (isMobile) {
       // Render three lines for mobile: left, center, and right
@@ -44,7 +46,7 @@ const BackgroundSVG: React.FC<BackgroundSVGProps> = ({
             d={`M ${leftX} ${height / 2} L ${leftX} 0 M ${leftX} ${
               height / 2
             } L ${leftX} ${height}`}
-            stroke="var(--gray-4)"
+            stroke="var(--svg-line)"
             strokeWidth="2"
             fill="none"
             variants={drawVariant}
@@ -54,7 +56,7 @@ const BackgroundSVG: React.FC<BackgroundSVGProps> = ({
             d={`M ${centerX} ${height / 2} L ${centerX} 0 M ${centerX} ${
               height / 2
             } L ${centerX} ${height}`}
-            stroke="var(--gray-4)"
+            stroke="var(--svg-line)"
             strokeWidth="2"
             fill="none"
             variants={drawVariant}
@@ -64,7 +66,7 @@ const BackgroundSVG: React.FC<BackgroundSVGProps> = ({
             d={`M ${rightX} ${height / 2} L ${rightX} 0 M ${rightX} ${
               height / 2
             } L ${rightX} ${height}`}
-            stroke="var(--gray-4)"
+            stroke="var(--svg-line)"
             strokeWidth="2"
             fill="none"
             variants={drawVariant}
@@ -90,7 +92,7 @@ const BackgroundSVG: React.FC<BackgroundSVGProps> = ({
           <motion.path
             key={index}
             d={`M ${x} ${centerY} L ${x} 0 M ${x} ${centerY} L ${x} ${height}`}
-            stroke="#2c2c2c"
+            stroke="var(--svg-line)"
             strokeWidth="2"
             fill="none"
             variants={drawVariant}
@@ -98,7 +100,7 @@ const BackgroundSVG: React.FC<BackgroundSVGProps> = ({
         );
       });
     }
-  }, [width, height, isMobile]);
+  }, [width, height, isMobile, isLoading]);
 
   return (
     <motion.div
@@ -111,7 +113,7 @@ const BackgroundSVG: React.FC<BackgroundSVGProps> = ({
             width={width}
             height={height}
             initial="hidden"
-            animate="visible"
+            animate={isLoading ? "hidden" : "visible"}
             className="fixed top-0 left-0"
           >
             {renderSVGLines}
