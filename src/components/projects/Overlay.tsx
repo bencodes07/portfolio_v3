@@ -73,13 +73,19 @@ export default function Overlay({
             </div>
           </div>
           <img
-            className="w-full object-cover object-top rounded-2xl select-none mb-12"
+            className={`w-full object-cover object-top rounded-2xl select-none ${!project.title.includes("TCG") && "mb-12"}`}
             style={{
               border: "1px solid rgb(" + project.color + ")",
               boxShadow: "0px 0px 16px 8px rgba(" + project.color + ", 0.25)",
             }}
             src={project.imageDetail}
           />
+          {project.title.includes("TCG") && (
+            <p className="my-8 poppins-regular-italic text-base text-gray-2 w-full text-center">
+              Disclaimer: This project was developed during my employment at
+              TCG-Vault, where I contributed as part of the development team.
+            </p>
+          )}
         </div>
       </div>
     </motion.div>

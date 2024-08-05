@@ -62,7 +62,7 @@ const Contact: React.FC<ContactSectionProps> = ({
       <motion.div
         custom={2}
         variants={fadeInUpVariants}
-        className="flex flex-row gap-x-4 items-center mt-[14vh]"
+        className="flex flex-row gap-x-6 items-center mt-[14vh]"
       >
         <Magnetic>
           <a

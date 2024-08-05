@@ -12,11 +12,16 @@ const Loader: React.FC<LoaderProps> = ({ onLoadingComplete }) => {
 
   useEffect(() => {
     const animateSvg = async () => {
+      document.body.style.cursor = "wait";
       // Start the SVG animation
-      await controls.start({
-        pathLength: 1,
-        transition: { duration: 2, ease: "easeInOut" },
-      });
+      await controls
+        .start({
+          pathLength: 1,
+          transition: { duration: 2, ease: "easeInOut" },
+        })
+        .then(() => {
+          document.body.style.cursor = "auto";
+        });
 
       // Wait 300ms after animation completes
       await new Promise((resolve) => setTimeout(resolve, 300));
@@ -75,14 +80,19 @@ const Loader: React.FC<LoaderProps> = ({ onLoadingComplete }) => {
           <motion.svg
             width="100"
             height="100"
-            viewBox="-5.5 0 32 32"
+            viewBox="0 0 32 32"
             xmlns="http://www.w3.org/2000/svg"
+            initial={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             <motion.path
-              d="M4.156 2.031v10.125c1.656-1.813 4.125-3 6.75-3 4.75 0 8.594 3.75 8.594 8.438s-3.844 8.438-8.594 8.438c-2.625 0-5.094-1.188-6.75-3v2.563h-2.25v-23.563h2.25zM10.875 23.969c3.594 0 6.469-2.844 6.469-6.375s-2.875-6.375-6.469-6.375-6.719 2.844-6.719 6.375 3.125 6.375 6.719 6.375z"
+              d="M8 2 V28 M8 22 A7 7 0 1 1 8 22.01"
               fill="none"
               stroke="#000000"
-              strokeWidth="1"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               initial={{ pathLength: 0 }}
               animate={controls}
             />

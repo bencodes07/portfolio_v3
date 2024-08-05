@@ -110,7 +110,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       year: "2021-Now",
       image: "./img/tcg/landing.jpeg",
       imageDetail: "./img/tcg/collection.png",
-      description: `TCG Home is an innovative online platform transforming the global niche market of collectible card games like "Magic: The Gathering". This project moves such games into the digital era by creating a comprehensive seamless portal where collecting, playing, and trading can take place. Disclaimer: This project was developed during my employment at TCG-Vault, where I contributed as part of the development team.`,
+      description: `TCG Home is an innovative online platform transforming the global niche market of collectible card games like "Magic: The Gathering". This project moves such games into the digital era by creating a comprehensive seamless portal where collecting, playing, and trading can take place.`,
       technologies: {
         frontend: "VueJS, Typescript, GraphQL",
         backend: "Not Involved",
