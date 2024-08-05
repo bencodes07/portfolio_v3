@@ -11,72 +11,77 @@ export default function Overlay({
 }) {
   return (
     <motion.div
-      className="text-white px-4 pointer-events-auto h-screen max-h-screen flex max-w-[1000px] w-full flex-col justify-between items-start"
+      data-lenis-prevent
+      className="text-white inset-0 overflow-scroll fixed max-h-[100vh] px-4 w-full flex justify-center pb-12"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.4 }}
     >
       <div
-        className={`flex flex-row items-center ${!isMobile ? "justify-between" : "justify-start gap-x-2"} w-full mb-[4vh] pr-12`}
         style={{ marginTop: !isMobile ? "20vh" : "2.5rem" }}
+        className="max-w-[1000px] w-full"
       >
-        <h1 className="khula-regular max-sm:text-[12vw] text-8xl tracking-[calc(6rem * 0.03)]">
-          {project.title}
-        </h1>
-        <a
-          href={project.link}
-          target="_blank"
-          title={project.title.includes("Portfolio") ? "Figma Design" : ""}
+        <div
+          className={`flex flex-row items-center ${!isMobile ? "justify-between" : "justify-start gap-x-2"} w-full mb-[4vh] pr-12`}
         >
-          <ArrowUpRight size={48} className="mb-2" />
-        </a>
-      </div>
-
-      <div
-        className="flex gap-x-12"
-        style={{ flexDirection: isMobile ? "column" : "row" }}
-      >
-        <div>
-          <p className="khula-light text-sm tracking-[calc(0.875rem * 0.05)] uppercase text-gray-1">
-            Description
-          </p>
-          <hr className="w-[350px] border-gray-2 mt-2" />
-          <p className="poppins-regular text-base text-gray-1 overflow-scroll mt-8 mb-[4vh] max-w-[500px] w-full">
-            {project.description}
-          </p>
+          <h1 className="khula-regular max-sm:text-[12vw] text-8xl tracking-[calc(6rem * 0.03)]">
+            {project.title}
+          </h1>
+          <a
+            href={project.link}
+            target="_blank"
+            title={project.title.includes("Portfolio") ? "Figma Design" : ""}
+          >
+            <ArrowUpRight size={48} className="mb-2" />
+          </a>
         </div>
-        <div>
-          <p className="khula-light text-sm tracking-[calc(0.875rem * 0.05)] uppercase text-gray-1">
-            Technologies
-          </p>
-          <hr className="w-[350px] border-gray-2 mt-2" />
-          <p className="poppins-regular text-base text-gray-1 mt-8 mb-[4vh] max-w-[500px] w-full flex-col flex">
-            <p className="flex gap-x-1 poppins-regular text-base text-gray-1">
-              <span className="khula-light mt-[3px]">Frontend: </span>
-              {project.technologies.frontend}
-            </p>
-            <p className="flex gap-x-1 poppins-regular text-base text-gray-1">
-              <span className="khula-light mt-[3px]">Backend: </span>
-              {project.technologies.backend.includes("Not Involved") ? (
-                <i>Not Involved</i>
-              ) : (
-                project.technologies.backend
-              )}
-            </p>
-          </p>
+
+        <div className="flex flex-col">
+          <div
+            className="flex flex-row gap-x-12"
+            style={{ flexDirection: isMobile ? "column" : "row" }}
+          >
+            <div>
+              <p className="khula-light text-sm tracking-[calc(0.875rem * 0.05)] uppercase text-gray-1">
+                Description
+              </p>
+              <hr className="w-[350px] border-gray-2 mt-2" />
+              <p className="poppins-regular text-base text-gray-1 overflow-scroll mt-8 mb-[4vh] max-w-[500px] w-full">
+                {project.description}
+              </p>
+            </div>
+            <div>
+              <p className="khula-light text-sm tracking-[calc(0.875rem * 0.05)] uppercase text-gray-1">
+                Technologies
+              </p>
+              <hr className="w-[350px] border-gray-2 mt-2" />
+              <p className="poppins-regular text-base text-gray-1 mt-8 mb-[4vh] max-w-[500px] w-full flex-col flex">
+                <p className="flex gap-x-1 poppins-regular text-base text-gray-1">
+                  <span className="khula-light mt-[3px]">Frontend: </span>
+                  {project.technologies.frontend}
+                </p>
+                <p className="flex gap-x-1 poppins-regular text-base text-gray-1">
+                  <span className="khula-light mt-[3px]">Backend: </span>
+                  {project.technologies.backend.includes("Not Involved") ? (
+                    <i>Not Involved</i>
+                  ) : (
+                    project.technologies.backend
+                  )}
+                </p>
+              </p>
+            </div>
+          </div>
+          <img
+            className="w-full object-cover object-top rounded-2xl select-none mb-12"
+            style={{
+              border: "1px solid rgb(" + project.color + ")",
+              boxShadow: "0px 0px 16px 8px rgba(" + project.color + ", 0.25)",
+            }}
+            src={project.imageDetail}
+          />
         </div>
       </div>
-
-      <img
-        className="w-full object-cover object-top h-[45vh] rounded-2xl rounded-b-none select-none"
-        style={{
-          border: "1px solid rgb(" + project.color + ")",
-          borderBottom: "none",
-          boxShadow: "0px 0px 16px 8px rgba(" + project.color + ", 0.25)",
-        }}
-        src={project.imageDetail}
-      />
     </motion.div>
   );
 }

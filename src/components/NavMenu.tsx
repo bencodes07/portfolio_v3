@@ -1,7 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { X } from "lucide-react";
-import { useScroll as useContextScroll } from "../contexts/ScrollContext";
+import { useLenis } from "@studio-freight/react-lenis";
 
 interface NavMenuProps {
   isOpen: boolean;
@@ -11,17 +11,17 @@ interface NavMenuProps {
 const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
   const { scrollY } = useScroll();
 
-  const locomotiveScroll = useContextScroll();
+  const lenis = useLenis();
 
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     targetId: string,
   ) => {
     e.preventDefault();
-    if (locomotiveScroll) {
+    if (lenis) {
       const target = document.getElementById(targetId);
       if (target) {
-        locomotiveScroll.scrollTo(target);
+        lenis.scrollTo(target);
       }
     }
     onClose();

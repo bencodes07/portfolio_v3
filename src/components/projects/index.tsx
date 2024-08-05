@@ -250,7 +250,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       }}
       initial="hidden"
       animate={projectsControls}
-      className="w-screen min-h-screen overflow-hidden flex justify-center flex-col items-center relative z-10"
+      className="w-screen min-h-screen flex justify-center flex-col items-center relative z-10"
     >
       {isTouchDevice || (!isTouchDevice && isMobile) ? (
         <motion.div>
@@ -381,7 +381,8 @@ const Projects: React.FC<ProjectsSectionProps> = ({
           <>
             <Curve isVisible={isOverlayVisible} />
             <motion.div
-              className="fixed inset-0 w-full z-[999] flex items-center justify-center pointer-events-none"
+              className="fixed inset-0 w-full z-[999] flex items-center justify-center"
+              style={{ pointerEvents: isContentVisible ? "auto" : "none" }}
               initial="hidden"
               animate={isOverlayVisible ? "visible" : "exit"}
               exit="exit"

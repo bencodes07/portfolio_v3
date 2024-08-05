@@ -14,13 +14,13 @@ import { debounce } from "lodash";
 import BackgroundSVG from "./components/hero/BackgroundSVG";
 import About from "./components/about";
 import { useColorAnimation } from "./hooks/useColorAnimation";
-import { ScrollProvider } from "./contexts/ScrollContext";
 import LocomotiveScroll from "locomotive-scroll";
 import Contact from "./components/contact";
 import Projects from "./components/projects";
 import SectionSpacer from "./components/SectionSpacer";
 import { useIsTouchDevice } from "./hooks/useIsTouchDevice";
 import Loader from "./components/Loader";
+import { ReactLenis } from "@studio-freight/react-lenis";
 
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -133,7 +133,7 @@ function App() {
   };
 
   return (
-    <ScrollProvider value={locomotiveScroll}>
+    <ReactLenis root>
       <Loader onLoadingComplete={() => setIsLoading(false)} />
 
       <div style={{ visibility: isLoading ? "hidden" : "visible" }}>
@@ -232,7 +232,7 @@ function App() {
           />
         </div>
       </div>
-    </ScrollProvider>
+    </ReactLenis>
   );
 }
 

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { motion, useAnimationControls } from "framer-motion";
-import { useScroll } from "../../contexts/ScrollContext";
 
 interface CurveProps {
   isVisible: boolean;
@@ -12,8 +11,6 @@ export default function Curve({ isVisible }: CurveProps) {
     height: typeof window !== "undefined" ? window.innerHeight : 1080,
   });
   const controls = useAnimationControls();
-
-  const locomotiveScroll = useScroll();
 
   useEffect(() => {
     function resize() {
@@ -32,10 +29,8 @@ export default function Curve({ isVisible }: CurveProps) {
   useEffect(() => {
     if (isVisible) {
       controls.start("visible");
-      locomotiveScroll?.stop();
     } else {
       controls.start("hidden");
-      locomotiveScroll?.start();
     }
   }, [isVisible, controls]);
 
@@ -44,8 +39,8 @@ export default function Curve({ isVisible }: CurveProps) {
   const initialPath = `
     M0 ${dimensions.height + curveHeight}
     Q${dimensions.width / 2} ${dimensions.height + curveHeight} ${
-    dimensions.width
-  } ${dimensions.height + curveHeight}
+      dimensions.width
+    } ${dimensions.height + curveHeight}
     L${dimensions.width} ${dimensions.height + curveHeight}
     L0 ${dimensions.height + curveHeight}
   `;
@@ -60,8 +55,8 @@ export default function Curve({ isVisible }: CurveProps) {
   const targetPath = `
     M0 ${-curveHeight}
     Q${dimensions.width / 2} ${-curveHeight * 2} ${
-    dimensions.width
-  } ${-curveHeight}
+      dimensions.width
+    } ${-curveHeight}
     L${dimensions.width} ${dimensions.height + curveHeight}
     L0 ${dimensions.height + curveHeight}
   `;
