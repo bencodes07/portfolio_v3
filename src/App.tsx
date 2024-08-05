@@ -24,7 +24,6 @@ import { ReactLenis } from "@studio-freight/react-lenis";
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const dimensionsRef = useRef({ width: 0, height: 0 });
-  useState<LocomotiveScroll | null>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
