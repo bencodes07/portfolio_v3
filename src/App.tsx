@@ -14,7 +14,6 @@ import { debounce } from "lodash";
 import BackgroundSVG from "./components/hero/BackgroundSVG";
 import About from "./components/about";
 import { useColorAnimation } from "./hooks/useColorAnimation";
-import LocomotiveScroll from "locomotive-scroll";
 import Contact from "./components/contact";
 import Projects from "./components/projects";
 import SectionSpacer from "./components/SectionSpacer";
@@ -25,8 +24,7 @@ import { ReactLenis } from "@studio-freight/react-lenis";
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const dimensionsRef = useRef({ width: 0, height: 0 });
-  const [locomotiveScroll, setLocomotiveScroll] =
-    useState<LocomotiveScroll | null>(null);
+  useState<LocomotiveScroll | null>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
@@ -94,22 +92,6 @@ function App() {
   }, []);
 
   useMotionValueEvent(scrollYProgress, "change", handleScroll);
-
-  useEffect(() => {
-    if (window.innerWidth > 768) {
-      (async () => {
-        const LocomotiveScroll = (await import("locomotive-scroll")).default;
-        const scroll = new LocomotiveScroll();
-        setLocomotiveScroll(scroll);
-      })();
-    }
-
-    return () => {
-      if (locomotiveScroll) {
-        locomotiveScroll.destroy();
-      }
-    };
-  }, []);
 
   // ----- Color Animation ----- //
   const { hue1, hue2 } = useColorAnimation();

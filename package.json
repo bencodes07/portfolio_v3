@@ -12,6 +12,7 @@
   "dependencies": {
     "@studio-freight/react-lenis": "^0.0.47",
     "framer-motion": "^11.3.8",
+    "gsap": "^3.12.5",
     "is-touch-device": "^1.0.1",
     "lodash": "^4.17.21",
     "lucide-react": "^0.414.0",
