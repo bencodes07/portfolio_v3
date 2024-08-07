@@ -59,36 +59,39 @@ function App() {
   const textColor = useMotionValue("#FFFFFF");
   const svgOpacity = useMotionValue(1);
 
-  const handleScroll = useCallback((latest: number) => {
-    requestAnimationFrame(() => {
-      const progress = !isMobile
-        ? Math.max(0, Math.min((latest - 0.1) / 0.1, 1))
-        : Math.max(0, Math.min((latest - 0.03) / 0.1, 1));
+  const handleScroll = useCallback(
+    (latest: number) => {
+      requestAnimationFrame(() => {
+        const progress = !isMobile
+          ? Math.max(0, Math.min((latest - 0.1) / 0.1, 1))
+          : Math.max(0, Math.min((latest - 0.03) / 0.1, 1));
 
-      const startColor = [0, 0, 0];
-      const endColor = [255, 255, 255]; // #FFFFFF
+        const startColor = [0, 0, 0];
+        const endColor = [255, 255, 255]; // #FFFFFF
 
-      const interpolateColor = (start: number[], end: number[]): string =>
-        start
-          .map((channel, i) =>
-            Math.round(channel + (end[i] - channel) * progress),
-          )
-          .join(", ");
+        const interpolateColor = (start: number[], end: number[]): string =>
+          start
+            .map((channel, i) =>
+              Math.round(channel + (end[i] - channel) * progress),
+            )
+            .join(", ");
 
-      const newGradient = `radial-gradient(circle, rgb(${interpolateColor(
-        [17, 17, 17],
-        endColor,
-      )}) 0%, rgb(${interpolateColor(startColor, endColor)}) 65%)`;
-      backgroundGradient.set(newGradient);
+        const newGradient = `radial-gradient(circle, rgb(${interpolateColor(
+          [17, 17, 17],
+          endColor,
+        )}) 0%, rgb(${interpolateColor(startColor, endColor)}) 65%)`;
+        backgroundGradient.set(newGradient);
 
-      const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
-        255 - Math.round(255 * progress)
-      }, ${255 - Math.round(255 * progress)})`;
-      textColor.set(txtColor);
-      const newOpacity = 1 - progress * 3;
-      svgOpacity.set(newOpacity);
-    });
-  }, []);
+        const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
+          255 - Math.round(255 * progress)
+        }, ${255 - Math.round(255 * progress)})`;
+        textColor.set(txtColor);
+        const newOpacity = 1 - progress * 3;
+        svgOpacity.set(newOpacity);
+      });
+    },
+    [isMobile],
+  );
 
   useMotionValueEvent(scrollYProgress, "change", handleScroll);
 

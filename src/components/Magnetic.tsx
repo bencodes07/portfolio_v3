@@ -33,7 +33,7 @@ export default function Index({ children }: { children: JSX.Element }) {
       animation.current = gsap.to(element, {
         x,
         y,
-        duration: 0.3,
+        duration: 0.7,
         ease: "power2.out",
       });
     };

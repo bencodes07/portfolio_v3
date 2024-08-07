@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import { Project } from ".";
 import { motion } from "framer-motion";
+import Magnetic from "../Magnetic";
 
 export default function Overlay({
   project,
@@ -28,13 +29,16 @@ export default function Overlay({
           <h1 className="khula-regular max-sm:text-[12vw] text-8xl tracking-[calc(6rem * 0.03)]">
             {project.title}
           </h1>
-          <a
-            href={project.link}
-            target="_blank"
-            title={project.title.includes("Portfolio") ? "Figma Design" : ""}
-          >
-            <ArrowUpRight size={48} className="mb-2" />
-          </a>
+          <Magnetic>
+            <a
+              href={project.link}
+              target="_blank"
+              className="cursor-pointer hover:bg-light hover:text-dark rounded-full size-12 transition-colors ease-in duration-300"
+              title={project.title.includes("Portfolio") ? "Figma Design" : ""}
+            >
+              <ArrowUpRight size={48} className="mb-2" />
+            </a>
+          </Magnetic>
         </div>
 
         <div className="flex flex-col">
