@@ -143,12 +143,12 @@ function App() {
     }
   }, [width, height, isMobile]);
 
-  const { scrollYProgress } = useScroll();
+  const { scrollYProgress, scrollY } = useScroll();
   const backgroundGradient = useMotionValue(
     "radial-gradient(circle, #111111 0%, #000000 65%)"
   );
   const textColor = useMotionValue("#FFFFFF");
-  const svgOpacity = useMotionValue(1);
+  const svgOpacity = useTransform(scrollY, [0, 350], [1, 0]);
 
   const handleScroll = useCallback((latest: number) => {
     requestAnimationFrame(() => {
@@ -174,8 +174,6 @@ function App() {
         255 - Math.round(255 * progress)
       }, ${255 - Math.round(255 * progress)})`;
       textColor.set(txtColor);
-      const newOpacity = 1 - progress;
-      svgOpacity.set(newOpacity);
     });
   }, []);
 
