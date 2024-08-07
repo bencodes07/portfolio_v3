@@ -132,7 +132,7 @@ const MouseGradient = ({ isMobile }: { isMobile: boolean }) => {
       <div>
         {window.innerWidth > 768 && (
           <button
-            className="fixed top-6 right-16 z-40 px-4 py-2 text-xl poppins-regular flex flex-row gap-x-2 items-center"
+            className="fixed top-6 right-16 z-[11] px-4 py-2 text-xl poppins-regular flex flex-row gap-x-2 items-center"
             style={{ color: textColor }}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
@@ -144,11 +144,10 @@ const MouseGradient = ({ isMobile }: { isMobile: boolean }) => {
           style={{
             position: window.innerWidth > 768 ? "fixed" : "absolute",
             right: "1.5rem",
-            zIndex: 40,
             padding: "0.5rem 1rem",
             color: buttonProps.color,
           }}
-          className="fixed top-6 right-16 z-40 px-4 py-2 text-light text-xl poppins-regular flex flex-row gap-x-2 items-center"
+          className="fixed top-6 right-16 z-[11] px-4 py-2 text-light text-xl poppins-regular flex flex-row gap-x-2 items-center"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <Equal size={32} />

@@ -1,6 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { X } from "lucide-react";
+import { useLenis } from "@studio-freight/react-lenis";
 
 interface NavMenuProps {
   isOpen: boolean;
@@ -9,6 +10,22 @@ interface NavMenuProps {
 
 const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
   const { scrollY } = useScroll();
+
+  const lenis = useLenis();
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    targetId: string,
+  ) => {
+    e.preventDefault();
+    if (lenis) {
+      const target = document.getElementById(targetId);
+      if (target) {
+        lenis.scrollTo(target);
+      }
+    }
+    onClose();
+  };
   return (
     <>
       {/* Backdrop */}
@@ -16,7 +33,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
         {isOpen && (
           <motion.div
             key="backdrop"
-            className="fixed inset-0 bg-black z-40"
+            className="fixed inset-0 bg-black z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
@@ -85,25 +102,39 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
           </button>
         </motion.div>
 
-        <div className="flex justify-between flex-grow mt-12 mx-[15%] items-center">
-          <div className="flex flex-grow items-start justify-between w-full">
+        <div className="flex justify-between flex-grow mt-12 mx-[15%] max-sm:mx-[5%] items-center">
+          <div className="flex flex-grow flex-row max-sm:flex-col-reverse items-start justify-between w-full">
             <motion.div
               className="space-y-4"
               initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.3 }}
             >
-              <h3 className="text-lg khula-light">Social</h3>
+              <h3 className="text-lg khula-light max-sm:mt-10">Social</h3>
               <ul className="space-y-2">
-                {["LinkedIn", "Instagram", "GitHub"].map((item, index) => (
+                {[
+                  {
+                    name: "LinkedIn",
+                    link: "https://linkedin.com/in/ben-böckmann-296293265",
+                  },
+                  {
+                    name: "Instagram",
+                    link: "https://instagram.com/ben.bck_prvt",
+                  },
+                  { name: "Github", link: "https://github.com/bencodes07" },
+                ].map((item, index) => (
                   <motion.li
-                    key={item}
+                    key={item.name}
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
                   >
-                    <a href="#" className="hover:underline text-xl">
-                      {item}
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      className="hover:underline text-xl poppins-light"
+                    >
+                      {item.name}
                     </a>
                   </motion.li>
                 ))}
@@ -118,37 +149,47 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
             >
               <h3 className="text-lg khula-light">Menu</h3>
               <ul className="space-y-2">
-                {["About Me", "Projects", "Experience", "Contact"].map(
-                  (item, index) => (
-                    <motion.li
-                      key={item}
-                      initial={{ x: 20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
+                {[
+                  { name: "About Me", id: "about" },
+                  { name: "Projects", id: "projects" },
+                  /* { name: "Experience", id: "about" }, */
+                  { name: "Contact", id: "contact" },
+                ].map((item, index) => (
+                  <motion.li
+                    key={item.name}
+                    initial={{ x: 20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
+                    onClick={() =>
+                      window.innerWidth <= 768 &&
+                      document.getElementById(item.id)?.scrollIntoView()
+                    }
+                  >
+                    <a
+                      href={`#${item.id}`}
+                      onClick={(e) => handleNavClick(e, item.id)}
+                      className={`text-[2.5rem] ${
+                        !(window.innerWidth <= 768) && "hover:left-2"
+                      } left-0 relative transition-[left] duration-300 ease-in-out`}
                     >
-                      <a href="#" className="text-[2.5rem]">
-                        {item}
-                      </a>
-                    </motion.li>
-                  )
-                )}
+                      {item.name}
+                    </a>
+                  </motion.li>
+                ))}
               </ul>
             </motion.div>
           </div>
         </div>
 
         <motion.div
-          className="mx-12 mb-12"
+          className="mx-[15%] max-sm:mx-[5%] mb-12"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.3 }}
         >
           <p className="text-sm text-gray-600">Get in touch</p>
-          <a
-            href="mailto:boeckmannben@gmail.com"
-            className="text-lg hover:underline"
-          >
-            boeckmannben@gmail.com
+          <a href="mailto:info@bencodes.de" className="text-lg hover:underline">
+            info@bencodes.de
           </a>
         </motion.div>
       </motion.div>
