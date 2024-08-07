@@ -12,7 +12,7 @@ export default function Overlay({
   return (
     <motion.div
       data-lenis-prevent
-      className="text-white inset-0 overflow-scroll fixed max-h-[100vh] px-4 w-full flex justify-center pb-12"
+      className="text-white inset-0 overflow-y-scroll overflow-x-hidden fixed max-h-[100vh] px-4 w-full flex justify-center pb-12"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
@@ -47,7 +47,7 @@ export default function Overlay({
                 Description
               </p>
               <hr className="w-[350px] border-gray-2 mt-2" />
-              <p className="poppins-regular text-base text-gray-1 overflow-scroll mt-8 mb-[4vh] max-w-[500px] w-full">
+              <p className="poppins-regular text-base text-gray-1 overflow-y-auto overflow-x-hidden mt-8 mb-[4vh] max-w-[500px] w-full">
                 {project.description}
               </p>
             </div>
