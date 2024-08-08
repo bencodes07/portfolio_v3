@@ -141,7 +141,7 @@ function App() {
             className="flex justify-center items-center relative z-10 flex-col mt-8"
           >
             <motion.h1
-              className="text-[80px] max-sm:text-[10vw] max-sm:max-w-sm max-sm:leading-tight text-light khula-extrabold w-[732px] text-center leading-[85px]"
+              className="md:text-[80px] max-sm:text-[10vw] sm:text-[10vw] max-sm:max-w-sm max-sm:leading-tight text-light khula-extrabold w-[732px] text-center leading-[85px]"
               style={{
                 transform: isMobile
                   ? "none"
