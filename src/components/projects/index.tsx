@@ -76,8 +76,8 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       title: "MeetMate",
       category: "Web Development / Design",
       year: "2024/25",
-      image: "./img/meetmate/landing.png",
-      imageDetail: "./img/meetmate/dashboard.png",
+      image: "./img/meetmate/landing.webp",
+      imageDetail: "./img/meetmate/dashboard.webp",
       description:
         "MeetMate is a web application streamlining appointment management for businesses and clients. It simplifies scheduling, allowing clients to book with various companies while businesses manage availability efficiently. This approach reduces time spent on booking and organizing appointments for all parties.",
       color: "77, 128, 237",
@@ -92,8 +92,8 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       title: "fishtrack.",
       category: "iOS Development / Product Design",
       year: "2023/24",
-      image: "./img/fishtrack/preview.png",
-      imageDetail: "./img/fishtrack/mockup.png",
+      image: "./img/fishtrack/preview.webp",
+      imageDetail: "./img/fishtrack/mockup.webp",
       description:
         "fishtrack is an iOS app for fishing enthusiasts to log and analyze their catches. It extracts date and location from photos, allows users to add fish details, and provides filtering options. Anglers can easily track their catches and view statistics, gaining insights into their fishing patterns over time.",
       technologies: {
@@ -108,8 +108,8 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       title: "TCG-Home",
       category: "Frontend Development",
       year: "2021-Now",
-      image: "./img/tcg/landing.jpeg",
-      imageDetail: "./img/tcg/collection.png",
+      image: "./img/tcg/landing.webp",
+      imageDetail: "./img/tcg/collection.webp",
       description: `TCG Home is an innovative online platform transforming the global niche market of collectible card games like "Magic: The Gathering". This project moves such games into the digital era by creating a comprehensive seamless portal where collecting, playing, and trading can take place.`,
       technologies: {
         frontend: "VueJS, Typescript, GraphQL",
@@ -123,8 +123,8 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       title: "Portfolio",
       category: "Web Development",
       year: "2024",
-      image: "./img/portfolio/landing.png",
-      imageDetail: "./img/portfolio/about.png",
+      image: "./img/portfolio/landing.webp",
+      imageDetail: "./img/portfolio/about.webp",
       description:
         "This portfolio showcases a range of web development projects, demonstrating proficiency in creating practical, user-focused applications. From appointment management systems to specialized mobile apps, each project highlights problem-solving skills and technical expertise. Click the arrow to view the Figma Design",
       technologies: {

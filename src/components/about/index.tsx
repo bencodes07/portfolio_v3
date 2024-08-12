@@ -68,7 +68,7 @@ const About: React.FC<AboutSectionProps> = ({
         <motion.h1
           variants={fadeInUpVariants}
           custom={0}
-          className={`khula-semibold text-6xl ${isMobile && "text-4xl"}`}
+          className={`khula-semibold ${isMobile ? "text-4xl" : "text-6xl"}`}
         >
           I believe in a user centered design approach, ensuring that every
           project I work on is tailored to meet the specific needs of its users.
