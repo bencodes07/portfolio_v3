@@ -82,6 +82,12 @@ function App() {
         )}) 0%, rgb(${interpolateColor(startColor, endColor)}) 65%)`;
         backgroundGradient.set(newGradient);
 
+        if (progress < 0.1) {
+          document.body.style.backgroundColor = "#000000";
+        } else if (progress > 0.3) {
+          document.body.style.backgroundColor = "#ffffff";
+        }
+
         const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
           255 - Math.round(255 * progress)
         }, ${255 - Math.round(255 * progress)})`;

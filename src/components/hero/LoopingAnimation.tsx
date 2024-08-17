@@ -19,13 +19,13 @@ function reducer(state: AnimationState, action: Action): AnimationState {
   }
 }
 
-interface AnimatedShapeProps {
+type AnimatedShapeProps = {
   side: "left" | "right";
   onComplete: () => void;
   width: number;
   height: number;
   isMobile: boolean;
-}
+};
 
 function AnimatedShape({
   side,
