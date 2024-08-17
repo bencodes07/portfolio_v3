@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSpring, animated, config } from "react-spring";
 import NavMenu from "./NavMenu";
 import { Equal } from "lucide-react";
-import {useScroll, useTransform, motion} from "framer-motion";
+import { useScroll, useTransform, motion } from "framer-motion";
 import gsap from "gsap";
 
 const MouseGradient = ({ isMobile }: { isMobile: boolean }) => {
@@ -80,7 +80,7 @@ const MouseGradient = ({ isMobile }: { isMobile: boolean }) => {
         const t = (scrollYProgress.get() - 0.2) / 0.2; // normalize to 0-1
         setButtonProps({
           color: `rgb(${Math.round(255 * (1 - t))}, ${Math.round(
-            255 * (1 - t)
+            255 * (1 - t),
           )}, ${Math.round(255 * (1 - t))})`,
           backgroundColor: `rgba(255, 255, 255, ${t})`,
         });
@@ -109,25 +109,27 @@ const MouseGradient = ({ isMobile }: { isMobile: boolean }) => {
 
   return (
     <>
-          <motion.div
-              ref={gradientRef}
-              style={{
-                position: window.innerWidth > 768 ? "fixed" : "absolute",
-                top: "50%",
-                left: "50%",
-                width: `${
-                    !isMobile ? Math.min(window.innerWidth, window.innerHeight) : 0
-                }px`,
-                height: `${
-                    !isMobile ? Math.min(window.innerWidth, window.innerHeight) : 0
-                }px`,
-                transform: "translate(-50%, -50%)",
-                pointerEvents: "none",
-                zIndex: 0,
-                opacity: gradientOpacity,
-                background: `radial-gradient(circle, rgba(190, 190, 255, 0.06) 0%, transparent 50%)`,
-              }}
-          />
+      {!isMobile && (
+        <motion.div
+          ref={gradientRef}
+          style={{
+            position: window.innerWidth > 768 ? "fixed" : "absolute",
+            top: "50%",
+            left: "50%",
+            width: `${
+              !isMobile ? Math.min(window.innerWidth, window.innerHeight) : 0
+            }px`,
+            height: `${
+              !isMobile ? Math.min(window.innerWidth, window.innerHeight) : 0
+            }px`,
+            transform: "translate(-50%, -50%)",
+            pointerEvents: "none",
+            zIndex: 0,
+            opacity: gradientOpacity,
+            background: `radial-gradient(circle, rgba(190, 190, 255, 0.06) 0%, transparent 50%)`,
+          }}
+        />
+      )}
 
       <div>
         {window.innerWidth > 768 && (
