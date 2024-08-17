@@ -20,7 +20,8 @@
 }
 
 #root,
-body {
+body,
+html {
   overflow-x: hidden;
   background-color: var(--dark);
 }

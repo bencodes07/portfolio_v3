@@ -85,9 +85,11 @@ function App() {
         if (progress < 0.1) {
           document.body.style.backgroundColor = "#000000";
           document.getElementById("root")!.style.backgroundColor = "#000000";
+          document.documentElement.style.backgroundColor = "#000000";
         } else if (progress > 0.3) {
           document.body.style.backgroundColor = "#ffffff";
           document.getElementById("root")!.style.backgroundColor = "#ffffff";
+          document.documentElement.style.backgroundColor = "#ffffff";
         }
 
         const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
