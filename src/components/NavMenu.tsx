@@ -3,10 +3,10 @@ import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { X } from "lucide-react";
 import { useLenis } from "@studio-freight/react-lenis";
 
-interface NavMenuProps {
+type NavMenuProps = {
   isOpen: boolean;
   onClose: () => void;
-}
+};
 
 const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
   const { scrollY } = useScroll();

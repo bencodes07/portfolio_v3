@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 
-interface CurveProps {
+type CurveProps = {
   isVisible: boolean;
-}
+};
 
 export default function Curve({ isVisible }: CurveProps) {
   const [dimensions, setDimensions] = useState({

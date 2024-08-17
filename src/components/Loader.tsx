@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 
-interface LoaderProps {
+type LoaderProps = {
   onLoadingComplete: () => void;
-}
+};
 
 const Loader: React.FC<LoaderProps> = ({ onLoadingComplete }) => {
   const [show, setShow] = useState<boolean>(true);

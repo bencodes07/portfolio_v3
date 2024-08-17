@@ -1,10 +1,10 @@
 import { useReducer, useEffect, useRef } from "react";
 import { motion, useAnimate } from "framer-motion";
 
-interface AnimationState {
+type AnimationState = {
   leftKey: number;
   rightKey: number;
-}
+};
 
 type Action = { type: "INCREMENT_LEFT" } | { type: "INCREMENT_RIGHT" };
 
