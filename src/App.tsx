@@ -59,7 +59,6 @@ function App() {
   );
   const textColor = useMotionValue("#FFFFFF");
   const svgOpacity = useMotionValue(1);
-  const [bodyColor, setBodyColor] = useState("#000000");
   const dynamicBodyColor = useMotionValue("#000000");
 
   const handleScroll = useCallback(
@@ -90,12 +89,10 @@ function App() {
           document.body.style.backgroundColor = "#000000";
           document.getElementById("root")!.style.backgroundColor = "#000000";
           document.documentElement.style.backgroundColor = "#000000";
-          setBodyColor("#000000");
         } else if (progress > 0.3) {
           document.body.style.backgroundColor = "#ffffff";
           document.getElementById("root")!.style.backgroundColor = "#ffffff";
           document.documentElement.style.backgroundColor = "#ffffff";
-          setBodyColor("#ffffff");
         }
 
         const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
