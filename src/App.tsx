@@ -20,6 +20,7 @@ import SectionSpacer from "./components/SectionSpacer";
 import { useIsTouchDevice } from "./hooks/useIsTouchDevice";
 import Loader from "./components/Loader";
 import { ReactLenis } from "@studio-freight/react-lenis";
+import { Helmet } from "react-helmet-async";
 
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -58,6 +59,7 @@ function App() {
   );
   const textColor = useMotionValue("#FFFFFF");
   const svgOpacity = useMotionValue(1);
+  const [bodyColor, setBodyColor] = useState("#000000");
 
   const handleScroll = useCallback(
     (latest: number) => {
@@ -86,10 +88,12 @@ function App() {
           document.body.style.backgroundColor = "#000000";
           document.getElementById("root")!.style.backgroundColor = "#000000";
           document.documentElement.style.backgroundColor = "#000000";
+          setBodyColor("#000000");
         } else if (progress > 0.3) {
           document.body.style.backgroundColor = "#ffffff";
           document.getElementById("root")!.style.backgroundColor = "#ffffff";
           document.documentElement.style.backgroundColor = "#ffffff";
+          setBodyColor("#ffffff");
         }
 
         const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
@@ -128,6 +132,9 @@ function App() {
 
   return (
     <ReactLenis root>
+      <Helmet>
+        <meta name="theme-color" content={bodyColor} />
+      </Helmet>
       <Loader onLoadingComplete={() => setIsLoading(false)} />
 
       <div style={{ visibility: isLoading ? "hidden" : "visible" }}>
