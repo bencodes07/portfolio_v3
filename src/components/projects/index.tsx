@@ -10,6 +10,7 @@ import { useIsTouchDevice } from "../../hooks/useIsTouchDevice";
 import Curve from "./Curve";
 import Overlay from "./Overlay";
 import { X } from "lucide-react";
+import { useLenis } from "@studio-freight/react-lenis";
 
 type ProjectsSectionProps = {
   isProjectsInView: boolean;
@@ -75,7 +76,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       number: "01",
       title: "MeetMate",
       category: "Web Development / Design",
-      year: "2024/25",
+      year: "2024-25",
       image: "./img/meetmate/landing.webp",
       imageDetail: "./img/meetmate/dashboard.webp",
       description:
@@ -91,7 +92,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       number: "02",
       title: "fishtrack.",
       category: "iOS Development / Product Design",
-      year: "2023/24",
+      year: "2023-24",
       image: "./img/fishtrack/preview.webp",
       imageDetail: "./img/fishtrack/mockup.webp",
       description:
@@ -221,12 +222,19 @@ const Projects: React.FC<ProjectsSectionProps> = ({
     }, 800);
   };
 
+  const lenis = useLenis();
+
   useEffect(() => {
     if (isOverlayVisible) {
+      lenis?.stop();
+      document.documentElement.style.overflowY = "hidden";
       const timer = setTimeout(() => {
         setIsContentVisible(true);
       }, 800);
       return () => clearTimeout(timer);
+    } else {
+      lenis?.start();
+      document.documentElement.style.overflowY = "auto";
     }
   }, [isOverlayVisible]);
 
