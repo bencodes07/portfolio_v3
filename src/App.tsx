@@ -58,7 +58,6 @@ function App() {
   );
   const textColor = useMotionValue("#FFFFFF");
   const svgOpacity = useMotionValue(1);
-  const dynamicBodyColor = useMotionValue("#000000");
 
   const handleScroll = useCallback(
     (latest: number) => {
@@ -82,7 +81,16 @@ function App() {
           endColor,
         )}) 0%, rgb(${interpolateColor(startColor, endColor)}) 65%)`;
         backgroundGradient.set(newGradient);
-        dynamicBodyColor.set(`rgb(${interpolateColor(startColor, endColor)})`);
+
+        if (progress < 0.1) {
+          document.body.style.backgroundColor = "#000000";
+          document.getElementById("root")!.style.backgroundColor = "#000000";
+          document.documentElement.style.backgroundColor = "#000000";
+        } else if (progress > 0.3) {
+          document.body.style.backgroundColor = "#ffffff";
+          document.getElementById("root")!.style.backgroundColor = "#ffffff";
+          document.documentElement.style.backgroundColor = "#ffffff";
+        }
 
         const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
           255 - Math.round(255 * progress)
@@ -99,13 +107,6 @@ function App() {
 
   // ----- Color Animation ----- //
   const { hue1, hue2 } = useColorAnimation();
-
-  // ----- Initial colors ----- //
-  useEffect(() => {
-    document.body.style.backgroundColor = "#000000";
-    document.getElementById("root")!.style.backgroundColor = "#000000";
-    document.documentElement.style.backgroundColor = "#000000";
-  }, []);
 
   // ----- Loading Animation ----- //
   const [isLoading, setIsLoading] = useState(true);
