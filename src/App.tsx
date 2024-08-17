@@ -60,6 +60,7 @@ function App() {
   const textColor = useMotionValue("#FFFFFF");
   const svgOpacity = useMotionValue(1);
   const [bodyColor, setBodyColor] = useState("#000000");
+  const dynamicBodyColor = useMotionValue("#000000");
 
   const handleScroll = useCallback(
     (latest: number) => {
@@ -83,6 +84,7 @@ function App() {
           endColor,
         )}) 0%, rgb(${interpolateColor(startColor, endColor)}) 65%)`;
         backgroundGradient.set(newGradient);
+        dynamicBodyColor.set(`rgb(${interpolateColor(startColor, endColor)})`);
 
         if (progress < 0.1) {
           document.body.style.backgroundColor = "#000000";
@@ -133,7 +135,7 @@ function App() {
   return (
     <ReactLenis root>
       <Helmet>
-        <meta name="theme-color" content={bodyColor} />
+        <meta name="theme-color" content={dynamicBodyColor.get()} />
       </Helmet>
       <Loader onLoadingComplete={() => setIsLoading(false)} />
 
