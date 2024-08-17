@@ -20,7 +20,6 @@ import SectionSpacer from "./components/SectionSpacer";
 import { useIsTouchDevice } from "./hooks/useIsTouchDevice";
 import Loader from "./components/Loader";
 import { ReactLenis } from "@studio-freight/react-lenis";
-import { Helmet } from "react-helmet-async";
 
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -85,16 +84,6 @@ function App() {
         backgroundGradient.set(newGradient);
         dynamicBodyColor.set(`rgb(${interpolateColor(startColor, endColor)})`);
 
-        if (progress < 0.1) {
-          document.body.style.backgroundColor = "#000000";
-          document.getElementById("root")!.style.backgroundColor = "#000000";
-          document.documentElement.style.backgroundColor = "#000000";
-        } else if (progress > 0.3) {
-          document.body.style.backgroundColor = "#ffffff";
-          document.getElementById("root")!.style.backgroundColor = "#ffffff";
-          document.documentElement.style.backgroundColor = "#ffffff";
-        }
-
         const txtColor = `rgb(${255 - Math.round(255 * progress)}, ${
           255 - Math.round(255 * progress)
         }, ${255 - Math.round(255 * progress)})`;
@@ -110,6 +99,13 @@ function App() {
 
   // ----- Color Animation ----- //
   const { hue1, hue2 } = useColorAnimation();
+
+  // ----- Initial colors ----- //
+  useEffect(() => {
+    document.body.style.backgroundColor = "#000000";
+    document.getElementById("root")!.style.backgroundColor = "#000000";
+    document.documentElement.style.backgroundColor = "#000000";
+  }, []);
 
   // ----- Loading Animation ----- //
   const [isLoading, setIsLoading] = useState(true);
@@ -131,9 +127,6 @@ function App() {
 
   return (
     <ReactLenis root>
-      <Helmet>
-        <meta name="theme-color" content={dynamicBodyColor.get()} />
-      </Helmet>
       <Loader onLoadingComplete={() => setIsLoading(false)} />
 
       <div style={{ visibility: isLoading ? "hidden" : "visible" }}>
