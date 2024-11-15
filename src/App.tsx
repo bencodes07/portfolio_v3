@@ -20,6 +20,7 @@ import SectionSpacer from "./components/SectionSpacer";
 import { useIsTouchDevice } from "./hooks/useIsTouchDevice";
 import Loader from "./components/Loader";
 import { ReactLenis } from "@studio-freight/react-lenis";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -226,6 +227,7 @@ function App() {
           />
         </div>
       </div>
+      <Analytics />
     </ReactLenis>
   );
 }

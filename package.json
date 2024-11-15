@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@studio-freight/react-lenis": "^0.0.47",
+    "@vercel/analytics": "^1.4.0",
     "framer-motion": "^11.3.8",
     "gsap": "^3.12.5",
     "is-touch-device": "^1.0.1",
