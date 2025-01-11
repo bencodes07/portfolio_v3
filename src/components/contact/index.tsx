@@ -93,7 +93,7 @@ const Contact: React.FC<ContactSectionProps> = ({
         <p className="poppins-extralight text-2xl">Ben Böckmann</p>
 
         <p className="poppins-light px-4 text-gray-3 tracking-[calc(-1rem*0.03)] mt-[8vh] select-none mb-1 text-center">
-          © Ben Böckmann 2024. All rights reserved. Location: Germany
+          © Ben Böckmann 2025. All rights reserved. Location: Germany
         </p>
         <p className="poppins-light px-4 text-gray-3 select-none tracking-[calc(-1rem*0.03)] mb-8 max-w-[500px] text-center">
           This site showcases my personal projects and professional work.
