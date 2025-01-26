@@ -19,6 +19,8 @@ const fadeInUpVariants = {
       duration: 0.6,
       ease: "easeOut",
       delay: custom * 0.2,
+      type: "tween",
+      useNativeDriver: true
     },
   }),
 };
@@ -30,6 +32,8 @@ const lineVariants = {
     transition: {
       duration: 1.5,
       ease: "easeInOut",
+      type: "tween",
+      useNativeDriver: true
     },
   },
 };
@@ -55,13 +59,15 @@ const About: React.FC<AboutSectionProps> = ({
     }
   }, [isAboutInView, aboutControls, hasAnimated, setHasAnimated]);
 
+  const initialState = isMobile ? "visible" : "hidden";
+
   return (
     <motion.div
       style={{ background: backgroundGradient }}
       className="w-screen min-h-screen overflow-hidden flex justify-center items-center relative z-10"
     >
       <motion.div
-        initial="hidden"
+        initial={initialState}
         animate={aboutControls}
         className="max-w-[1000px] px-4"
       >

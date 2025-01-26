@@ -40,6 +40,8 @@ const fadeInUpVariants = {
       duration: 0.6,
       ease: "easeOut",
       delay: custom * 0.2,
+      type: "tween",
+      useNativeDriver: true
     },
   }),
   exit: {
@@ -48,6 +50,8 @@ const fadeInUpVariants = {
     transition: {
       duration: 0.4,
       ease: "easeIn",
+      type: "tween",
+      useNativeDriver: true
     },
   },
 };
@@ -250,13 +254,15 @@ const Projects: React.FC<ProjectsSectionProps> = ({
     });
   }, []);
 
+  const initialState = isMobile ? "visible" : "hidden";
+
   return (
     <motion.div
       style={{
         background: backgroundGradient,
         zIndex: isOverlayVisible ? 20 : 10,
       }}
-      initial="hidden"
+      initial={initialState}
       animate={projectsControls}
       className="w-screen min-h-screen flex justify-center flex-col items-center relative z-10"
     >

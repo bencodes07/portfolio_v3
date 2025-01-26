@@ -18,6 +18,8 @@ const drawVariant = {
     transition: {
       pathLength: { type: "spring", duration: 5, bounce: 0, delay: 0.5 },
       opacity: { duration: 0.8, ease: "easeInOut", delay: 0.5 },
+      type: "tween",
+      useNativeDriver: true
     },
   },
 };
@@ -102,6 +104,8 @@ const BackgroundSVG: React.FC<BackgroundSVGProps> = ({
     }
   }, [width, height, isMobile, isLoading]);
 
+  const initialState = isMobile ? "visible" : "hidden";
+
   return (
     <motion.div
       style={{ opacity: svgOpacity }}
@@ -112,7 +116,7 @@ const BackgroundSVG: React.FC<BackgroundSVGProps> = ({
           <motion.svg
             width={width}
             height={height}
-            initial="hidden"
+            initial={initialState}
             animate={isLoading ? "hidden" : "visible"}
             className="fixed top-0 left-0"
           >
