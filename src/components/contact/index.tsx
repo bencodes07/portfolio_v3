@@ -48,7 +48,9 @@ const Contact: React.FC<ContactSectionProps> = ({
     <motion.div
       animate={contactControls}
       initial={initialState}
-      className={`w-screen contact-bg ${isMobile ? "before:bg-none after:bg-none" : "before:block after:block"} min-h-screen overflow-hidden flex flex-col justify-end items-center gap-y-4 relative z-[2]`}
+      className={`w-screen contact-bg ${
+        isMobile ? "before:bg-none after:bg-none" : "before:block after:block"
+      } min-h-screen overflow-hidden flex flex-col justify-end items-center gap-y-4 relative z-[2]`}
     >
       <motion.h2
         custom={0}
@@ -107,7 +109,8 @@ const Contact: React.FC<ContactSectionProps> = ({
         <p className="poppins-extralight text-2xl">Ben Böckmann</p>
 
         <p className="poppins-light px-4 text-gray-3 tracking-[calc(-1rem*0.03)] mt-[8vh] select-none mb-1 text-center">
-          © Ben Böckmann 2024. All rights reserved. Location: Germany
+          © Ben Böckmann {new Date().getFullYear()}. All rights reserved.
+          Location: Germany
         </p>
         <p className="poppins-light px-4 text-gray-3 select-none tracking-[calc(-1rem*0.03)] mb-8 max-w-[500px] text-center">
           This site showcases my personal projects and professional work.

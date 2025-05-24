@@ -94,7 +94,9 @@ const About: React.FC<AboutSectionProps> = ({
           ></motion.hr>
         </motion.div>
         <div
-          className={`flex justify-between flex-row mt-16 ${isMobile && "mt-8 flex-col"}`}
+          className={`flex justify-between flex-row mt-16 ${
+            isMobile && "mt-8 flex-col"
+          }`}
         >
           <div className="flex flex-col w-1/2">
             <motion.h2
@@ -119,12 +121,14 @@ const About: React.FC<AboutSectionProps> = ({
             )}
           </div>
           <div
-            className={`flex flex-col gap-y-4 w-1/2 khula-light text-2xl ${isMobile && "mt-8 text-lg w-full"}`}
+            className={`flex flex-col gap-y-4 w-1/2 khula-light text-2xl ${
+              isMobile && "mt-8 text-lg w-full"
+            }`}
           >
             <motion.p variants={fadeInUpVariants} custom={4}>
-              I'm a 17 year-old passionate fullstack web developer dedicated to
-              turning ideas into creative solutions. I specialize in creating
-              seamless and intuitive user experiences.
+              I'm a 17 year-old web developer dedicated to turning ideas into
+              creative solutions. I specialize in creating seamless and
+              intuitive user experiences.
             </motion.p>
             <motion.p variants={fadeInUpVariants} custom={5}>
               I'm involved in every step of the process: from discovery and
