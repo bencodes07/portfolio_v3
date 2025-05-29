@@ -1,15 +1,3 @@
 {
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "destination": "https://bencodes.de/$1",
-      "permanent": true,
-      "has": [
-        {
-          "type": "host",
-          "value": "www.bencodes.de"
-        }
-      ]
-    }
-  ]
+  "redirects": []
 }
