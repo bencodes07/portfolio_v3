@@ -126,7 +126,7 @@ const About: React.FC<AboutSectionProps> = ({
             }`}
           >
             <motion.p variants={fadeInUpVariants} custom={4}>
-              I'm a 17 year-old web developer dedicated to turning ideas into
+              I'm a 18 year-old web developer dedicated to turning ideas into
               creative solutions. I specialize in creating seamless and
               intuitive user experiences.
             </motion.p>
