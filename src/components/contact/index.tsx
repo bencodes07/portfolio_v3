@@ -82,15 +82,6 @@ const Contact: React.FC<ContactSectionProps> = ({
         </Magnetic>
         <Magnetic>
           <a
-            href="tel:+4917621577766"
-            className="flex gap-x-2 rounded-full border-dark border-2 px-2 py-1"
-          >
-            <Phone />
-            Phone
-          </a>
-        </Magnetic>
-        <Magnetic>
-          <a
             href="https://linkedin.com/in/ben-böckmann-296293265"
             target="_blank"
             className="flex gap-x-2 rounded-full border-dark border-2 px-2 py-1"
