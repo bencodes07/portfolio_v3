@@ -90,7 +90,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
         frontend: "NextJS, TailwindCSS, ThreeJS",
         backend: "Spring Boot, GraphQL, PostgreSQL, MongoDB",
       },
-      link: "https://meetmate.dev",
+      link: "https://github.com/informatik-projekt-kurs",
     },
     {
       number: "02",
