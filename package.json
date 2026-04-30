@@ -36,7 +36,7 @@
     "postcss": "^8.5.12",
     "sass": "^1.99.0",
     "tailwindcss": "^3.4.6",
-    "typescript": "^5.2.2",
+    "typescript": "^6.0.3",
     "vite": "^5.3.4"
   },
   "config": {
