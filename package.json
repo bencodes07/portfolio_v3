@@ -18,7 +18,7 @@
     "lucide-react": "^0.414.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "react-router-dom": "^6.25.1",
+    "react-router-dom": "^7.14.2",
     "react-spring": "^10.0.3"
   },
   "devDependencies": {
