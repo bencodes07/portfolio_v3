@@ -8,6 +8,7 @@ import {
   useMotionValueEvent,
   useScroll,
   useTransform,
+  Variants,
 } from "framer-motion";
 import MouseGradient from "./components/MouseGradient";
 import { debounce } from "lodash";
@@ -107,7 +108,7 @@ function App() {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const landingSectionVariants = {
+  const landingSectionVariants: Variants = {
     hidden: { scale: 0.8, opacity: 0 },
     visible: {
       scale: 1,

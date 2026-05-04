@@ -1,4 +1,4 @@
-import { MotionValue, useAnimationControls, motion } from "framer-motion";
+import { MotionValue, useAnimationControls, motion, Variants } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import Magnetic from "../Magnetic";
@@ -10,7 +10,7 @@ type AboutSectionProps = {
   backgroundGradient: MotionValue<string>;
 };
 
-const fadeInUpVariants = {
+const fadeInUpVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: (custom: number) => ({
     opacity: 1,
@@ -25,7 +25,7 @@ const fadeInUpVariants = {
   }),
 };
 
-const lineVariants = {
+const lineVariants: Variants = {
   hidden: { width: 0 },
   visible: {
     width: "100%",

@@ -2,10 +2,9 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useIsTouchDevice } from "../hooks/useIsTouchDevice";
 
-// Utility function for throttling
-function throttle(func: Function, limit: number) {
+function throttle(func: (...args: unknown[]) => void, limit: number) {
   let inThrottle: boolean;
-  return function (this: any, ...args: any[]) {
+  return function (this: unknown, ...args: unknown[]) {
     if (!inThrottle) {
       func.apply(this, args);
       inThrottle = true;
@@ -14,7 +13,7 @@ function throttle(func: Function, limit: number) {
   };
 }
 
-export default function Index({ children }: { children: JSX.Element }) {
+export default function Index({ children }: { children: React.ReactElement }) {
   const magnetic = useRef<HTMLDivElement>(null);
   const animation = useRef<gsap.core.Tween | null>(null);
   const isTouchDevice = useIsTouchDevice();
@@ -24,7 +23,7 @@ export default function Index({ children }: { children: JSX.Element }) {
     const element = magnetic.current;
     if (!element) return;
 
-    const maxDistance = 20; // Maximum pixel distance to move
+    const maxDistance = 20;
 
     const animate = (x: number, y: number) => {
       if (animation.current) {
@@ -43,7 +42,6 @@ export default function Index({ children }: { children: JSX.Element }) {
       let x = clientX - (left + width / 2);
       let y = clientY - (top + height / 2);
 
-      // Limit the movement range
       const distance = Math.sqrt(x * x + y * y);
       if (distance > maxDistance) {
         const factor = maxDistance / distance;
@@ -54,20 +52,20 @@ export default function Index({ children }: { children: JSX.Element }) {
       return { x, y };
     };
 
-    const mouseMove = throttle((e: MouseEvent) => {
-      const { x, y } = calculateMovement(e.clientX, e.clientY);
+    const mouseMove = throttle((e: unknown) => {
+      const { x, y } = calculateMovement((e as MouseEvent).clientX, (e as MouseEvent).clientY);
       requestAnimationFrame(() => animate(x, y));
-    }, 16); // Throttle to about 60fps
+    }, 16);
 
     const mouseLeave = () => {
       requestAnimationFrame(() => animate(0, 0));
     };
 
-    element.addEventListener("mousemove", mouseMove);
+    element.addEventListener("mousemove", mouseMove as EventListener);
     element.addEventListener("mouseleave", mouseLeave);
 
     return () => {
-      element.removeEventListener("mousemove", mouseMove);
+      element.removeEventListener("mousemove", mouseMove as EventListener);
       element.removeEventListener("mouseleave", mouseLeave);
     };
   }, [isTouchDevice]);
