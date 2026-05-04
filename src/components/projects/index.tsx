@@ -5,6 +5,7 @@ import {
   AnimatePresence,
   useSpring,
   useAnimationControls,
+  Variants,
 } from "framer-motion";
 import { useIsTouchDevice } from "../../hooks/useIsTouchDevice";
 import Curve from "./Curve";
@@ -31,7 +32,7 @@ export type Project = {
   link: string;
 };
 
-const fadeInUpVariants = {
+const fadeInUpVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: (custom: number) => ({
     opacity: 1,
