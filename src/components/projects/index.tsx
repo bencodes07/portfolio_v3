@@ -10,7 +10,7 @@ import { useIsTouchDevice } from "../../hooks/useIsTouchDevice";
 import Curve from "./Curve";
 import Overlay from "./Overlay";
 import { X } from "lucide-react";
-import { useLenis } from "@studio-freight/react-lenis";
+import { useLenis } from "lenis/react";
 
 type ProjectsSectionProps = {
   isProjectsInView: boolean;
@@ -153,8 +153,6 @@ const Projects: React.FC<ProjectsSectionProps> = ({
     }
   }, [isProjectsInView, projectsControls, hasAnimated, setHasAnimated]);
 
-  // ----- Hover effect ----- //
-
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       cursorX.set(e.clientX);
@@ -165,7 +163,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
 
   const handleScroll = useCallback(() => {
     setIsScrolling(true);
-    setTimeout(() => setIsScrolling(false), 100); // Debounce scrolling state
+    setTimeout(() => setIsScrolling(false), 100);
   }, []);
 
   useEffect(() => {
@@ -208,8 +206,6 @@ const Projects: React.FC<ProjectsSectionProps> = ({
     };
   }, [isMobile, handleMouseMove, handleScroll, cursorX, cursorY, isScrolling]);
 
-  // ----- Overlay ----- //
-
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isContentVisible, setIsContentVisible] = useState(false);
@@ -241,8 +237,6 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       document.documentElement.style.overflowY = "auto";
     }
   }, [isOverlayVisible]);
-
-  // ----- Image Preloading ----- //
 
   useEffect(() => {
     projects.map((project: Project) => {
@@ -276,7 +270,6 @@ const Projects: React.FC<ProjectsSectionProps> = ({
             Selected Projects
           </motion.h2>
 
-          {/* Mobile Version: Card like design */}
           <div className="grid grid-cols-2 grid-flow-row max-sm:grid-cols-1 gap-6 gap-y-32 px-4">
             {projects.map((project, index) => (
               <motion.div

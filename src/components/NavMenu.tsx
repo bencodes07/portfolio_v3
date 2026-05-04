@@ -1,7 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { X } from "lucide-react";
-import { useLenis } from "@studio-freight/react-lenis";
+import { useLenis } from "lenis/react";
 
 type NavMenuProps = {
   isOpen: boolean;
@@ -28,7 +28,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
   };
   return (
     <>
-      {/* Backdrop */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -58,10 +57,9 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
             },
           },
         }}
-        style={{ originX: 1, top: scrollY }} // This ensures the scale animation starts from the right
+        style={{ originX: 1, top: scrollY }}
       ></motion.div>
 
-      {/* Navigation Menu */}
       <motion.div
         className="fixed right-0 h-screen w-1/3 max-2xl:w-1/2 max-xl:w-2/3 max-md:w-full z-[100] flex flex-col p-6 justify-center max-w-screen-md bg-white overflow-y-auto"
         initial="initial"
@@ -86,7 +84,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
             },
           },
         }}
-        style={{ top: scrollY + "px" }} // Set the top position based on scrollY
+        style={{ top: scrollY + "px" }}
       >
         <motion.div
           className="flex justify-end items-center"
@@ -152,7 +150,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
                 {[
                   { name: "About Me", id: "about" },
                   { name: "Projects", id: "projects" },
-                  /* { name: "Experience", id: "about" }, */
                   { name: "Contact", id: "contact" },
                 ].map((item, index) => (
                   <motion.li

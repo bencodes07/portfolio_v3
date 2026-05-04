@@ -19,7 +19,7 @@ import Projects from "./components/projects";
 import SectionSpacer from "./components/SectionSpacer";
 import { useIsTouchDevice } from "./hooks/useIsTouchDevice";
 import Loader from "./components/Loader";
-import { ReactLenis } from "@studio-freight/react-lenis";
+import { ReactLenis } from "lenis/react";
 
 function App() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -31,7 +31,6 @@ function App() {
 
   const isTouchDevice = useIsTouchDevice();
 
-  // ----- Dimension update ----- //
   const updateDimensions = useCallback(
     debounce(() => {
       const newDimensions = {
@@ -51,7 +50,6 @@ function App() {
     return () => window.removeEventListener("resize", updateDimensions);
   }, [updateDimensions]);
 
-  // ----- Scroll animations ----- //
   const { scrollYProgress } = useScroll();
   const backgroundGradient = useMotionValue(
     "radial-gradient(circle, #111111 0%, #000000 65%)",
@@ -67,7 +65,7 @@ function App() {
           : Math.max(0, Math.min((latest - 0.03) / 0.1, 1));
 
         const startColor = [0, 0, 0];
-        const endColor = [255, 255, 255]; // #FFFFFF
+        const endColor = [255, 255, 255];
 
         const interpolateColor = (start: number[], end: number[]): string =>
           start
@@ -105,10 +103,8 @@ function App() {
 
   useMotionValueEvent(scrollYProgress, "change", handleScroll);
 
-  // ----- Color Animation ----- //
   const { hue1, hue2 } = useColorAnimation();
 
-  // ----- Loading Animation ----- //
   const [isLoading, setIsLoading] = useState(true);
 
   const landingSectionVariants = {

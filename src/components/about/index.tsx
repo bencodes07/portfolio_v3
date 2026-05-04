@@ -2,7 +2,7 @@ import { MotionValue, useAnimationControls, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import Magnetic from "../Magnetic";
-import { useLenis } from "@studio-freight/react-lenis";
+import { useLenis } from "lenis/react";
 
 type AboutSectionProps = {
   isAboutInView: boolean;
