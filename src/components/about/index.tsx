@@ -3,6 +3,10 @@ import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import Magnetic from "../Magnetic";
 import { useLenis } from "lenis/react";
+import { getAge } from "../../lib/getAge";
+
+const BIRTH_DATE = new Date(2007, 6, 16); // July 16, 2007
+const age = getAge(BIRTH_DATE);
 
 type AboutSectionProps = {
   isAboutInView: boolean;
@@ -124,8 +128,8 @@ const About: React.FC<AboutSectionProps> = ({
             }`}
           >
             <motion.p variants={fadeInUpVariants} custom={4}>
-              I'm a 18 year-old web developer dedicated to turning ideas into
-              creative solutions. I specialize in creating seamless and
+              I'm a {age} year-old web developer dedicated to turning ideas
+              into creative solutions. I specialize in creating seamless and
               intuitive user experiences.
             </motion.p>
             <motion.p variants={fadeInUpVariants} custom={5}>
