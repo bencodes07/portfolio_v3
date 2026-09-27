@@ -13,8 +13,10 @@ function throttle(func: (...args: unknown[]) => void, limit: number) {
   };
 }
 
-export default function Index({ children }: { children: React.ReactElement }) {
-  const magnetic = useRef<HTMLDivElement>(null);
+type MagneticChild = React.ReactElement<{ ref?: React.Ref<HTMLElement> }>;
+
+export default function Index({ children }: { children: MagneticChild }) {
+  const magnetic = useRef<HTMLElement>(null);
   const animation = useRef<gsap.core.Tween | null>(null);
   const isTouchDevice = useIsTouchDevice();
 

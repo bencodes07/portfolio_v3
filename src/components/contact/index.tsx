@@ -1,7 +1,13 @@
-import { MotionValue, motion, useAnimationControls } from "framer-motion";
-import { Linkedin, Mail } from "lucide-react";
+import {
+  MotionValue,
+  motion,
+  useAnimationControls,
+  Variants,
+} from "framer-motion";
+import { Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import Magnetic from "../Magnetic";
+import LinkedinIcon from "../icons/LinkedinIcon";
 
 type ContactSectionProps = {
   isContactInView: boolean;
@@ -9,7 +15,7 @@ type ContactSectionProps = {
   backgroundGradient: MotionValue<string>;
 };
 
-const fadeInUpVariants = {
+const fadeInUpVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: (custom: number) => ({
     opacity: 1,
@@ -19,7 +25,6 @@ const fadeInUpVariants = {
       ease: "easeOut",
       delay: custom * 0.2,
       type: "tween",
-      useNativeDriver: true
     },
   }),
 };
@@ -86,7 +91,7 @@ const Contact: React.FC<ContactSectionProps> = ({
             target="_blank"
             className="flex gap-x-2 rounded-full border-dark border-2 px-2 py-1"
           >
-            <Linkedin />
+            <LinkedinIcon />
             LinkedIn
           </a>
         </Magnetic>

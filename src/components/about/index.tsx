@@ -20,7 +20,6 @@ const fadeInUpVariants: Variants = {
       ease: "easeOut",
       delay: custom * 0.2,
       type: "tween",
-      useNativeDriver: true
     },
   }),
 };
@@ -33,7 +32,6 @@ const lineVariants: Variants = {
       duration: 1.5,
       ease: "easeInOut",
       type: "tween",
-      useNativeDriver: true
     },
   },
 };

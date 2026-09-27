@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useRef } from "react";
-import { motion, useAnimate } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 
 type AnimationState = {
   leftKey: number;
@@ -34,17 +34,17 @@ function AnimatedShape({
   height,
   isMobile,
 }: AnimatedShapeProps) {
-  const [scope, animate] = useAnimate();
+  const controls = useAnimation();
   const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     const runAnimation = async () => {
       // Draw the outline
-      await animate(scope.current, { pathLength: 1 }, { duration: 1.5 });
+      await controls.start({ pathLength: 1, transition: { duration: 1.5 } });
       // Fill the shape
-      await animate(scope.current, { fillOpacity: 1 }, { duration: 0.5 });
+      await controls.start({ fillOpacity: 1, transition: { duration: 0.5 } });
       // Move the shape down
-      await animate(scope.current, { y: "50%" }, { duration: 1 });
+      await controls.start({ y: "50%", transition: { duration: 1 } });
       onComplete();
     };
 
@@ -55,7 +55,7 @@ function AnimatedShape({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [animate, onComplete]);
+  }, [controls, onComplete]);
 
   const centerX = width / 2;
   const yStart = (height * 2) / 3;
@@ -76,12 +76,12 @@ function AnimatedShape({
       className="fixed top-0 left-0 "
     >
       <motion.path
-        ref={scope}
         d={path}
         stroke="var(--svg-line)"
         strokeWidth="2"
         fill="var(--svg-line)"
         initial={{ pathLength: 0, fillOpacity: 0, y: 0 }}
+        animate={controls}
       />
     </svg>
   );

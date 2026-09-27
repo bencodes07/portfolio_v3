@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import "./assets/tailwind.css";
 import "./assets/globals.scss";
 import Redirect from "./components/Redirect.tsx";
 

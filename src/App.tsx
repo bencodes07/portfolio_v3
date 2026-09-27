@@ -32,15 +32,16 @@ function App() {
 
   const isTouchDevice = useIsTouchDevice();
 
-  const updateDimensions = useCallback(
-    debounce(() => {
-      const newDimensions = {
-        width: window.innerWidth,
-        height: window.innerHeight,
-      };
-      dimensionsRef.current = newDimensions;
-      setDimensions(newDimensions);
-    }, 200),
+  const updateDimensions = useMemo(
+    () =>
+      debounce(() => {
+        const newDimensions = {
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+        dimensionsRef.current = newDimensions;
+        setDimensions(newDimensions);
+      }, 200),
     [],
   );
 
@@ -99,7 +100,7 @@ function App() {
         svgOpacity.set(newOpacity);
       });
     },
-    [isMobile],
+    [isMobile, backgroundGradient, svgOpacity, textColor],
   );
 
   useMotionValueEvent(scrollYProgress, "change", handleScroll);
@@ -120,12 +121,23 @@ function App() {
         staggerChildren: 0.1,
         delay: 0.5,
         type: "tween",
-        useNativeDriver: true
       },
     },
   };
 
   const initialState = isMobile ? "visible" : "hidden";
+
+  const headingTranslateY = useTransform(
+    scrollYProgress,
+    [0, 0.5],
+    ["translateY(0px)", "translateY(-200px)"],
+  );
+  const headingOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+  const headingGradient = useTransform(
+    [hue1, hue2],
+    ([h1, h2]) =>
+      `linear-gradient(90deg, hsl(${h1}, 100%, 50%), hsl(${h2}, 100%, 50%))`,
+  );
 
   return (
     <ReactLenis root>
@@ -154,25 +166,15 @@ function App() {
             <motion.h1
               className="md:text-[80px] max-sm:text-[10vw] sm:text-[10vw] max-sm:max-w-sm max-sm:leading-tight text-light khula-extrabold w-[732px] text-center leading-[85px]"
               style={{
-                transform: isMobile
-                  ? "none"
-                  : useTransform(
-                      scrollYProgress,
-                      [0, 0.5],
-                      ["translateY(0px)", "translateY(-200px)"]
-                    ),
-                opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0]),
+                transform: isMobile ? "none" : headingTranslateY,
+                opacity: headingOpacity,
                 textShadow: "0px 0px 6px rgba(255,255,255,0.25)",
               }}
             >
               Turning ideas into{" "}
               <motion.span
                 style={{
-                  backgroundImage: useTransform(
-                    [hue1, hue2],
-                    ([h1, h2]) =>
-                      `linear-gradient(90deg, hsl(${h1}, 100%, 50%), hsl(${h2}, 100%, 50%))`
-                  ),
+                  backgroundImage: headingGradient,
                   backgroundClip: "text",
                   WebkitBackgroundClip: "text",
                   color: "transparent",
@@ -185,14 +187,8 @@ function App() {
             <motion.p
               className="poppins-regular text-lg mt-4 max-w-[390px] text-gray-2 max-sm:text-[4vw] px-4 text-center leading-[123%]"
               style={{
-                transform: isMobile
-                  ? "none"
-                  : useTransform(
-                      scrollYProgress,
-                      [0, 0.5],
-                      ["translateY(0px)", "translateY(-200px)"]
-                    ),
-                opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0]),
+                transform: isMobile ? "none" : headingTranslateY,
+                opacity: headingOpacity,
               }}
             >
               Innovative web developer crafting unique user experiences.

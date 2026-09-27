@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useSpring, animated, config } from "react-spring";
+import { useSpring, animated, config } from "@react-spring/web";
 import NavMenu from "./NavMenu";
 import { Equal } from "lucide-react";
 import { useScroll, useTransform, motion } from "framer-motion";
@@ -105,7 +105,7 @@ const MouseGradient = ({ isMobile }: { isMobile: boolean }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [setButtonProps]);
+  }, [scrollYProgress, setButtonProps]);
 
   return (
     <>

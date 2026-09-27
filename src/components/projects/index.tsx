@@ -42,7 +42,6 @@ const fadeInUpVariants: Variants = {
       ease: "easeOut",
       delay: custom * 0.2,
       type: "tween",
-      useNativeDriver: true
     },
   }),
   exit: {
@@ -52,10 +51,75 @@ const fadeInUpVariants: Variants = {
       duration: 0.4,
       ease: "easeIn",
       type: "tween",
-      useNativeDriver: true
     },
   },
 };
+
+const projects: Project[] = [
+  {
+    number: "01",
+    title: "MeetMate",
+    category: "Web Development / Design",
+    year: "2024-25",
+    image: "./img/meetmate/landing.webp",
+    imageDetail: "./img/meetmate/dashboard.webp",
+    description:
+      "MeetMate is a web application streamlining appointment management for businesses and clients. It simplifies scheduling, allowing clients to book with various companies while businesses manage availability efficiently. This approach reduces time spent on booking and organizing appointments for all parties.",
+    color: "77, 128, 237",
+    technologies: {
+      frontend: "NextJS, TailwindCSS, ThreeJS",
+      backend: "Spring Boot, GraphQL, PostgreSQL, MongoDB",
+    },
+    link: "https://github.com/informatik-projekt-kurs",
+  },
+  {
+    number: "02",
+    title: "fishtrack.",
+    category: "iOS Development / Product Design",
+    year: "2023-24",
+    image: "./img/fishtrack/preview.webp",
+    imageDetail: "./img/fishtrack/mockup.webp",
+    description:
+      "fishtrack is an iOS app for fishing enthusiasts to log and analyze their catches. It extracts date and location from photos, allows users to add fish details, and provides filtering options. Anglers can easily track their catches and view statistics, gaining insights into their fishing patterns over time.",
+    technologies: {
+      frontend: "Swift, SwiftUI, UIKit",
+      backend: "Supabase",
+    },
+    color: "0 122 255",
+    link: "https://github.com/bencodes07/fishtrackMobile",
+  },
+  {
+    number: "03",
+    title: "TCG-Home",
+    category: "Frontend Development",
+    year: "2021-Now",
+    image: "./img/tcg/landing.webp",
+    imageDetail: "./img/tcg/collection.webp",
+    description: `TCG Home is an innovative online platform transforming the global niche market of collectible card games like "Magic: The Gathering". This project moves such games into the digital era by creating a comprehensive seamless portal where collecting, playing, and trading can take place.`,
+    technologies: {
+      frontend: "VueJS, Typescript, GraphQL",
+      backend: "Not Involved",
+    },
+    color: "121 35 208",
+    link: "https://tcg-home.com",
+  },
+  {
+    number: "04",
+    title: "Portfolio",
+    category: "Web Development",
+    year: "2024",
+    image: "./img/portfolio/landing.webp",
+    imageDetail: "./img/portfolio/about.webp",
+    description:
+      "This portfolio showcases a range of web development projects, demonstrating proficiency in creating practical, user-focused applications. From appointment management systems to specialized mobile apps, each project highlights problem-solving skills and technical expertise. Click the arrow to view the Figma Design",
+    technologies: {
+      frontend: "React, TailwindCSS, Framer Motion",
+      backend: "N/A",
+    },
+    color: "255 255 255",
+    link: "https://www.figma.com/design/fSOLXbVsHPG3k61ffrfFLQ/Portfolio?m=auto&t=KL4Fad6LDLPN60Us-1",
+  },
+];
 
 const Projects: React.FC<ProjectsSectionProps> = ({
   isProjectsInView,
@@ -75,72 +139,6 @@ const Projects: React.FC<ProjectsSectionProps> = ({
 
   const cursorX = useSpring(0, { stiffness: 200, damping: 50 });
   const cursorY = useSpring(0, { stiffness: 200, damping: 50 });
-
-  const projects: Project[] = [
-    {
-      number: "01",
-      title: "MeetMate",
-      category: "Web Development / Design",
-      year: "2024-25",
-      image: "./img/meetmate/landing.webp",
-      imageDetail: "./img/meetmate/dashboard.webp",
-      description:
-        "MeetMate is a web application streamlining appointment management for businesses and clients. It simplifies scheduling, allowing clients to book with various companies while businesses manage availability efficiently. This approach reduces time spent on booking and organizing appointments for all parties.",
-      color: "77, 128, 237",
-      technologies: {
-        frontend: "NextJS, TailwindCSS, ThreeJS",
-        backend: "Spring Boot, GraphQL, PostgreSQL, MongoDB",
-      },
-      link: "https://github.com/informatik-projekt-kurs",
-    },
-    {
-      number: "02",
-      title: "fishtrack.",
-      category: "iOS Development / Product Design",
-      year: "2023-24",
-      image: "./img/fishtrack/preview.webp",
-      imageDetail: "./img/fishtrack/mockup.webp",
-      description:
-        "fishtrack is an iOS app for fishing enthusiasts to log and analyze their catches. It extracts date and location from photos, allows users to add fish details, and provides filtering options. Anglers can easily track their catches and view statistics, gaining insights into their fishing patterns over time.",
-      technologies: {
-        frontend: "Swift, SwiftUI, UIKit",
-        backend: "Supabase",
-      },
-      color: "0 122 255",
-      link: "https://github.com/bencodes07/fishtrackMobile",
-    },
-    {
-      number: "03",
-      title: "TCG-Home",
-      category: "Frontend Development",
-      year: "2021-Now",
-      image: "./img/tcg/landing.webp",
-      imageDetail: "./img/tcg/collection.webp",
-      description: `TCG Home is an innovative online platform transforming the global niche market of collectible card games like "Magic: The Gathering". This project moves such games into the digital era by creating a comprehensive seamless portal where collecting, playing, and trading can take place.`,
-      technologies: {
-        frontend: "VueJS, Typescript, GraphQL",
-        backend: "Not Involved",
-      },
-      color: "121 35 208",
-      link: "https://tcg-home.com",
-    },
-    {
-      number: "04",
-      title: "Portfolio",
-      category: "Web Development",
-      year: "2024",
-      image: "./img/portfolio/landing.webp",
-      imageDetail: "./img/portfolio/about.webp",
-      description:
-        "This portfolio showcases a range of web development projects, demonstrating proficiency in creating practical, user-focused applications. From appointment management systems to specialized mobile apps, each project highlights problem-solving skills and technical expertise. Click the arrow to view the Figma Design",
-      technologies: {
-        frontend: "React, TailwindCSS, Framer Motion",
-        backend: "N/A",
-      },
-      color: "255 255 255",
-      link: "https://www.figma.com/design/fSOLXbVsHPG3k61ffrfFLQ/Portfolio?m=auto&t=KL4Fad6LDLPN60Us-1",
-    },
-  ];
 
   useEffect(() => {
     if (isProjectsInView && !hasAnimated) {
@@ -237,7 +235,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       lenis?.start();
       document.documentElement.style.overflowY = "auto";
     }
-  }, [isOverlayVisible]);
+  }, [isOverlayVisible, lenis]);
 
   useEffect(() => {
     projects.map((project: Project) => {

@@ -1,4 +1,4 @@
-import { MotionValue, motion } from "framer-motion";
+import { MotionValue, motion, Variants } from "framer-motion";
 import { useMemo } from "react";
 import LoopingAnimation from "./LoopingAnimation";
 
@@ -10,7 +10,7 @@ type BackgroundSVGProps = {
   isLoading: boolean;
 };
 
-const drawVariant = {
+const drawVariant: Variants = {
   hidden: { pathLength: 0, opacity: 0 },
   visible: {
     pathLength: 1,
@@ -19,7 +19,6 @@ const drawVariant = {
       pathLength: { type: "spring", duration: 5, bounce: 0, delay: 0.5 },
       opacity: { duration: 0.8, ease: "easeInOut", delay: 0.5 },
       type: "tween",
-      useNativeDriver: true
     },
   },
 };
